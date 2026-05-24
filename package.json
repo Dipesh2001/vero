@@ -1,0 +1,10 @@
+{
+  "name": "shopify-theme-vero",
+  "version": "1.0.0",
+  "description": "Shopify theme development scripts for Vero theme",
+  "scripts": {
+    "dev": "shopify theme dev --path theme --store rqiycp-xj.myshopify.com",
+    "download": "shopify theme pull --path theme --store rqiycp-xj.myshopify.com",
+    "deploy": "shopify theme push --path theme --store rqiycp-xj.myshopify.com --ignore \"sections/*.json\" --ignore \"section/*.json\" --ignore \"templates/*.json\" --ignore \"templates/**/*.json\" --ignore \"config/settings_data.json\" --ignore \"locales/*.json\""
+  }
+}

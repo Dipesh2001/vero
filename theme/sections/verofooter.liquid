@@ -1,0 +1,600 @@
+{{ 'section-footer.css' | asset_url | stylesheet_tag }}
+{{ 'component-newsletter.css' | asset_url | stylesheet_tag }}
+{{ 'component-list-menu.css' | asset_url | stylesheet_tag }}
+{{ 'component-list-payment.css' | asset_url | stylesheet_tag }}
+{{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .footer {
+    margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
+  }
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+  }
+  .section-{{ section.id }}-padding .vero-footer-container {
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .footer {
+      margin-top: {{ section.settings.margin_top }}px;
+    }
+
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+    }
+    .section-{{ section.id }}-padding .vero-footer-container {
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* Custom Vero Footer Layout */
+  .vero-footer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  @media screen and (min-width: 990px) {
+    .vero-footer-container {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 60px;
+    }
+  }
+
+  .vero-footer-left {
+    width: 100%;
+  }
+  
+  .vero-footer-right {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  @media screen and (min-width: 990px) {
+    .vero-footer-left {
+      width: 25%;
+    }
+    .vero-footer-right {
+      width: 70%;
+    }
+  }
+
+  /* Newsletter Typography */
+  .vero-newsletter-heading {
+    font-family: var(--font-body-custom) !important;
+    font-weight: 700 !important;
+    font-size: 34.6px !important;
+    letter-spacing: -0.72px !important;
+    margin-bottom: 10px;
+    margin-top: 0;
+    line-height: 1.2;
+    color: rgb(var(--color-button-text)) !important;
+  }
+  .vero-newsletter-text {
+    font-family: var(--font-body-custom) !important;
+    font-weight: 400 !important;
+    font-size: 13.2px !important;
+    letter-spacing: -0.14px !important;
+    margin-bottom: 20px;
+    color: rgb(var(--color-button-text)) !important;
+  }
+  
+  .vero-newsletter-links {
+    margin-top: 15px;
+    font-family: var(--font-body-custom) !important;
+    font-weight: 300 !important;
+    font-size: 11.4px !important;
+    letter-spacing: -0.12px !important;
+    color: rgb(var(--color-button-text)) !important;
+  }
+  .vero-newsletter-links a {
+    color: rgb(var(--color-button-text)) !important;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+  }
+  .vero-newsletter-links a:hover {
+    color: rgb(var(--color-button)) !important;
+  }
+  
+  /* Social Icons */
+  .vero-social-icons {
+    margin-top: 25px;
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+  }
+  .vero-social-icons a {
+    color: rgb(var(--color-button-text)) !important;
+    padding: 0;
+    transition: transform 0.2s ease, color 0.3s ease;
+    display: inline-block;
+  }
+  .vero-social-icons a:hover {
+    color: rgb(var(--color-button)) !important;
+    transform: scale(1.15);
+  }
+  
+  /* Need Help Block */
+  .vero-help-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
+  }
+  @media screen and (min-width: 750px) {
+    .vero-help-section {
+      flex-direction: row;
+      align-items: center;
+      gap: 30px;
+    }
+  }
+  .vero-help-heading {
+    font-family: var(--font-body-custom) !important;
+    font-weight: 700 !important;
+    font-size: 34px !important;
+    letter-spacing: -0.72px !important;
+    margin: 0;
+    color: rgb(var(--color-button-text)) !important;
+  }
+  .vero-help-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .vero-help-button {
+    font-family: var(--font-body-custom) !important;
+    font-weight: 700 !important;
+    font-size: 15.3px !important;
+    letter-spacing: -0.16px !important;
+    color: rgb(var(--color-button-text));
+    background-color: rgb(var(--color-button));
+    border: 1px solid rgb(var(--color-button));
+    border-radius: 4px;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+  .vero-help-button:hover {
+    background-color: transparent;
+    color: rgb(var(--color-button));
+  }
+  
+  /* Menus Layout */
+  .vero-menus-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 30px;
+  }
+  @media screen and (min-width: 750px) {
+    .vero-menus-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+  }
+
+  /* Menus Typography */
+  .vero-menu-heading {
+    font-family: var(--font-body-custom) !important;
+    font-weight: 700 !important;
+    font-size: 21.7px !important;
+    letter-spacing: -0.46px !important;
+    margin-bottom: 15px;
+    color: rgb(var(--color-button-text)) !important;
+  }
+  .vero-menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .vero-menu-list li {
+    margin-bottom: 10px;
+  }
+  .vero-menu-list a {
+    font-family: var(--font-body-custom) !important;
+    font-weight: 400 !important;
+    font-size: 15.6px !important;
+    letter-spacing: -0.16px !important;
+    color: rgb(var(--color-button-text)) !important;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .vero-menu-list a:hover {
+    color: rgb(var(--color-button)) !important;
+  }
+  
+  /* Bottom Content */
+  .vero-footer-bottom {
+    background-color: #f2eadf !important;
+    padding-top: 25px;
+    padding-bottom: 25px;
+  }
+  .vero-footer-bottom-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  @media screen and (min-width: 750px) {
+    .vero-footer-bottom-inner {
+      flex-direction: row;
+    }
+  }
+
+  .vero-copyright, .vero-copyright a {
+    font-family: var(--font-heading-custom) !important;
+    font-weight: 400 !important;
+    font-size: 14px !important;
+    color: #00237d !important;
+    text-decoration: none;
+    margin: 0;
+    transition: color 0.3s ease;
+  }
+  .vero-copyright a:hover {
+    color: #ffc357 !important;
+  }
+  
+  .vero-payment-img {
+    width: {{ section.settings.payment_image_width }}px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+{%- endstyle -%}
+
+<footer class="footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="{% unless section.settings.full_width %}page-width{% else %}page-width--full{% endunless %}" style="{% if section.settings.full_width %}padding: 0 40px;{% endif %}">
+    <div class="vero-footer-container">
+      
+      <!-- Left Column: Newsletter & Social -->
+      <div class="vero-footer-left">
+        {%- if section.settings.newsletter_heading != blank -%}
+          <h2 class="vero-newsletter-heading">{{ section.settings.newsletter_heading }}</h2>
+          <div class="vero-newsletter-text">{{ section.settings.newsletter_text }}</div>
+          
+          <div class="vero-newsletter-links">
+            <a href="{{ section.settings.policy_1_link }}">{{ section.settings.policy_1_text }}</a> & <a href="{{ section.settings.policy_2_link }}">{{ section.settings.policy_2_text }}</a>.
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.show_social -%}
+          <ul class="vero-social-icons">
+            {%- if settings.social_tiktok_link != blank -%}
+              <li><a href="{{ settings.social_tiktok_link }}" class="link list-social__link" ><span class="svg-wrapper">{{ 'icon-tiktok.svg' | inline_asset_content }}</span></a></li>
+            {%- endif -%}
+            {%- if settings.social_instagram_link != blank -%}
+              <li><a href="{{ settings.social_instagram_link }}" class="link list-social__link" ><span class="svg-wrapper">{{ 'icon-instagram.svg' | inline_asset_content }}</span></a></li>
+            {%- endif -%}
+            {%- if settings.social_facebook_link != blank -%}
+              <li><a href="{{ settings.social_facebook_link }}" class="link list-social__link" ><span class="svg-wrapper">{{ 'icon-facebook.svg' | inline_asset_content }}</span></a></li>
+            {%- endif -%}
+            {%- if settings.social_youtube_link != blank -%}
+              <li><a href="{{ settings.social_youtube_link }}" class="link list-social__link" ><span class="svg-wrapper">{{ 'icon-youtube.svg' | inline_asset_content }}</span></a></li>
+            {%- endif -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      <!-- Right Column: Navigation -->
+      <div class="vero-footer-right">
+        
+        <!-- Help Buttons Block -->
+        {%- assign help_block = section.blocks | where: 'type', 'help_buttons' | first -%}
+        {%- if help_block -%}
+          <div class="vero-help-section" {{ help_block.shopify_attributes }}>
+            {%- if help_block.settings.heading != blank -%}
+              <h3 class="vero-help-heading">{{ help_block.settings.heading }}</h3>
+            {%- endif -%}
+            <div class="vero-help-buttons">
+              {%- if help_block.settings.button_1_text != blank -%}
+                <a href="{{ help_block.settings.button_1_link }}" class="vero-help-button">{{ help_block.settings.button_1_text }}</a>
+              {%- endif -%}
+              {%- if help_block.settings.button_2_text != blank -%}
+                <a href="{{ help_block.settings.button_2_link }}" class="vero-help-button">{{ help_block.settings.button_2_text }}</a>
+              {%- endif -%}
+              {%- if help_block.settings.button_3_text != blank -%}
+                <a href="{{ help_block.settings.button_3_link }}" class="vero-help-button">{{ help_block.settings.button_3_text }}</a>
+              {%- endif -%}
+            </div>
+          </div>
+          {%- if help_block.settings.show_divider -%}
+            <hr style="border: none; border-top: 1px solid {{ help_block.settings.divider_color }}; margin: 5px 0 10px 0; width: 100%;">
+          {%- endif -%}
+        {%- endif -%}
+
+        <!-- Menus Grid -->
+        <div class="vero-menus-grid">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'link_list' -%}
+              <div class="vero-menu-column" {{ block.shopify_attributes }}>
+                {%- assign menu_title = block.settings.heading | default: linklists[block.settings.menu].title -%}
+                {%- if menu_title != blank -%}
+                  <h3 class="vero-menu-heading">{{ menu_title }}</h3>
+                {%- endif -%}
+                {%- if block.settings.menu != blank -%}
+                  <ul class="vero-menu-list">
+                    {%- for link in block.settings.menu.links -%}
+                      <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="vero-footer-bottom">
+    <div class="page-width vero-footer-bottom-inner">
+      <div class="vero-copyright-block">
+        <p class="vero-copyright">{{ section.settings.copyright_text }}</p>
+      </div>
+      <div class="vero-payment-block">
+        {%- if section.settings.payment_image != blank -%}
+          <img src="{{ section.settings.payment_image | image_url: width: 600 }}" alt="Payment Methods" class="vero-payment-img" loading="lazy">
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Vero Footer",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "default": false,
+      "label": "Make section full width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "checkbox",
+      "id": "newsletter_enable",
+      "default": true,
+      "label": "Enable Newsletter"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "default": "Be the first to know",
+      "label": "Newsletter Heading"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_text",
+      "default": "Hear about new arrivals, sales, and other news.",
+      "label": "Newsletter Text"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "default": true,
+      "label": "Show Social Icons"
+    },
+    {
+      "type": "header",
+      "content": "Policy Links"
+    },
+    {
+      "type": "text",
+      "id": "policy_1_text",
+      "default": "Privacy Policy",
+      "label": "Policy 1 Text"
+    },
+    {
+      "type": "url",
+      "id": "policy_1_link",
+      "label": "Policy 1 Link"
+    },
+    {
+      "type": "text",
+      "id": "policy_2_text",
+      "default": "Terms",
+      "label": "Policy 2 Text"
+    },
+    {
+      "type": "url",
+      "id": "policy_2_link",
+      "label": "Policy 2 Link"
+    },
+    {
+      "type": "header",
+      "content": "Bottom Bar"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "default": "© 2025.All Rights Are Reserved by Velovamedia",
+      "label": "Copyright Text"
+    },
+    {
+      "type": "image_picker",
+      "id": "payment_image",
+      "label": "Custom Payment Image"
+    },
+    {
+      "type": "range",
+      "id": "payment_image_width",
+      "min": 50,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "label": "Payment Image Width",
+      "default": 300
+    },
+    {
+      "type": "header",
+      "content": "Desktop Spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top margin",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Desktop Top Padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Desktop Bottom Padding",
+      "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Mobile Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Top Padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Bottom Padding",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Menu Column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "info": "Leave blank to automatically use the selected menu's title."
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "default": "footer",
+          "label": "Menu"
+        }
+      ]
+    },
+    {
+      "type": "help_buttons",
+      "name": "Help Buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Need Help?",
+          "label": "Heading"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_divider",
+          "default": true,
+          "label": "Show Bottom Divider"
+        },
+        {
+          "type": "color",
+          "id": "divider_color",
+          "label": "Divider Color",
+          "default": "#4d4d4d"
+        },
+        {
+          "type": "text",
+          "id": "button_1_text",
+          "default": "Track My Order",
+          "label": "Button 1 Text"
+        },
+        {
+          "type": "url",
+          "id": "button_1_link",
+          "label": "Button 1 Link"
+        },
+        {
+          "type": "text",
+          "id": "button_2_text",
+          "default": "Start A Return",
+          "label": "Button 2 Text"
+        },
+        {
+          "type": "url",
+          "id": "button_2_link",
+          "label": "Button 2 Link"
+        },
+        {
+          "type": "text",
+          "id": "button_3_text",
+          "default": "Contact Us",
+          "label": "Button 3 Text"
+        },
+        {
+          "type": "url",
+          "id": "button_3_link",
+          "label": "Button 3 Link"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "help_buttons"
+      },
+      {
+        "type": "link_list"
+      },
+      {
+        "type": "link_list"
+      },
+      {
+        "type": "link_list"
+      }
+    ]
+  }
+}
+{% endschema %}

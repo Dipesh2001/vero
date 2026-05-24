@@ -1,0 +1,66 @@
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "verofooter",
+      "blocks": {
+        "help_buttons": {
+          "type": "help_buttons",
+          "settings": {
+            "heading": "Need Help?",
+            "button_1_text": "Track My Order",
+            "button_1_link": "",
+            "button_2_text": "Start A Return",
+            "button_2_link": "",
+            "button_3_text": "Contact Us",
+            "button_3_link": ""
+          }
+        },
+        "company_menu": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Company",
+            "menu": "footer"
+          }
+        },
+        "support_menu": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Support",
+            "menu": "footer"
+          }
+        },
+        "legal_menu": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Legal",
+            "menu": "footer"
+          }
+        }
+      },
+      "block_order": [
+        "help_buttons",
+        "company_menu",
+        "support_menu",
+        "legal_menu"
+      ],
+      "settings": {
+        "color_scheme": "scheme-5",
+        "newsletter_enable": false,
+        "newsletter_heading": "Be the first to know",
+        "newsletter_text": "Hear about new arrivals, sales, and other news.",
+        "show_social": true,
+        "copyright_text": "© 2025.All Rights Are Reserved by Velovamedia",
+        "margin_top": 0,
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_top_mobile": 36,
+        "padding_bottom_mobile": 36
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

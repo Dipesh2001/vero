@@ -1,0 +1,813 @@
+/*
+ * ============================================================
+ *  VERO — Global Design Tokens & CSS Custom Properties
+ *  File: assets/vero-global.css
+ *
+ *  Architecture follows a 3-tier token system:
+ *    1. Primitive tokens  — raw values (colors, sizes, etc.)
+ *    2. Semantic tokens   — context-aware aliases
+ *    3. Component tokens  — referenced per-component
+ *
+ *  Fonts used:
+ *    - Barlow (Panton alternative, geometric sans-serif)
+ *      → loaded via Google Fonts in theme.liquid
+ *    - Cormorant Garamond Italic (Sloop Script / Sleep Script accent)
+ *      → loaded via Google Fonts in theme.liquid
+ *
+ *  Google Fonts import (add to <head> in theme.liquid):
+ *    <link rel="preconnect" href="https://fonts.googleapis.com">
+ *    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ *    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+ * ============================================================
+ */
+
+/* ============================================================
+   1. PRIMITIVE TOKENS — Raw values, no semantic meaning
+   ============================================================ */
+
+:root {
+
+  /* ----------------------------------------------------------
+     BRAND PALETTE — Exact hex values from VERO brand identity
+     ---------------------------------------------------------- */
+
+  /* Navy / Primary Blue */
+  --vero-navy-050: #e8edf7;
+  --vero-navy-100: #c4ceea;
+  --vero-navy-200: #9aaedd;
+  --vero-navy-300: #718dd0;
+  --vero-navy-400: #4e73c6;
+  --vero-navy-500: #2e59bc; /* mid */
+  --vero-navy-600: #1a3e96;
+  --vero-navy-700: #00247D; /* ← BRAND EXACT: primary navy */
+  --vero-navy-800: #001a60;
+  --vero-navy-900: #000f3d;
+
+  /* Sky Blue (light, clean, fresh) */
+  --vero-sky-100: #EEF7FD;
+  --vero-sky-200: #C8E8FB; /* ← BRAND EXACT */
+  --vero-sky-300: #9fd4f6;
+  --vero-sky-400: #70bdf1;
+  --vero-sky-500: #40a5eb;
+
+  /* Periwinkle / Soft Lavender */
+  --vero-periwinkle-100: #eeeeff;
+  --vero-periwinkle-200: #CCCDFF; /* ← BRAND EXACT */
+  --vero-periwinkle-300: #ababf5;
+  --vero-periwinkle-400: #8889eb;
+
+  /* Amber / Golden Yellow */
+  --vero-amber-100: #fff3cc;
+  --vero-amber-200: #ffe799;
+  --vero-amber-300: #ffda66;
+  --vero-amber-400: #FFC356; /* ← BRAND EXACT: accent/energy */
+  --vero-amber-500: #f5a800;
+  --vero-amber-600: #cc8a00;
+
+  /* Warm Cream / Off-White (background tone) */
+  --vero-cream-100: #FDFAF6;
+  --vero-cream-200: #F2E9DF; /* ← BRAND EXACT: background/canvas */
+  --vero-cream-300: #e8d9c9;
+  --vero-cream-400: #d9c5ae;
+  --vero-cream-500: #c9ae92;
+
+  /* Dark / Ink (for text) */
+  --vero-ink-900: #0a0a0a;
+  --vero-ink-800: #141414;
+  --vero-ink-700: #1e1e1e;
+  --vero-ink-600: #333333;
+  --vero-ink-500: #4d4d4d;
+  --vero-ink-400: #666666;
+  --vero-ink-300: #888888;
+  --vero-ink-200: #aaaaaa;
+  --vero-ink-100: #cccccc;
+
+  /* Pure Neutrals */
+  --vero-white: #ffffff;
+  --vero-black: #000000;
+
+  /* ----------------------------------------------------------
+     SPACING SCALE — 4px base unit
+     ---------------------------------------------------------- */
+  --space-1:  0.4rem;   /*  4px */
+  --space-2:  0.8rem;   /*  8px */
+  --space-3:  1.2rem;   /* 12px */
+  --space-4:  1.6rem;   /* 16px */
+  --space-5:  2.0rem;   /* 20px */
+  --space-6:  2.4rem;   /* 24px */
+  --space-8:  3.2rem;   /* 32px */
+  --space-10: 4.0rem;   /* 40px */
+  --space-12: 4.8rem;   /* 48px */
+  --space-14: 5.6rem;   /* 56px */
+  --space-16: 6.4rem;   /* 64px */
+  --space-20: 8.0rem;   /* 80px */
+  --space-24: 9.6rem;   /* 96px */
+  --space-32: 12.8rem;  /* 128px */
+  --space-40: 16.0rem;  /* 160px */
+
+  /* ----------------------------------------------------------
+     FONT SIZE SCALE — rem units (base 16px)
+     Following Major Third ratio (1.25x)
+     ---------------------------------------------------------- */
+  --text-2xs:  1.0rem;     /* 10px  — micro labels */
+  --text-xs:   1.2rem;     /* 12px  — captions, badges */
+  --text-sm:   1.4rem;     /* 14px  — secondary text, meta */
+  --text-base: 1.6rem;     /* 16px  — body default */
+  --text-md:   1.8rem;     /* 18px  — large body */
+  --text-lg:   2.0rem;     /* 20px  — lead / intro paragraph */
+  --text-xl:   2.4rem;     /* 24px  — h5, section labels */
+  --text-2xl:  3.0rem;     /* 30px  — h4 */
+  --text-3xl:  3.6rem;     /* 36px  — h3 */
+  --text-4xl:  4.8rem;     /* 48px  — h2 */
+  --text-5xl:  6.0rem;     /* 60px  — h1 */
+  --text-6xl:  7.2rem;     /* 72px  — display / hero */
+  --text-7xl:  9.6rem;     /* 96px  — statement / banner */
+  --text-8xl:  12.8rem;    /* 128px — XXL brand lockup */
+
+  /* ----------------------------------------------------------
+     FONT WEIGHT SCALE
+     ---------------------------------------------------------- */
+  --weight-thin:       100;
+  --weight-extralight: 200;
+  --weight-light:      300;
+  --weight-regular:    400;
+  --weight-medium:     500;
+  --weight-semibold:   600;
+  --weight-bold:       700;
+  --weight-extrabold:  800;
+  --weight-black:      900;
+
+  /* ----------------------------------------------------------
+     LINE HEIGHT SCALE
+     ---------------------------------------------------------- */
+  --leading-none:    1;
+  --leading-tight:   1.1;
+  --leading-snug:    1.25;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose:   2;
+
+  /* ----------------------------------------------------------
+     LETTER SPACING SCALE
+     ---------------------------------------------------------- */
+  --tracking-tighter: -0.05em;
+  --tracking-tight:   -0.025em;
+  --tracking-normal:   0em;
+  --tracking-wide:     0.025em;
+  --tracking-wider:    0.05em;
+  --tracking-widest:   0.1em;
+  --tracking-mega:     0.2em; /* for all-caps labels/badges */
+
+  /* ----------------------------------------------------------
+     BORDER RADIUS SCALE
+     ---------------------------------------------------------- */
+  --radius-none:    0;
+  --radius-xs:      0.4rem;   /*  4px */
+  --radius-sm:      0.6rem;   /*  6px */
+  --radius-md:      0.8rem;   /*  8px */
+  --radius-lg:      1.2rem;   /* 12px */
+  --radius-xl:      1.6rem;   /* 16px */
+  --radius-2xl:     2.4rem;   /* 24px */
+  --radius-3xl:     3.2rem;   /* 32px */
+  --radius-full:    9999px;   /* pill / circle */
+
+  /* ----------------------------------------------------------
+     SHADOW / ELEVATION SCALE
+     ---------------------------------------------------------- */
+  --shadow-xs:     0 1px 2px 0 rgba(0, 36, 125, 0.06);
+  --shadow-sm:     0 1px 3px 0 rgba(0, 36, 125, 0.08), 0 1px 2px -1px rgba(0, 36, 125, 0.06);
+  --shadow-md:     0 4px 6px -1px rgba(0, 36, 125, 0.1), 0 2px 4px -2px rgba(0, 36, 125, 0.06);
+  --shadow-lg:     0 10px 15px -3px rgba(0, 36, 125, 0.1), 0 4px 6px -4px rgba(0, 36, 125, 0.05);
+  --shadow-xl:     0 20px 25px -5px rgba(0, 36, 125, 0.12), 0 8px 10px -6px rgba(0, 36, 125, 0.05);
+  --shadow-2xl:    0 25px 50px -12px rgba(0, 36, 125, 0.25);
+  --shadow-inner:  inset 0 2px 4px 0 rgba(0, 36, 125, 0.06);
+  --shadow-none:   none;
+  /* Amber/warm glow for CTA hover effects */
+  --shadow-glow-amber: 0 0 20px 4px rgba(255, 195, 86, 0.4);
+  --shadow-glow-navy:  0 0 20px 4px rgba(0, 36, 125, 0.3);
+
+  /* ----------------------------------------------------------
+     ANIMATION / TRANSITION TOKENS
+     ---------------------------------------------------------- */
+  --duration-instant:    50ms;
+  --duration-fast:       100ms;
+  --duration-normal:     200ms;
+  --duration-slow:       300ms;
+  --duration-slower:     500ms;
+  --duration-slowest:    700ms;
+  --duration-long:       1000ms;
+
+  --ease-linear:        linear;
+  --ease-in:            cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:           cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:        cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce:        cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth:        cubic-bezier(0, 0, 0.3, 1);
+
+  /* ----------------------------------------------------------
+     Z-INDEX SCALE
+     ---------------------------------------------------------- */
+  --z-below:      -1;
+  --z-base:        0;
+  --z-raised:     10;
+  --z-dropdown:  100;
+  --z-sticky:    200;
+  --z-overlay:   300;
+  --z-modal:     400;
+  --z-toast:     500;
+  --z-tooltip:   600;
+
+  /* ----------------------------------------------------------
+     LAYOUT TOKENS
+     ---------------------------------------------------------- */
+  --page-width:         1400px;
+  --page-width-narrow:   860px;
+  --container-padding:   2.4rem;
+  --section-gap-mobile:  4.0rem;
+  --section-gap-desktop: 7.0rem;
+}
+
+
+/* ============================================================
+   2. SEMANTIC TOKENS — Brand + Intent-driven aliases
+   ============================================================ */
+
+:root {
+
+  /* ----------------------------------------------------------
+     COLOR — BRAND
+     ---------------------------------------------------------- */
+  --color-brand-primary:         var(--vero-navy-700);   /* #00247D — dominant brand navy */
+  --color-brand-primary-light:   var(--vero-navy-500);
+  --color-brand-primary-dark:    var(--vero-navy-900);
+
+  --color-brand-secondary:       var(--vero-sky-200);    /* #C8E8FB — fresh sky blue */
+  --color-brand-accent:          var(--vero-amber-400);  /* #FFC356 — energy amber */
+  --color-brand-highlight:       var(--vero-periwinkle-200); /* #CCCDFF — soft periwinkle */
+  --color-brand-canvas:          var(--vero-cream-200);  /* #F2E9DF — warm background */
+
+  /* ----------------------------------------------------------
+     COLOR — BACKGROUND SURFACES
+     ---------------------------------------------------------- */
+  --color-bg-page:            var(--vero-cream-200);     /* main page background */
+  --color-bg-surface:         var(--vero-white);         /* cards, modals, inputs */
+  --color-bg-surface-alt:     var(--vero-cream-100);     /* alternate panels */
+  --color-bg-subtle:          var(--vero-cream-300);     /* light section fills */
+  --color-bg-inverse:         var(--vero-navy-700);      /* inverted sections */
+  --color-bg-accent:          var(--vero-amber-400);     /* CTA banners */
+
+  /* ----------------------------------------------------------
+     COLOR — TEXT
+     ---------------------------------------------------------- */
+  --color-text-primary:       var(--vero-ink-800);       /* main body text */
+  --color-text-secondary:     var(--vero-ink-500);       /* supporting text */
+  --color-text-tertiary:      var(--vero-ink-300);       /* placeholder, disabled */
+  --color-text-inverse:       var(--vero-white);         /* on dark backgrounds */
+  --color-text-heading:       var(--vero-navy-700);      /* all headings */
+  --color-text-accent:        var(--vero-amber-500);     /* highlighted/hover text */
+  --color-text-link:          var(--vero-navy-700);
+  --color-text-link-hover:    var(--vero-amber-400);
+
+  /* ----------------------------------------------------------
+     COLOR — BORDERS & DIVIDERS
+     ---------------------------------------------------------- */
+  --color-border-subtle:      rgba(0, 36, 125, 0.1);     /* very light lines */
+  --color-border-default:     rgba(0, 36, 125, 0.2);     /* standard borders */
+  --color-border-strong:      rgba(0, 36, 125, 0.4);
+  --color-border-brand:       var(--vero-navy-700);
+  --color-border-accent:      var(--vero-amber-400);
+
+  /* ----------------------------------------------------------
+     COLOR — INTERACTIVE / UI STATES
+     ---------------------------------------------------------- */
+  --color-focus-ring:         var(--vero-amber-400);
+  --color-selection-bg:       var(--vero-sky-200);
+
+  /* ----------------------------------------------------------
+     COLOR — FEEDBACK
+     ---------------------------------------------------------- */
+  --color-success:      #2e7d32;
+  --color-success-bg:   #e8f5e9;
+  --color-warning:      var(--vero-amber-500);
+  --color-warning-bg:   #fff8e1;
+  --color-error:        #c62828;
+  --color-error-bg:     #ffebee;
+  --color-info:         var(--vero-navy-600);
+  --color-info-bg:      var(--vero-sky-200);
+
+  /* ----------------------------------------------------------
+     TYPOGRAPHY — FAMILIES
+     ---------------------------------------------------------- */
+
+  /* Display / Heading — Barlow (closest free match to Panton Trial)
+     Barlow Condensed for impact headlines */
+  --font-heading:         'Barlow', 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+  --font-heading-condensed: 'Barlow Condensed', 'Barlow', 'Helvetica Neue', Arial, sans-serif;
+
+  /* Body — Barlow Regular for long-form readability */
+  --font-body:            'Barlow', 'Helvetica Neue', Arial, sans-serif;
+
+  /* Accent / Script — Cormorant Garamond Italic (closest free match to Sloop Script)
+     Use sparingly for brand flourishes, pull quotes, special labels */
+  --font-script:          'Cormorant Garamond', 'Georgia', serif;
+
+  /* Mono — for code, SKUs, technical details */
+  --font-mono:            'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+
+  /* ----------------------------------------------------------
+     TYPOGRAPHY — HEADING SCALE
+     Complete size + weight + leading + tracking combos
+     ---------------------------------------------------------- */
+
+  /* Hero / Statement — massive display (banner, hero backgrounds) */
+  --font-display-size:      var(--text-7xl);      /* 96px */
+  --font-display-weight:    var(--weight-black);  /* 900 */
+  --font-display-leading:   var(--leading-tight); /* 1.1 */
+  --font-display-tracking:  var(--tracking-tight); /* -0.025em */
+  --font-display-transform: uppercase;
+  --font-display-family:    var(--font-heading-condensed);
+
+  /* H1 — Page title */
+  --font-h1-size:      var(--text-5xl);      /* 60px */
+  --font-h1-weight:    var(--weight-extrabold); /* 800 */
+  --font-h1-leading:   var(--leading-tight); /* 1.1 */
+  --font-h1-tracking:  var(--tracking-tight);
+  --font-h1-family:    var(--font-heading);
+
+  /* H2 — Section heading */
+  --font-h2-size:      var(--text-4xl);      /* 48px */
+  --font-h2-weight:    var(--weight-bold);   /* 700 */
+  --font-h2-leading:   var(--leading-snug);  /* 1.25 */
+  --font-h2-tracking:  var(--tracking-tight);
+  --font-h2-family:    var(--font-heading);
+
+  /* H3 — Sub-section / product name */
+  --font-h3-size:      var(--text-3xl);      /* 36px */
+  --font-h3-weight:    var(--weight-bold);   /* 700 */
+  --font-h3-leading:   var(--leading-snug);  /* 1.25 */
+  --font-h3-tracking:  var(--tracking-normal);
+  --font-h3-family:    var(--font-heading);
+
+  /* H4 — Card heading */
+  --font-h4-size:      var(--text-2xl);      /* 30px */
+  --font-h4-weight:    var(--weight-semibold); /* 600 */
+  --font-h4-leading:   var(--leading-snug);  /* 1.25 */
+  --font-h4-tracking:  var(--tracking-normal);
+  --font-h4-family:    var(--font-heading);
+
+  /* H5 — Small heading / nav items */
+  --font-h5-size:      var(--text-xl);       /* 24px */
+  --font-h5-weight:    var(--weight-semibold); /* 600 */
+  --font-h5-leading:   var(--leading-normal); /* 1.5 */
+  --font-h5-tracking:  var(--tracking-normal);
+  --font-h5-family:    var(--font-heading);
+
+  /* H6 — Label-style tiny heading */
+  --font-h6-size:      var(--text-lg);       /* 20px */
+  --font-h6-weight:    var(--weight-semibold); /* 600 */
+  --font-h6-leading:   var(--leading-normal);
+  --font-h6-tracking:  var(--tracking-wide);
+  --font-h6-transform: uppercase;
+  --font-h6-family:    var(--font-heading);
+
+  /* ----------------------------------------------------------
+     TYPOGRAPHY — BODY SCALE
+     ---------------------------------------------------------- */
+
+  /* Lead / Intro paragraph */
+  --font-lead-size:      var(--text-lg);       /* 20px */
+  --font-lead-weight:    var(--weight-regular); /* 400 */
+  --font-lead-leading:   var(--leading-relaxed); /* 1.625 */
+  --font-lead-tracking:  var(--tracking-normal);
+
+  /* Body / Default paragraph */
+  --font-body-size:      var(--text-base);     /* 16px */
+  --font-body-weight:    var(--weight-regular); /* 400 */
+  --font-body-leading:   var(--leading-normal); /* 1.5 */
+  --font-body-tracking:  var(--tracking-normal);
+
+  /* Body Medium — slightly larger body */
+  --font-body-md-size:   var(--text-md);       /* 18px */
+  --font-body-md-weight: var(--weight-regular);
+  --font-body-md-leading: var(--leading-relaxed);
+
+  /* Small / Secondary */
+  --font-sm-size:       var(--text-sm);        /* 14px */
+  --font-sm-weight:     var(--weight-regular);
+  --font-sm-leading:    var(--leading-normal);
+
+  /* ----------------------------------------------------------
+     TYPOGRAPHY — UI ELEMENTS
+     ---------------------------------------------------------- */
+
+  /* Button text */
+  --font-button-size:      var(--text-sm);       /* 14px */
+  --font-button-weight:    var(--weight-bold);   /* 700 */
+  --font-button-leading:   1;
+  --font-button-tracking:  var(--tracking-widest); /* 0.1em */
+  --font-button-transform: uppercase;
+
+  /* Button Large */
+  --font-button-lg-size:   var(--text-base);     /* 16px */
+  --font-button-lg-weight: var(--weight-bold);
+  --font-button-lg-tracking: var(--tracking-wider);
+  --font-button-lg-transform: uppercase;
+
+  /* Navigation links */
+  --font-nav-size:      var(--text-sm);          /* 14px */
+  --font-nav-weight:    var(--weight-semibold);  /* 600 */
+  --font-nav-tracking:  var(--tracking-wide);    /* 0.025em */
+  --font-nav-transform: uppercase;
+
+  /* Badge / Tag / Label */
+  --font-badge-size:    var(--text-xs);           /* 12px */
+  --font-badge-weight:  var(--weight-bold);       /* 700 */
+  --font-badge-tracking: var(--tracking-mega);   /* 0.2em */
+  --font-badge-transform: uppercase;
+
+  /* Caption / Fine print */
+  --font-caption-size:   var(--text-xs);          /* 12px */
+  --font-caption-weight: var(--weight-regular);
+  --font-caption-leading: var(--leading-normal);
+
+  /* Price / Monetary display */
+  --font-price-size:     var(--text-2xl);         /* 30px */
+  --font-price-weight:   var(--weight-extrabold); /* 800 */
+  --font-price-leading:  1;
+
+  /* Overline (ALL-CAPS small label above heading) */
+  --font-overline-size:    var(--text-xs);        /* 12px */
+  --font-overline-weight:  var(--weight-semibold);/* 600 */
+  --font-overline-tracking: var(--tracking-mega); /* 0.2em */
+  --font-overline-transform: uppercase;
+  --font-overline-color:  var(--vero-amber-400);
+
+  /* Script / Decorative accent */
+  --font-script-size:    var(--text-4xl);         /* 48px */
+  --font-script-weight:  var(--weight-regular);   /* 400 italic */
+  --font-script-leading: var(--leading-snug);
+
+  /* ----------------------------------------------------------
+     COMPONENT TOKENS — Buttons
+     ---------------------------------------------------------- */
+
+  /* Primary Button (Navy on Cream) */
+  --btn-primary-bg:           var(--color-brand-primary);
+  --btn-primary-color:        var(--vero-white);
+  --btn-primary-border:       var(--color-brand-primary);
+  --btn-primary-bg-hover:     var(--vero-navy-900);
+  --btn-primary-color-hover:  var(--vero-white);
+  --btn-primary-border-hover: var(--vero-navy-900);
+
+  /* Secondary Button (outlined navy) */
+  --btn-secondary-bg:           transparent;
+  --btn-secondary-color:        var(--color-brand-primary);
+  --btn-secondary-border:       var(--color-brand-primary);
+  --btn-secondary-bg-hover:     var(--color-brand-primary);
+  --btn-secondary-color-hover:  var(--vero-white);
+  --btn-secondary-border-hover: var(--color-brand-primary);
+
+  /* Accent Button (Amber CTA) */
+  --btn-accent-bg:           var(--vero-amber-400);
+  --btn-accent-color:        var(--vero-navy-700);
+  --btn-accent-border:       var(--vero-amber-400);
+  --btn-accent-bg-hover:     var(--vero-amber-500);
+  --btn-accent-color-hover:  var(--vero-navy-900);
+  --btn-accent-border-hover: var(--vero-amber-500);
+
+  /* Ghost Button (on dark/navy backgrounds) */
+  --btn-ghost-bg:           transparent;
+  --btn-ghost-color:        var(--vero-white);
+  --btn-ghost-border:       rgba(255, 255, 255, 0.5);
+  --btn-ghost-bg-hover:     rgba(255, 255, 255, 0.12);
+  --btn-ghost-color-hover:  var(--vero-white);
+  --btn-ghost-border-hover: var(--vero-white);
+
+  /* Button sizing */
+  --btn-padding-sm:     var(--space-2) var(--space-4);
+  --btn-padding-md:     var(--space-3) var(--space-6);
+  --btn-padding-lg:     var(--space-4) var(--space-8);
+  --btn-padding-xl:     var(--space-5) var(--space-10);
+  --btn-radius:         var(--radius-full);  /* VERO uses pill-style buttons */
+  --btn-transition:     all var(--duration-normal) var(--ease-in-out);
+
+  /* ----------------------------------------------------------
+     COMPONENT TOKENS — Product Cards
+     ---------------------------------------------------------- */
+  --card-bg:             var(--vero-white);
+  --card-border:         var(--color-border-subtle);
+  --card-border-radius:  var(--radius-xl);
+  --card-shadow:         var(--shadow-sm);
+  --card-shadow-hover:   var(--shadow-xl);
+  --card-padding:        var(--space-4);
+  --card-transition:     box-shadow var(--duration-slow) var(--ease-out), transform var(--duration-slow) var(--ease-out);
+
+  /* ----------------------------------------------------------
+     COMPONENT TOKENS — Forms & Inputs
+     ---------------------------------------------------------- */
+  --input-bg:            var(--vero-white);
+  --input-color:         var(--color-text-primary);
+  --input-placeholder:   var(--color-text-tertiary);
+  --input-border:        var(--color-border-default);
+  --input-border-focus:  var(--color-brand-primary);
+  --input-border-error:  var(--color-error);
+  --input-radius:        var(--radius-md);
+  --input-padding:       var(--space-3) var(--space-4);
+  --input-font-size:     var(--text-sm);
+  --input-shadow-focus:  0 0 0 3px rgba(0, 36, 125, 0.15);
+
+  /* ----------------------------------------------------------
+     COMPONENT TOKENS — Header / Navigation
+     ---------------------------------------------------------- */
+  --header-bg:           var(--vero-white);
+  --header-bg-scroll:    rgba(255, 255, 255, 0.96);
+  --header-border:       var(--color-border-subtle);
+  --header-color:        var(--color-text-primary);
+  --header-shadow:       var(--shadow-md);
+  --header-height-mobile: 5.6rem;
+  --header-height-desk:   7.2rem;
+
+  /* ----------------------------------------------------------
+     COMPONENT TOKENS — Badge / Labels
+     ---------------------------------------------------------- */
+  --badge-sale-bg:      var(--vero-amber-400);
+  --badge-sale-color:   var(--vero-navy-700);
+  --badge-new-bg:       var(--vero-navy-700);
+  --badge-new-color:    var(--vero-white);
+  --badge-sold-bg:      var(--vero-ink-300);
+  --badge-sold-color:   var(--vero-white);
+  --badge-radius:       var(--radius-full);
+  --badge-padding:      0.2em 0.75em;
+}
+
+
+/* ============================================================
+   3. RESPONSIVE ADJUSTMENTS
+   Typography scale tweaks for mobile
+   ============================================================ */
+
+@media screen and (max-width: 749px) {
+  :root {
+    /* Scale down display & hero text on mobile */
+    --font-display-size:  var(--text-5xl);  /* 60px → 60px on mobile */
+    --font-h1-size:       var(--text-4xl);  /* 60px → 48px on mobile */
+    --font-h2-size:       var(--text-3xl);  /* 48px → 36px on mobile */
+    --font-h3-size:       var(--text-2xl);  /* 36px → 30px on mobile */
+    --font-h4-size:       var(--text-xl);   /* 30px → 24px on mobile */
+    --font-script-size:   var(--text-3xl);  /* 48px → 36px on mobile */
+    --font-price-size:    var(--text-xl);   /* 30px → 24px on mobile */
+    --container-padding:  var(--space-4);   /* 24px → 16px on mobile */
+  }
+}
+
+
+/* ============================================================
+   4. GLOBAL RESETS & BASE STYLES (VERO-specific)
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg-page);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--font-body-size);
+  font-weight: var(--font-body-weight);
+  line-height: var(--font-body-leading);
+  letter-spacing: var(--font-body-tracking);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Text selection uses brand colors */
+::selection {
+  background-color: var(--color-brand-secondary);
+  color: var(--color-brand-primary);
+}
+
+
+/* ============================================================
+   5. TYPOGRAPHY — Applied heading styles
+   ============================================================ */
+
+/* Display / Hero */
+.vero-display {
+  font-family: var(--font-display-family);
+  font-size: var(--font-display-size);
+  font-weight: var(--font-display-weight);
+  line-height: var(--font-display-leading);
+  letter-spacing: var(--font-display-tracking);
+  text-transform: var(--font-display-transform);
+  color: var(--color-text-heading);
+}
+
+h1, .vero-h1 {
+  font-family: var(--font-h1-family);
+  font-size: var(--font-h1-size);
+  font-weight: var(--font-h1-weight);
+  line-height: var(--font-h1-leading);
+  letter-spacing: var(--font-h1-tracking);
+  color: var(--color-text-heading);
+  margin: 0 0 var(--space-6) 0;
+}
+
+h2, .vero-h2 {
+  font-family: var(--font-h2-family);
+  font-size: var(--font-h2-size);
+  font-weight: var(--font-h2-weight);
+  line-height: var(--font-h2-leading);
+  letter-spacing: var(--font-h2-tracking);
+  color: var(--color-text-heading);
+  margin: 0 0 var(--space-5) 0;
+}
+
+h3, .vero-h3 {
+  font-family: var(--font-h3-family);
+  font-size: var(--font-h3-size);
+  font-weight: var(--font-h3-weight);
+  line-height: var(--font-h3-leading);
+  letter-spacing: var(--font-h3-tracking);
+  color: var(--color-text-heading);
+  margin: 0 0 var(--space-4) 0;
+}
+
+h4, .vero-h4 {
+  font-family: var(--font-h4-family);
+  font-size: var(--font-h4-size);
+  font-weight: var(--font-h4-weight);
+  line-height: var(--font-h4-leading);
+  letter-spacing: var(--font-h4-tracking);
+  color: var(--color-text-heading);
+  margin: 0 0 var(--space-3) 0;
+}
+
+h5, .vero-h5 {
+  font-family: var(--font-h5-family);
+  font-size: var(--font-h5-size);
+  font-weight: var(--font-h5-weight);
+  line-height: var(--font-h5-leading);
+  letter-spacing: var(--font-h5-tracking);
+  color: var(--color-text-heading);
+  margin: 0 0 var(--space-3) 0;
+}
+
+h6, .vero-h6 {
+  font-family: var(--font-h6-family);
+  font-size: var(--font-h6-size);
+  font-weight: var(--font-h6-weight);
+  line-height: var(--font-h6-leading);
+  letter-spacing: var(--font-h6-tracking);
+  text-transform: var(--font-h6-transform);
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-2) 0;
+}
+
+/* Lead paragraph */
+.vero-lead {
+  font-family: var(--font-body);
+  font-size: var(--font-lead-size);
+  font-weight: var(--font-lead-weight);
+  line-height: var(--font-lead-leading);
+  color: var(--color-text-secondary);
+}
+
+/* Overline — small uppercase label above a heading */
+.vero-overline {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: var(--font-overline-size);
+  font-weight: var(--font-overline-weight);
+  letter-spacing: var(--font-overline-tracking);
+  text-transform: var(--font-overline-transform);
+  color: var(--font-overline-color);
+  margin-bottom: var(--space-2);
+}
+
+/* Script accent text */
+.vero-script {
+  font-family: var(--font-script);
+  font-size: var(--font-script-size);
+  font-weight: var(--font-script-weight);
+  font-style: italic;
+  line-height: var(--font-script-leading);
+  color: var(--color-brand-primary);
+}
+
+/* Caption */
+.vero-caption {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-caption-weight);
+  line-height: var(--font-caption-leading);
+  color: var(--color-text-tertiary);
+}
+
+/* Badge / Label */
+.vero-badge {
+  display: inline-block;
+  font-size: var(--font-badge-size);
+  font-weight: var(--font-badge-weight);
+  letter-spacing: var(--font-badge-tracking);
+  text-transform: var(--font-badge-transform);
+  border-radius: var(--badge-radius);
+  padding: var(--badge-padding);
+  line-height: 1;
+}
+
+.vero-badge--sale {
+  background-color: var(--badge-sale-bg);
+  color: var(--badge-sale-color);
+}
+
+.vero-badge--new {
+  background-color: var(--badge-new-bg);
+  color: var(--badge-new-color);
+}
+
+.vero-badge--sold {
+  background-color: var(--badge-sold-bg);
+  color: var(--badge-sold-color);
+}
+
+
+/* ============================================================
+   6. UTILITY COLOR CLASSES
+   ============================================================ */
+
+/* Backgrounds */
+.bg-brand-primary  { background-color: var(--color-brand-primary); }
+.bg-brand-secondary { background-color: var(--color-brand-secondary); }
+.bg-brand-accent   { background-color: var(--color-brand-accent); }
+.bg-brand-canvas   { background-color: var(--color-brand-canvas); }
+.bg-brand-highlight { background-color: var(--color-brand-highlight); }
+.bg-surface        { background-color: var(--color-bg-surface); }
+.bg-inverse        { background-color: var(--color-bg-inverse); }
+
+/* Text */
+.text-brand-primary { color: var(--color-brand-primary); }
+.text-brand-accent  { color: var(--color-brand-accent); }
+.text-inverse       { color: var(--color-text-inverse); }
+.text-secondary     { color: var(--color-text-secondary); }
+.text-heading       { color: var(--color-text-heading); }
+
+
+/* ============================================================
+   7. UTILITY SPACING CLASSES
+   ============================================================ */
+
+.mt-auto { margin-top: auto; }
+.mb-auto { margin-bottom: auto; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+
+.gap-xs { gap: var(--space-2); }
+.gap-sm { gap: var(--space-4); }
+.gap-md { gap: var(--space-6); }
+.gap-lg { gap: var(--space-8); }
+.gap-xl { gap: var(--space-12); }
+
+
+/* ============================================================
+   8. FOCUS RING — brand-styled accessible focus
+   ============================================================ */
+
+*:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 3px;
+  border-radius: var(--radius-xs);
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+
+/* ============================================================
+   9. SCROLLBAR — subtle brand-tinted scrollbar
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--vero-cream-200);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--vero-navy-400);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--vero-cream-200);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vero-navy-700);
+}
