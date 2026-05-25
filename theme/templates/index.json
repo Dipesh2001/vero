@@ -19,16 +19,9 @@
             "image_overlay_opacity": 0,
             "show_content": false,
             "heading": "",
-            "heading_size": "h1",
             "subheading": "",
             "button_label": "",
-            "link": "shopify://collections",
-            "button_style_secondary": false,
-            "show_text_box": false,
-            "box_align": "middle-center",
-            "text_alignment": "center",
-            "text_alignment_mobile": "center",
-            "color_scheme": ""
+            "link": "shopify://collections"
           }
         },
         "slide_zm9kNH": {
@@ -38,16 +31,9 @@
             "image_overlay_opacity": 0,
             "show_content": false,
             "heading": "",
-            "heading_size": "h1",
             "subheading": "",
             "button_label": "",
-            "link": "",
-            "button_style_secondary": false,
-            "show_text_box": false,
-            "box_align": "middle-center",
-            "text_alignment": "center",
-            "text_alignment_mobile": "center",
-            "color_scheme": ""
+            "link": ""
           }
         },
         "slide_hAVrdd": {
@@ -56,16 +42,9 @@
             "image_overlay_opacity": 0,
             "show_content": false,
             "heading": "",
-            "heading_size": "h1",
             "subheading": "",
             "button_label": "",
-            "link": "",
-            "button_style_secondary": false,
-            "show_text_box": false,
-            "box_align": "middle-center",
-            "text_alignment": "center",
-            "text_alignment_mobile": "center",
-            "color_scheme": "scheme-1"
+            "link": ""
           }
         }
       },
@@ -76,19 +55,24 @@
       ],
       "name": "Main Carousel",
       "settings": {
+        "carousel_type": "slider",
         "layout": "full_bleed",
         "slide_height": "medium",
-        "slider_visual": "dots",
+        "heading": "",
+        "heading_alignment": "center",
         "auto_rotate": true,
         "change_slides_speed": 5,
         "image_behavior": "ambient",
+        "color_scheme": "",
+        "show_arrows": false,
+        "arrow_position": "outside",
+        "slider_visual": "dots",
+        "pagination_color_active": "#00237d",
+        "pagination_color_inactive": "#ffffff",
         "padding_top": 0,
         "padding_bottom": 0,
         "padding_top_mobile": 20,
-        "padding_bottom_mobile": 24,
-        "show_text_below": true,
-        "pagination_color_active": "#00237d",
-        "pagination_color_inactive": "#ffffff"
+        "padding_bottom_mobile": 24
       }
     },
     "collections_listing_homepage": {
@@ -97,25 +81,31 @@
         "item_tumblers": {
           "type": "collection_item",
           "settings": {
-            "title": "Coffee Tumblers",
             "image": "shopify://shop_images/Tumbler_banner_desktop.jpg",
-            "link": "shopify://collections"
+            "title": "Coffee Tumblers",
+            "link": "shopify://collections",
+            "card_bg_color": "#eaeaea",
+            "card_text_color": "#00237d"
           }
         },
         "item_bottles": {
           "type": "collection_item",
           "settings": {
-            "title": "Travel Bottles",
             "image": "shopify://shop_images/Hompage_banner_desktop.jpg",
-            "link": "shopify://collections"
+            "title": "Travel Bottles",
+            "link": "shopify://collections",
+            "card_bg_color": "#eaeaea",
+            "card_text_color": "#00237d"
           }
         },
         "item_carry": {
           "type": "collection_item",
           "settings": {
-            "title": "Everyday Carry",
             "image": "shopify://shop_images/Bag_banner_desktop.jpg",
-            "link": "shopify://collections"
+            "title": "Everyday Carry",
+            "link": "shopify://collections",
+            "card_bg_color": "#eaeaea",
+            "card_text_color": "#00237d"
           }
         }
       },
@@ -127,10 +117,11 @@
       "settings": {
         "heading": "Top Categories",
         "heading_alignment": "center",
+        "listing_type": "normal",
         "image_ratio": "square",
         "title_color": "#00237d",
         "image_border_radius": 0,
-        "show_arrows": true,
+        "show_arrows": false,
         "slides_per_view_desktop": 3,
         "slides_per_view_tablet": 2,
         "slides_per_view_mobile": "1.5",
@@ -139,6 +130,54 @@
         "padding_bottom": 36,
         "padding_top_mobile": 20,
         "padding_bottom_mobile": 20
+      }
+    },
+    "image_banner_CXJ4xP": {
+      "type": "image-banner",
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Bag_banner_desktop.jpg",
+        "image_link_1": "",
+        "image_link_2": "",
+        "image_overlay_opacity": 0,
+        "image_height": "adapt",
+        "image_behavior": "none",
+        "desktop_content_position": "middle-center",
+        "desktop_content_alignment": "center",
+        "show_text_box": true,
+        "color_scheme": "",
+        "make_full_width": false,
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_top_mobile": 24,
+        "padding_bottom_mobile": 24,
+        "stack_images_on_mobile": true,
+        "mobile_content_alignment": "center",
+        "show_text_below": true
+      }
+    },
+    "image_banner_EhHwJ6": {
+      "type": "image-banner",
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Tumbler_banner_desktop.jpg",
+        "image_link_1": "",
+        "image_link_2": "",
+        "image_overlay_opacity": 0,
+        "image_height": "adapt",
+        "image_behavior": "none",
+        "desktop_content_position": "middle-center",
+        "desktop_content_alignment": "center",
+        "show_text_box": true,
+        "color_scheme": "",
+        "make_full_width": false,
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_top_mobile": 24,
+        "padding_bottom_mobile": 24,
+        "stack_images_on_mobile": true,
+        "mobile_content_alignment": "center",
+        "show_text_below": true
       }
     },
     "custom_carousel_reviews": {
@@ -177,52 +216,22 @@
       "settings": {
         "carousel_type": "card",
         "layout": "full_bleed",
+        "slide_height": "medium",
         "heading": "Loved By Everyday Explorers",
         "heading_alignment": "center",
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "color_scheme": "scheme-6",
         "show_arrows": true,
         "arrow_position": "outside",
         "slider_visual": "none",
         "pagination_color_active": "#ffc357",
         "pagination_color_inactive": "#ffffff",
-        "color_scheme": "scheme-6",
         "padding_top": 36,
         "padding_bottom": 36,
         "padding_top_mobile": 20,
         "padding_bottom_mobile": 20
-      }
-    },
-    "image_banner_CXJ4xP": {
-      "type": "image-banner",
-      "name": "t:sections.image-banner.presets.name",
-      "settings": {
-        "image": "shopify://shop_images/Bag_banner_desktop.jpg",
-        "image_overlay_opacity": 0,
-        "image_height": "adapt",
-        "image_behavior": "none",
-        "desktop_content_position": "middle-center",
-        "desktop_content_alignment": "center",
-        "show_text_box": true,
-        "color_scheme": "",
-        "stack_images_on_mobile": true,
-        "mobile_content_alignment": "center",
-        "show_text_below": true
-      }
-    },
-    "image_banner_EhHwJ6": {
-      "type": "image-banner",
-      "name": "t:sections.image-banner.presets.name",
-      "settings": {
-        "image": "shopify://shop_images/Tumbler_banner_desktop.jpg",
-        "image_overlay_opacity": 0,
-        "image_height": "adapt",
-        "image_behavior": "none",
-        "desktop_content_position": "middle-center",
-        "desktop_content_alignment": "center",
-        "show_text_box": true,
-        "color_scheme": "",
-        "stack_images_on_mobile": true,
-        "mobile_content_alignment": "center",
-        "show_text_below": true
       }
     },
     "custom_newsletter_PgKLfg": {
@@ -242,14 +251,71 @@
         "padding_top_mobile": 32,
         "padding_bottom_mobile": 32
       }
+    },
+    "collections_listing_mMtDcJ": {
+      "type": "collections-listing",
+      "blocks": {
+        "collection_item_nUAyMG": {
+          "type": "collection_item",
+          "settings": {
+            "image": "shopify://shop_images/White_bottle.png",
+            "title": "Coffee Tumblers",
+            "link": "",
+            "card_bg_color": "#eaeaea",
+            "card_text_color": "#00237d"
+          }
+        },
+        "collection_item_4APRnx": {
+          "type": "collection_item",
+          "settings": {
+            "title": "Travel Bottles",
+            "link": "",
+            "card_bg_color": "#eaeaea",
+            "card_text_color": "#00237d"
+          }
+        },
+        "collection_item_e6LtLp": {
+          "type": "collection_item",
+          "settings": {
+            "title": "Everyday Carry",
+            "link": "",
+            "card_bg_color": "#eaeaea",
+            "card_text_color": "#00237d"
+          }
+        }
+      },
+      "block_order": [
+        "collection_item_nUAyMG",
+        "collection_item_4APRnx",
+        "collection_item_e6LtLp"
+      ],
+      "name": "Collections Listing",
+      "settings": {
+        "heading": "Top Categories",
+        "heading_alignment": "center",
+        "listing_type": "text_image",
+        "image_ratio": "portrait",
+        "title_color": "#00237d",
+        "image_border_radius": 0,
+        "show_arrows": false,
+        "slides_per_view_desktop": 3,
+        "slides_per_view_tablet": 2,
+        "slides_per_view_mobile": "1.5",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_top_mobile": 20,
+        "padding_bottom_mobile": 20
+      }
     }
   },
   "order": [
     "custom_carousel_9bhfxr",
     "collections_listing_homepage",
-    "custom_carousel_reviews",
     "image_banner_CXJ4xP",
     "image_banner_EhHwJ6",
-    "custom_newsletter_PgKLfg"
+    "custom_carousel_reviews",
+    "custom_newsletter_PgKLfg",
+    "collections_listing_mMtDcJ"
   ]
 }
