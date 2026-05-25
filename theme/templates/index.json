@@ -1,75 +1,255 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "custom_carousel_9bhfxr": {
+      "type": "custom-carousel",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "slide_P8WKYD": {
+          "type": "slide",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "image": "shopify://shop_images/Hompage_banner_desktop.jpg",
+            "image_overlay_opacity": 0,
+            "show_content": false,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "shopify://collections",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
           }
         },
-        "button": {
-          "type": "buttons",
+        "slide_zm9kNH": {
+          "type": "slide",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "image": "shopify://shop_images/Bag_banner_desktop.jpg",
+            "image_overlay_opacity": 0,
+            "show_content": false,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": ""
+          }
+        },
+        "slide_hAVrdd": {
+          "type": "slide",
+          "settings": {
+            "image_overlay_opacity": 0,
+            "show_content": false,
+            "heading": "",
+            "heading_size": "h1",
+            "subheading": "",
+            "button_label": "",
+            "link": "",
+            "button_style_secondary": false,
+            "show_text_box": false,
+            "box_align": "middle-center",
+            "text_alignment": "center",
+            "text_alignment_mobile": "center",
+            "color_scheme": "scheme-1"
           }
         }
       },
       "block_order": [
-        "heading",
-        "button"
+        "slide_P8WKYD",
+        "slide_zm9kNH",
+        "slide_hAVrdd"
       ],
+      "name": "Main Carousel",
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "layout": "full_bleed",
+        "slide_height": "medium",
+        "slider_visual": "dots",
+        "auto_rotate": true,
+        "change_slides_speed": 5,
+        "image_behavior": "ambient",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "padding_top_mobile": 20,
+        "padding_bottom_mobile": 24,
+        "show_text_below": true,
+        "pagination_color_active": "#00237d",
+        "pagination_color_inactive": "#ffffff"
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "collections_listing_homepage": {
+      "type": "collections-listing",
+      "blocks": {
+        "item_tumblers": {
+          "type": "collection_item",
+          "settings": {
+            "title": "Coffee Tumblers",
+            "image": "shopify://shop_images/Tumbler_banner_desktop.jpg",
+            "link": "shopify://collections"
+          }
+        },
+        "item_bottles": {
+          "type": "collection_item",
+          "settings": {
+            "title": "Travel Bottles",
+            "image": "shopify://shop_images/Hompage_banner_desktop.jpg",
+            "link": "shopify://collections"
+          }
+        },
+        "item_carry": {
+          "type": "collection_item",
+          "settings": {
+            "title": "Everyday Carry",
+            "image": "shopify://shop_images/Bag_banner_desktop.jpg",
+            "link": "shopify://collections"
+          }
+        }
+      },
+      "block_order": [
+        "item_tumblers",
+        "item_bottles",
+        "item_carry"
+      ],
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
+        "heading": "Top Categories",
+        "heading_alignment": "center",
+        "image_ratio": "square",
+        "title_color": "#00237d",
+        "image_border_radius": 0,
+        "show_arrows": true,
+        "slides_per_view_desktop": 3,
+        "slides_per_view_tablet": 2,
+        "slides_per_view_mobile": "1.5",
+        "color_scheme": "scheme-6",
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_top_mobile": 20,
+        "padding_bottom_mobile": 20
+      }
+    },
+    "custom_carousel_reviews": {
+      "type": "custom-carousel",
+      "blocks": {
+        "slide_review_1": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Hompage_banner_desktop.jpg",
+            "image_overlay_opacity": 0,
+            "show_content": false,
+            "heading": "",
+            "subheading": "",
+            "button_label": "",
+            "link": "shopify://collections"
+          }
+        },
+        "slide_review_2": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Bag_banner_desktop.jpg",
+            "image_overlay_opacity": 0,
+            "show_content": false,
+            "heading": "",
+            "subheading": "",
+            "button_label": "",
+            "link": "shopify://collections"
+          }
+        }
+      },
+      "block_order": [
+        "slide_review_1",
+        "slide_review_2"
+      ],
+      "name": "Review Cards Carousel",
+      "settings": {
+        "carousel_type": "card",
+        "layout": "full_bleed",
+        "heading": "Loved By Everyday Explorers",
+        "heading_alignment": "center",
+        "show_arrows": true,
+        "arrow_position": "outside",
+        "slider_visual": "none",
+        "pagination_color_active": "#ffc357",
+        "pagination_color_inactive": "#ffffff",
+        "color_scheme": "scheme-6",
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_top_mobile": 20,
+        "padding_bottom_mobile": 20
+      }
+    },
+    "image_banner_CXJ4xP": {
+      "type": "image-banner",
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Bag_banner_desktop.jpg",
+        "image_overlay_opacity": 0,
+        "image_height": "adapt",
+        "image_behavior": "none",
+        "desktop_content_position": "middle-center",
+        "desktop_content_alignment": "center",
+        "show_text_box": true,
+        "color_scheme": "",
+        "stack_images_on_mobile": true,
+        "mobile_content_alignment": "center",
+        "show_text_below": true
+      }
+    },
+    "image_banner_EhHwJ6": {
+      "type": "image-banner",
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Tumbler_banner_desktop.jpg",
+        "image_overlay_opacity": 0,
+        "image_height": "adapt",
+        "image_behavior": "none",
+        "desktop_content_position": "middle-center",
+        "desktop_content_alignment": "center",
+        "show_text_box": true,
+        "color_scheme": "",
+        "stack_images_on_mobile": true,
+        "mobile_content_alignment": "center",
+        "show_text_below": true
+      }
+    },
+    "custom_newsletter_PgKLfg": {
+      "type": "custom-newsletter",
+      "name": "Figma Newsletter",
+      "settings": {
+        "color_scheme": "scheme-2",
         "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
+        "heading": "Be the first to hear all things about Vero",
+        "subheading": "<p>Sign up to receive exclusive offers and news.</p>",
+        "subheading_color": "#a1a1a1",
+        "placeholder_text": "Enter your email address",
+        "button_text": "Subscribe",
+        "form_width": 600,
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
       }
     }
   },
   "order": [
-    "image_banner",
-    "featured_collection"
+    "custom_carousel_9bhfxr",
+    "collections_listing_homepage",
+    "custom_carousel_reviews",
+    "image_banner_CXJ4xP",
+    "image_banner_EhHwJ6",
+    "custom_newsletter_PgKLfg"
   ]
 }
