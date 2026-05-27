@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Shopify theme development scripts for Vero theme",
   "scripts": {
-    "dev": "shopify theme dev --path theme --store rqiycp-xj.myshopify.com",
-    "download": "shopify theme pull --path theme --store rqiycp-xj.myshopify.com",
-    "deploy": "shopify theme push --path theme --store rqiycp-xj.myshopify.com --ignore \"sections/*.json\" --ignore \"section/*.json\" --ignore \"templates/*.json\" --ignore \"templates/**/*.json\" --ignore \"config/settings_data.json\" --ignore \"locales/*.json\""
+    "dev": "shopify theme dev --path theme --store rqiycp-xj.myshopify.com --password shptka_6438dbb247f16d8c1d8764f0833f04dd",
+    "download": "shopify theme pull --path theme --store rqiycp-xj.myshopify.com --password shptka_6438dbb247f16d8c1d8764f0833f04dd",
+    "deploy": "shopify theme push --path theme --store rqiycp-xj.myshopify.com --password shptka_6438dbb247f16d8c1d8764f0833f04dd --ignore \"sections/*.json\" --ignore \"section/*.json\" --ignore \"templates/*.json\" --ignore \"templates/**/*.json\" --ignore \"config/settings_data.json\" --ignore \"locales/*.json\""
   }
 }

@@ -307,7 +307,36 @@
         "padding_top_mobile": 20,
         "padding_bottom_mobile": 20
       }
-    }
+    },
+    "1779906007860c7484": {
+      "type": "apps",
+      "blocks": {
+        "instafeed_app_block_hxC9wt": {
+          "type": "shopify://apps/instafeed/blocks/app-block/c447db20-095d-4a10-9725-b5977662c9d5",
+          "settings": {
+            "title": "Explore #Verolifestyle",
+            "title_color": "#ffc356",
+            "title_size_v2": 28,
+            "alignment": "center",
+            "instafeed_margin_top": 0,
+            "instafeed_margin_bottom": 30,
+            "instafeed_margin_sides": 0,
+            "show_instagram_link": false,
+            "link_alignment": "left",
+            "link_color": "#000000",
+            "background_color": "",
+            "feed_id": "",
+            "html_area": ""
+          }
+        }
+      },
+      "block_order": [
+        "instafeed_app_block_hxC9wt"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
   },
   "order": [
     "custom_carousel_9bhfxr",
@@ -315,6 +344,7 @@
     "image_banner_CXJ4xP",
     "image_banner_EhHwJ6",
     "custom_carousel_reviews",
+    "1779906007860c7484",
     "custom_newsletter_PgKLfg",
     "collections_listing_mMtDcJ"
   ]
