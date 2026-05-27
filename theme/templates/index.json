@@ -123,13 +123,12 @@
         "image_border_radius": 0,
         "show_arrows": false,
         "slides_per_view_desktop": 3,
-        "slides_per_view_tablet": 2,
         "slides_per_view_mobile": "1.5",
         "color_scheme": "scheme-6",
         "padding_top": 36,
         "padding_bottom": 36,
         "padding_top_mobile": 20,
-        "padding_bottom_mobile": 20
+        "padding_bottom_mobile": 24
       }
     },
     "image_banner_CXJ4xP": {
@@ -255,57 +254,69 @@
     "collections_listing_mMtDcJ": {
       "type": "collections-listing",
       "blocks": {
-        "collection_item_nUAyMG": {
+        "block_workout": {
           "type": "collection_item",
           "settings": {
             "image": "shopify://shop_images/White_bottle.png",
-            "title": "Coffee Tumblers",
-            "link": "",
-            "card_bg_color": "#eaeaea",
-            "card_text_color": "#00237d"
+            "title": "Workout",
+            "link": "shopify://collections",
+            "card_bg_color": "#dfd8d4",
+            "card_text_color": "#ffffff"
           }
         },
-        "collection_item_4APRnx": {
+        "block_daily_workout": {
           "type": "collection_item",
           "settings": {
-            "title": "Travel Bottles",
-            "link": "",
-            "card_bg_color": "#eaeaea",
-            "card_text_color": "#00237d"
+            "image": "shopify://shop_images/White_bottle.png",
+            "title": "Daily Workout",
+            "link": "shopify://collections",
+            "card_bg_color": "#bab8dd",
+            "card_text_color": "#ffffff"
           }
         },
-        "collection_item_e6LtLp": {
+        "block_travelling": {
           "type": "collection_item",
           "settings": {
-            "title": "Everyday Carry",
-            "link": "",
-            "card_bg_color": "#eaeaea",
-            "card_text_color": "#00237d"
+            "title": "Travelling",
+            "image": "shopify://shop_images/White_bottle.png",
+            "link": "shopify://collections",
+            "card_bg_color": "#97bdbc",
+            "card_text_color": "#ffffff"
+          }
+        },
+        "block_mom_me": {
+          "type": "collection_item",
+          "settings": {
+            "title": "Mom & me",
+            "image": "shopify://shop_images/White_bottle.png",
+            "link": "shopify://collections",
+            "card_bg_color": "#ffdcd3",
+            "card_text_color": "#ffffff"
           }
         }
       },
       "block_order": [
-        "collection_item_nUAyMG",
-        "collection_item_4APRnx",
-        "collection_item_e6LtLp"
+        "block_workout",
+        "block_daily_workout",
+        "block_travelling",
+        "block_mom_me"
       ],
       "name": "Collections Listing",
       "settings": {
-        "heading": "Top Categories",
+        "heading": "Premium Shades",
         "heading_alignment": "center",
         "listing_type": "text_image",
-        "image_ratio": "portrait",
-        "title_color": "#00237d",
+        "image_ratio": "square",
+        "title_color": "#ffffff",
         "image_border_radius": 0,
         "show_arrows": false,
-        "slides_per_view_desktop": 3,
-        "slides_per_view_tablet": 2,
+        "slides_per_view_desktop": 4,
         "slides_per_view_mobile": "1.5",
-        "color_scheme": "",
+        "color_scheme": "scheme-2",
         "padding_top": 36,
         "padding_bottom": 36,
         "padding_top_mobile": 20,
-        "padding_bottom_mobile": 20
+        "padding_bottom_mobile": 24
       }
     },
     "1779906007860c7484": {
@@ -342,10 +353,10 @@
     "custom_carousel_9bhfxr",
     "collections_listing_homepage",
     "image_banner_CXJ4xP",
+    "collections_listing_mMtDcJ",
     "image_banner_EhHwJ6",
     "custom_carousel_reviews",
     "1779906007860c7484",
-    "custom_newsletter_PgKLfg",
-    "collections_listing_mMtDcJ"
+    "custom_newsletter_PgKLfg"
   ]
 }
