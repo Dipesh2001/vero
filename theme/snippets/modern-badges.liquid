@@ -1,0 +1,101 @@
+{%- liquid
+  assign is_gallery = is_gallery | default: false
+  assign is_card = is_card | default: false
+  assign variant = variant | default: null
+
+  assign active_promo_badge_text = null
+  if is_gallery != true
+    for campaign in shop.metaobjects.promotional_campaign.values
+      assign now_time = 'now' | date: '%s' | plus: 0
+      assign start_time = campaign.start_time.value | date: '%s' | plus: 0
+      assign end_time = campaign.end_time.value | date: '%s' | plus: 0
+      if start_time == 0 or campaign.start_time == blank
+        assign start_time = campaign.start_time | date: '%s' | plus: 0
+      endif
+      if end_time == 0 or campaign.end_time == blank
+        assign end_time = campaign.end_time | date: '%s' | plus: 0
+      endif
+      if now_time >= start_time and now_time <= end_time
+        for promo_product in campaign.products.value
+          if promo_product.handle == product.handle
+            assign active_promo_badge_text = campaign.badge_name.value | default: campaign.badge_name
+            break
+          endif
+        endfor
+      endif
+      if active_promo_badge_text != null
+        break
+      endif
+    endfor
+  endif
+
+  assign has_discount_badge = false
+  assign display_promo = false
+  assign display_sale = false
+  assign display_new = false
+  assign display_bestseller = false
+  assign display_featured = false
+
+  if active_promo_badge_text != blank
+    assign display_promo = true
+    assign has_discount_badge = true
+  elsif is_gallery != true and product.compare_at_price > product.price
+    assign display_sale = true
+    assign has_discount_badge = true
+  endif
+
+  if has_discount_badge == false
+    for tag in product.tags
+      if tag == 'badge_new'
+        assign display_new = true
+      endif
+      if tag == 'badge_best_seller'
+        assign display_bestseller = true
+      endif
+      if tag == 'badge_featured'
+        assign display_featured = true
+      endif
+    endfor
+  endif
+
+  assign display_sold_out = false
+  if variant != null
+    if variant.available == false
+      assign display_sold_out = true
+    endif
+  else
+    if product.available == false
+      assign display_sold_out = true
+    endif
+  endif
+-%}
+
+{%- if display_promo or display_sale or display_new or display_bestseller or display_featured or display_sold_out -%}
+  <div class="modern-badges-container{% if is_card %} modern-badges-container--overlay{% endif %}" data-product-id="{{ product.id }}">
+    <div class="modern-badges-left">
+      {%- if display_promo -%}
+        <span class="modern-badge modern-badge--promo">{{ active_promo_badge_text }}</span>
+      {%- elsif display_sale -%}
+        <span class="modern-badge modern-badge--sale">{{ 'products.product.on_sale' | t | default: 'Sale' }}</span>
+      {%- endif -%}
+
+      {%- if has_discount_badge == false -%}
+        {%- if display_new -%}
+          <span class="modern-badge modern-badge--new">{{ 'products.badges.new' | t | default: 'New' }}</span>
+        {%- endif -%}
+        {%- if display_bestseller -%}
+          <span class="modern-badge modern-badge--bestseller">{{ 'products.badges.best_seller' | t | default: 'Best Seller' }}</span>
+        {%- endif -%}
+        {%- if display_featured -%}
+          <span class="modern-badge modern-badge--featured">{{ 'products.badges.featured' | t | default: 'Featured' }}</span>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+
+    {%- if display_sold_out -%}
+      <div class="modern-badges-right">
+        <span class="modern-badge modern-badge--sold-out">{{ 'products.badges.sold_out' | t | default: 'Sold Out' }}</span>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

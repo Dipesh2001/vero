@@ -1,0 +1,1014 @@
+{{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+
+<style>
+  /* Section Spacing */
+  .featured-collection-slider-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top_mobile | default: 20 }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile | default: 20 }}px;
+    position: relative;
+    overflow: hidden;
+  }
+  @media screen and (min-width: 750px) {
+    .featured-collection-slider-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top | default: 36 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | default: 36 }}px;
+    }
+  }
+
+  /* Section Title */
+  .featured-collection-slider-{{ section.id }} .section-header {
+    text-align: {{ section.settings.heading_alignment | default: 'center' }};
+    margin-bottom: 2rem;
+  }
+  .featured-collection-slider-{{ section.id }} .section-header h2 {
+    font-family: var(--font-body-custom);
+    font-weight: 700;
+    font-size: 2.8rem;
+    color: rgb(var(--color-foreground)) !important;
+    margin: 0;
+    line-height: 1.2;
+  }
+  @media screen and (min-width: 750px) {
+    .featured-collection-slider-{{ section.id }} .section-header h2 {
+      font-size: 4rem;
+    }
+  }
+
+  /* Carousel Outer Container */
+  .featured-collection-slider-{{ section.id }} .swiper-container-outer {
+    position: relative;
+    padding: 0 16px;
+  }
+  @media screen and (min-width: 750px) {
+    .featured-collection-slider-{{ section.id }} .swiper-container-outer {
+      padding: 0 40px;
+    }
+  }
+
+  .featured-collection-slider-{{ section.id }} .swiper-container-main.swiper {
+    width: 100%;
+    height: auto;
+    overflow: visible !important;
+    clip-path: inset(-100px -100px -100px -100px);
+  }
+
+  /* Product Card Styling */
+  .product-card-premium {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  /* Image Box Wrapper */
+  .product-card-image-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #faf9f9;
+    border: 1px solid #f2eadf;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Miniature Swiper inside Card */
+  .product-card-media-swiper.swiper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .product-card-media-swiper .swiper-slide {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .product-card-media-swiper img {
+    max-width: 85%;
+    max-height: 85%;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+  }
+
+  /* Swatches Navigation & Scroll */
+  .product-swatches-outer-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .swatch-scroll-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #00237d;
+    padding: 0;
+    z-index: 2;
+  }
+  .swatch-scroll-btn svg {
+    width: 10px;
+    height: 10px;
+    transition: transform 0.2s ease;
+  }
+  .swatch-scroll-prev svg {
+    transform: rotate(90px); /* Adjust rotation based on chevron direction */
+  }
+  .swatch-scroll-next svg {
+    transform: rotate(-90px);
+  }
+
+  .swatches-scroll-container {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Hide standard Firefox scrollbar */
+    padding: 2px 4px;
+    flex-grow: 1;
+    align-items: center;
+  }
+  .swatches-scroll-container::-webkit-scrollbar {
+    display: none; /* Hide Chrome/Safari scrollbar */
+  }
+
+  /* Color Swatch Button */
+  .color-swatch-btn-wrapper {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .color-swatch-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    border: 1px solid #00237d;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 0;
+    transition: transform 0.15s ease;
+  }
+  .color-swatch-btn:hover {
+    transform: scale(1.05);
+  }
+  .color-swatch-btn-wrapper.is-active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 28px;
+    height: 28px;
+    border: 1px solid #00237d;
+    border-radius: 4px;
+    box-sizing: border-box;
+    pointer-events: none;
+  }
+
+  /* Selected Swatch Description (Size | Color) */
+  .selected-color-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    color: #454545;
+    margin: 0 0 1rem 0;
+    text-align: left;
+    min-height: 1.8rem;
+  }
+
+  /* Product Meta Details */
+  .product-card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    text-align: left;
+  }
+  .product-card-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #00237d;
+    margin: 0;
+    line-height: 1.3;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .product-card-title:hover {
+    opacity: 0.8;
+  }
+
+  /* Prices Section */
+  .product-card-price-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.6rem;
+    color: #00237d;
+  }
+  .product-card-price-value {
+    font-weight: 600;
+  }
+  .product-card-compare-price {
+    font-size: 1.4rem;
+    color: #888888;
+    text-decoration: line-through;
+  }
+  .product-card-discount-percent {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #cc0000;
+    background-color: #ffe6e6;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  /* Badges overlay styles */
+  .modern-badges-container--overlay {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    z-index: 10;
+    pointer-events: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: calc(100% - 24px);
+  }
+  .modern-badges-left {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .modern-badges-right {
+    margin-left: auto;
+  }
+  .modern-badge {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    display: inline-block;
+    line-height: 1;
+  }
+  .modern-badge--promo {
+    background-color: #ffc356;
+    color: #ffffff;
+  }
+  .modern-badge--sale {
+    background-color: #cc0000;
+    color: #ffffff;
+  }
+  .modern-badge--new {
+    background-color: #c8e9fc;
+    color: #00237d;
+  }
+  .modern-badge--bestseller {
+    background-color: #ffdcd3;
+    color: #ff5a3c;
+  }
+  .modern-badge--featured {
+    background-color: #bab8dd;
+    color: #4b3d8f;
+  }
+  .modern-badge--sold-out {
+    background-color: #454545;
+    color: #ffffff;
+  }
+
+  /* Add to Bag Button */
+  .product-card-submit-btn {
+    background-color: #00237d !important;
+    color: #ffffff !important;
+    border: none;
+    border-radius: 0;
+    height: 62px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    width: 100%;
+    margin-top: 1.5rem;
+    padding: 0;
+  }
+  .product-card-submit-btn:hover {
+    background-color: #001a5e !important;
+  }
+  .product-card-submit-btn:active {
+    transform: scale(0.98);
+  }
+  .product-card-submit-btn[disabled] {
+    background-color: #cccccc !important;
+    color: #888888 !important;
+    cursor: not-allowed;
+  }
+
+  /* Loader spinner */
+  .product-card-submit-btn .loading__spinner {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    position: absolute;
+    right: 20px;
+  }
+  .product-card-submit-btn .loading__spinner.hidden {
+    display: none;
+  }
+  .product-card-submit-btn .spinner {
+    animation: rotator 1.4s linear infinite;
+    width: 20px;
+    height: 20px;
+  }
+  .product-card-submit-btn .path {
+    stroke-dasharray: 187;
+    stroke-dashoffset: 0;
+    transform-origin: center;
+    animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+    stroke: #ffffff;
+  }
+  @keyframes rotator {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(270deg); }
+  }
+  @keyframes dash {
+    0% { stroke-dashoffset: 187; }
+    50% {
+      stroke-dashoffset: 46.75;
+      transform: rotate(135deg);
+    }
+    100% {
+      stroke-dashoffset: 187;
+      transform: rotate(450deg);
+    }
+  }
+
+  /* Custom swiper navigation buttons inside Swiper container outer */
+  .swiper-button-prev-{{ section.id }}.swiper-button-prev,
+  .swiper-button-next-{{ section.id }}.swiper-button-next {
+    width: 35px;
+    height: 35px;
+    background: #000000 !important;
+    color: #ffffff !important;
+    border-radius: 50%;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin-top: 0 !important;
+    z-index: 10;
+    cursor: pointer;
+    border: none;
+  }
+  .swiper-button-prev-{{ section.id }}.swiper-button-prev::after,
+  .swiper-button-next-{{ section.id }}.swiper-button-next::after {
+    font-size: 16px !important;
+    font-weight: 900;
+    line-height: 1;
+    display: block;
+  }
+  .swiper-button-prev-{{ section.id }} { left: -10px; }
+  .swiper-button-next-{{ section.id }} { right: -10px; }
+  @media screen and (min-width: 750px) {
+    .swiper-button-prev-{{ section.id }} { left: 0; }
+    .swiper-button-next-{{ section.id }} { right: 0; }
+  }
+  @media screen and (max-width: 749px) {
+    .swiper-button-prev-{{ section.id }},
+    .swiper-button-next-{{ section.id }} {
+      display: none !important;
+    }
+  }
+</style>
+
+<div class="featured-collection-slider-{{ section.id }} color-{{ section.settings.color_scheme }} gradient">
+  {%- if section.settings.heading != blank -%}
+    <div class="section-header page-width">
+      <h2>{{ section.settings.heading | escape }}</h2>
+    </div>
+  {%- endif -%}
+
+  <div class="page-width">
+    <div class="swiper-container-outer">
+      <div class="swiper swiper-container-main swiper-container-{{ section.id }}">
+        <div class="swiper-wrapper">
+          {%- assign featured_collection = section.settings.collection -%}
+          {%- if featured_collection != blank and featured_collection.all_products_count > 0 -%}
+            {%- for product in featured_collection.products limit: section.settings.products_to_show -%}
+              <div class="swiper-slide">
+                <div class="product-card-premium js-product-card" data-product-id="{{ product.id }}">
+                  
+                  <!-- Image Box with sub-swiper and badges -->
+                  <div class="product-card-image-box">
+                    {%- render 'modern-badges', product: product, is_card: true -%}
+                    
+                    <div class="swiper product-card-media-swiper js-card-media-swiper">
+                      <div class="swiper-wrapper">
+                        {%- for media in product.media -%}
+                          <div class="swiper-slide" data-media-alt="{{ media.alt | escape }}" data-variant-id="{%- for variant in product.variants -%}{%- if variant.featured_media.id == media.id -%}{{ variant.id }}{%- endif -%}{%- endfor -%}">
+                            <img
+                              src="{{ media | image_url: width: 533 }}"
+                              alt="{{ media.alt | default: product.title | escape }}"
+                              loading="lazy"
+                              width="{{ media.width | default: 500 }}"
+                              height="{{ media.height | default: 500 }}"
+                            >
+                          </div>
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Swatches scrolling list -->
+                  {%- liquid
+                    assign color_option_index = -1
+                    assign size_option_index = -1
+                    for option in product.options_with_values
+                      assign option_name_down = option.name | downcase
+                      if option_name_down contains 'color' or option_name_down contains 'colour'
+                        assign color_option_index = forloop.index0
+                      endif
+                      if option_name_down contains 'size'
+                        assign size_option_index = forloop.index0
+                      endif
+                    endfor
+                  -%}
+
+                  {%- if color_option_index >= 0 -%}
+                    {%- assign color_option = product.options_with_values[color_option_index] -%}
+                    <div class="product-swatches-outer-wrapper">
+                      <button class="swatch-scroll-btn swatch-scroll-prev" type="button" aria-label="Previous Swatches">
+                        <svg viewBox="0 0 100 100" class="icon icon-chevron-left"><path d="M70.7,90.5L30.2,50L70.7,9.5" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      </button>
+                      <div class="swatches-scroll-container js-swatches-container">
+                        {%- for value in color_option.values -%}
+                          {%- liquid
+                            assign matching_variant = null
+                            for variant in product.variants
+                              assign var_option_val = variant.options[color_option_index]
+                              if var_option_val == value
+                                assign matching_variant = variant
+                                break
+                              endif
+                            endfor
+                            
+                            assign is_active = false
+                            if forloop.first
+                              assign is_active = true
+                              assign selected_variant = matching_variant
+                            endif
+
+                            # Determine Swatch Image or color
+                            assign swatch_bg = ''
+                            if value.swatch.image != blank
+                              assign swatch_image_url = value.swatch.image | image_url: width: 50
+                              assign swatch_bg = 'background-image: url(' | append: swatch_image_url | append: ');'
+                            elsif value.swatch.color != blank
+                              assign swatch_bg = 'background-color: rgb(' | append: value.swatch.color.rgb | append: ');'
+                            elsif matching_variant.featured_media != blank
+                              assign swatch_image_url = matching_variant.featured_media | image_url: width: 50
+                              assign swatch_bg = 'background-image: url(' | append: swatch_image_url | append: ');'
+                            else
+                              assign swatch_bg = 'background-color: ' | append: value | handle | append: ';'
+                            endif
+                          -%}
+                          <div class="color-swatch-btn-wrapper {% if is_active %}is-active{% endif %} js-swatch-wrapper">
+                            <button
+                              class="color-swatch-btn js-swatch-btn"
+                              style="{{ swatch_bg }}"
+                              data-color-name="{{ value | escape }}"
+                              data-variant-id="{{ matching_variant.id }}"
+                              data-price="{{ matching_variant.price | money }}"
+                              data-compare-price="{% if matching_variant.compare_at_price > matching_variant.price %}{{ matching_variant.compare_at_price | money }}{% endif %}"
+                              data-available="{{ matching_variant.available }}"
+                              title="{{ value | escape }}"
+                              type="button"
+                            ></button>
+                          </div>
+                        {%- endfor -%}
+                      </div>
+                      <button class="swatch-scroll-btn swatch-scroll-next" type="button" aria-label="Next Swatches">
+                        <svg viewBox="0 0 100 100" class="icon icon-chevron-right"><path d="M29.3,9.5L69.8,50L29.3,90.5" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      </button>
+                    </div>
+                  {%- endif -%}
+
+                  <!-- Color / Option Descriptor -->
+                  {%- liquid
+                    assign size_val = '30oz'
+                    if size_option_index >= 0
+                      assign size_val = product.variants[0].options[size_option_index]
+                    endif
+                    assign active_color_name = 'Selected Color'
+                    if color_option_index >= 0
+                      assign active_color_name = color_option.values[0]
+                    endif
+                  -%}
+                  <p class="selected-color-text js-selected-color-text" data-size="{{ size_val | escape }}">
+                    {{ size_val | escape }} | {{ active_color_name | escape }}
+                  </p>
+
+                  <!-- Product details (Title and Price) -->
+                  <div class="product-card-details">
+                    <a href="{{ product.url }}" class="product-card-title">{{ product.title | escape }}</a>
+                    
+                    {%- assign current_variant = selected_variant | default: product.selected_or_first_available_variant -%}
+                    <div class="product-card-price-container">
+                      <span class="product-card-price-value js-price-value">{{ current_variant.price | money }}</span>
+                      <s class="product-card-compare-price js-compare-price" style="{% unless current_variant.compare_at_price > current_variant.price %}display: none;{% endunless %}">
+                        {{ current_variant.compare_at_price | money }}
+                      </s>
+                      {%- if current_variant.compare_at_price > current_variant.price -%}
+                        {%- assign discount = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
+                        <span class="product-card-discount-percent js-discount-percent">-{{ discount }}%</span>
+                      {%- endif -%}
+                    </div>
+                  </div>
+
+                  <!-- Add to bag button -->
+                  {%- assign product_form_id = 'quick-add-slider-' | append: section.id | append: product.id -%}
+                  <product-form data-section-id="{{ section.id }}">
+                    {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                      <input type="hidden" name="id" value="{{ current_variant.id }}" class="product-variant-id js-product-variant-id" {% unless current_variant.available %}disabled{% endunless %}>
+                      <button
+                        type="submit"
+                        name="add"
+                        class="product-card-submit-btn js-product-submit-btn"
+                        {% unless current_variant.available %}disabled{% endunless %}
+                      >
+                        <span>
+                          {%- if current_variant.available -%}
+                            Add To Bag
+                          {%- else -%}
+                            Sold Out
+                          {%- endif -%}
+                        </span>
+                        <div class="loading__spinner hidden js-loading-spinner">
+                          <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+                          </svg>
+                        </div>
+                      </button>
+                    {%- endform -%}
+                  </product-form>
+
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..4) -%}
+              <div class="swiper-slide">
+                <div class="product-card-premium">
+                  <div class="product-card-image-box">
+                    {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                  <div class="product-card-details">
+                    <span class="product-card-title">Onboarding Product {{ i }}</span>
+                    <div class="product-card-price-container">
+                      <span class="product-card-price-value">₹800</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+
+      {% if section.settings.show_arrows and featured_collection != blank %}
+        <div class="swiper-button-prev-{{ section.id }} swiper-button-prev"></div>
+        <div class="swiper-button-next-{{ section.id }} swiper-button-next"></div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+  // Product Card Controller Class
+  class PremiumProductCard {
+    constructor(el) {
+      this.el = el;
+      this.mediaSwiperEl = el.querySelector('.js-card-media-swiper');
+      this.swatches = el.querySelectorAll('.js-swatch-btn');
+      this.selectedColorEl = el.querySelector('.js-selected-color-text');
+      this.variantIdInput = el.querySelector('.js-product-variant-id');
+      this.priceEl = el.querySelector('.js-price-value');
+      this.comparePriceEl = el.querySelector('.js-compare-price');
+      this.discountEl = el.querySelector('.js-discount-percent');
+      this.submitBtn = el.querySelector('.js-product-submit-btn');
+      this.swatchesContainer = el.querySelector('.js-swatches-container');
+      this.prevSwatchBtn = el.querySelector('.swatch-scroll-prev');
+      this.nextSwatchBtn = el.querySelector('.swatch-scroll-next');
+
+      // Save initial slides
+      if (this.mediaSwiperEl) {
+        this.allSlides = Array.from(this.mediaSwiperEl.querySelectorAll('.swiper-slide'));
+        this.initSwiper();
+      }
+
+      this.initSwatches();
+      this.initSwatchesScroll();
+    }
+
+    initSwiper() {
+      this.swiper = new Swiper(this.mediaSwiperEl, {
+        slidesPerView: 1,
+        nested: true,
+        resistanceRatio: 0,
+        allowTouchMove: true,
+        observer: true,
+        observeParents: true
+      });
+      
+      // Filter images for initial active color
+      const initialActiveSwatch = this.el.querySelector('.js-swatch-btn.is-active') || this.swatches[0];
+      if (initialActiveSwatch) {
+        this.selectSwatch(initialActiveSwatch, true);
+      }
+    }
+
+    initSwatches() {
+      this.swatches.forEach(swatch => {
+        swatch.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.selectSwatch(swatch, false);
+        });
+        swatch.addEventListener('mouseenter', () => {
+          this.updateColorText(swatch.dataset.colorName);
+        });
+        swatch.addEventListener('mouseleave', () => {
+          const activeSwatch = this.el.querySelector('.js-swatch-btn.is-active') || this.el.querySelector('.js-swatch-wrapper.is-active .js-swatch-btn');
+          if (activeSwatch) {
+            this.updateColorText(activeSwatch.dataset.colorName);
+          }
+        });
+      });
+    }
+
+    initSwatchesScroll() {
+      if (this.prevSwatchBtn && this.nextSwatchBtn && this.swatchesContainer) {
+        this.prevSwatchBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.swatchesContainer.scrollBy({ left: -60, behavior: 'smooth' });
+        });
+        this.nextSwatchBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.swatchesContainer.scrollBy({ left: 60, behavior: 'smooth' });
+        });
+      }
+    }
+
+    selectSwatch(swatch, isInitial = false) {
+      // Remove is-active class from all wrapper containers
+      const wrappers = this.el.querySelectorAll('.js-swatch-wrapper');
+      wrappers.forEach(w => w.classList.remove('is-active'));
+
+      // Add is-active class to clicked swatch's wrapper
+      const wrapper = swatch.closest('.js-swatch-wrapper');
+      if (wrapper) wrapper.classList.add('is-active');
+
+      this.swatches.forEach(s => s.classList.remove('is-active'));
+      swatch.classList.add('is-active');
+
+      const colorName = swatch.dataset.colorName;
+      const variantId = swatch.dataset.variantId;
+      const price = swatch.dataset.price;
+      const comparePrice = swatch.dataset.comparePrice;
+      const available = swatch.dataset.available === 'true';
+
+      // Update variant hidden input
+      if (this.variantIdInput) {
+        this.variantIdInput.value = variantId;
+        this.variantIdInput.disabled = !available;
+      }
+
+      // Update Price UI
+      this.updatePrices(price, comparePrice);
+
+      // Update Button State
+      this.updateButtonState(available);
+
+      // Filter slider images
+      this.filterSwiperImages(colorName, variantId);
+
+      // Update title text
+      this.updateColorText(colorName);
+    }
+
+    updateColorText(colorName) {
+      if (this.selectedColorEl) {
+        const sizeVal = this.selectedColorEl.dataset.size || '30oz';
+        this.selectedColorEl.textContent = `${sizeVal} | ${colorName}`;
+      }
+    }
+
+    updatePrices(price, comparePrice) {
+      if (this.priceEl) {
+        this.priceEl.innerHTML = price;
+      }
+      if (this.comparePriceEl) {
+        if (comparePrice && comparePrice !== '') {
+          this.comparePriceEl.innerHTML = comparePrice;
+          this.comparePriceEl.style.display = 'inline';
+
+          // Recalculate discount percentage
+          const priceNum = parseFloat(price.replace(/[^0-9.]/g, ''));
+          const compareNum = parseFloat(comparePrice.replace(/[^0-9.]/g, ''));
+          if (compareNum > priceNum) {
+            const discount = Math.round(((compareNum - priceNum) / compareNum) * 100);
+            if (this.discountEl) {
+              this.discountEl.textContent = `-${discount}%`;
+              this.discountEl.style.display = 'inline-block';
+            }
+          } else if (this.discountEl) {
+            this.discountEl.style.display = 'none';
+          }
+        } else {
+          this.comparePriceEl.style.display = 'none';
+          if (this.discountEl) this.discountEl.style.display = 'none';
+        }
+      }
+    }
+
+    updateButtonState(available) {
+      if (this.submitBtn) {
+        const textEl = this.submitBtn.querySelector('span');
+        if (available) {
+          this.submitBtn.removeAttribute('disabled');
+          if (textEl) textEl.textContent = 'Add To Bag';
+        } else {
+          this.submitBtn.setAttribute('disabled', 'disabled');
+          if (textEl) textEl.textContent = 'Sold Out';
+        }
+      }
+    }
+
+    filterSwiperImages(colorName, variantId) {
+      if (!this.swiper) return;
+
+      const lowerColor = colorName.toLowerCase().trim();
+      let filteredSlides = this.allSlides.filter(slide => {
+        const alt = (slide.dataset.mediaAlt || '').toLowerCase().trim();
+        return alt.includes(lowerColor);
+      });
+
+      // Fallbacks
+      if (filteredSlides.length === 0) {
+        filteredSlides = this.allSlides.filter(slide => slide.dataset.variantId === variantId);
+      }
+      if (filteredSlides.length === 0) {
+        filteredSlides = [this.allSlides[0]];
+      }
+
+      // Rebuild wrapper
+      const wrapper = this.mediaSwiperEl.querySelector('.swiper-wrapper');
+      if (wrapper) {
+        wrapper.innerHTML = '';
+        filteredSlides.forEach(slide => {
+          wrapper.appendChild(slide.cloneNode(true));
+        });
+      }
+
+      // Update Swiper
+      this.swiper.update();
+      this.swiper.slideTo(0, 0);
+    }
+  }
+
+  function initFeaturedCollectionSlider{{ section.id | replace: '-', '_' }}() {
+    const init = () => {
+      // Initialize main slider
+      new Swiper('.swiper-container-{{ section.id }}', {
+        slidesPerView: {{ section.settings.slides_per_view_mobile | default: 1.2 }},
+        spaceBetween: 16,
+        grabCursor: true,
+        breakpoints: {
+          750: {
+            slidesPerView: {{ section.settings.slides_per_view_desktop | default: 4 }},
+            spaceBetween: 24
+          }
+        }
+        {% if section.settings.show_arrows %},
+        navigation: {
+          nextEl: '.swiper-button-next-{{ section.id }}',
+          prevEl: '.swiper-button-prev-{{ section.id }}',
+        }
+        {% endif %}
+      });
+
+      // Initialize all product cards inside the slider
+      const cards = document.querySelectorAll('.featured-collection-slider-{{ section.id }} .js-product-card');
+      cards.forEach(card => {
+        new PremiumProductCard(card);
+      });
+    };
+
+    if (typeof Swiper !== 'undefined') {
+      init();
+    } else {
+      const script = document.createElement('script');
+      script.src = '{{ 'swiper-bundle.min.js' | asset_url }}';
+      script.onload = init;
+      document.head.appendChild(script);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initFeaturedCollectionSlider{{ section.id | replace: '-', '_' }});
+  
+  document.addEventListener('shopify:section:load', function(event) {
+    if (event.detail.sectionId === '{{ section.id }}') {
+      initFeaturedCollectionSlider{{ section.id | replace: '-', '_' }}();
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Feature Collection Slider",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading Settings"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop Best Sellers"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Collection Settings"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 16,
+      "step": 1,
+      "label": "Products to Show",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Slider Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show Navigation Arrows",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "slides_per_view_desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "Desktop Slides Per View",
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "slides_per_view_mobile",
+      "label": "Mobile Slides Per View",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 Slide"
+        },
+        {
+          "value": "1.2",
+          "label": "1.2 Slides"
+        },
+        {
+          "value": "1.5",
+          "label": "1.5 Slides"
+        },
+        {
+          "value": "2",
+          "label": "2 Slides"
+        }
+      ],
+      "default": "1.2"
+    },
+    {
+      "type": "header",
+      "content": "Color Scheme"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Padding Top",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Padding Bottom",
+      "default": 20
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collection Slider"
+    }
+  ]
+}
+{% endschema %}

@@ -184,6 +184,12 @@
     "modal": {
       "label": "Media gallery"
     },
+    "badges": {
+      "new": "New",
+      "best_seller": "Best Seller",
+      "featured": "Featured",
+      "sold_out": "Sold Out"
+    },
     "facets": {
       "filter_and_operator_subtitle": "Match all",
       "apply": "Apply",
