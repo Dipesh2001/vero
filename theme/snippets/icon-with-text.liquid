@@ -35,10 +35,29 @@
   elsif heading_3_empty == false and block.settings.icon_3 != 'none' or block.settings.image_3 != null
     assign text_only_all_items = false
   endif
+
+  assign border_styles = ''
+  if block.settings.border_top
+    assign border_styles = border_styles | append: 'border-top: 1px solid ' | append: block.settings.border_color | append: ';'
+  endif
+  if block.settings.border_bottom
+    assign border_styles = border_styles | append: 'border-bottom: 1px solid ' | append: block.settings.border_color | append: ';'
+  endif
+  if block.settings.border_left
+    assign border_styles = border_styles | append: 'border-left: 1px solid ' | append: block.settings.border_color | append: ';'
+  endif
+  if block.settings.border_right
+    assign border_styles = border_styles | append: 'border-right: 1px solid ' | append: block.settings.border_color | append: ';'
+  endif
+
+  if border_styles != blank
+    assign border_styles = border_styles | append: ' padding: 1.5rem;'
+  endif
 -%}
 <ul
   class="icon-with-text icon-with-text--{{ block.settings.layout }} list-unstyled{% if text_only_all_items %} icon-with-text--text-only{% endif %}"
   {{ block.shopify_attributes }}
+  style="{{ border_styles }}"
 >
   {%- unless heading_1_empty -%}
     <li class="icon-with-text__item">
@@ -57,7 +76,7 @@
           loading="lazy"
         >
       {%- endif -%}
-      <span class="h4 inline-richtext">
+      <span class="h4 inline-richtext" style="color: {{ block.settings.text_color | default: 'inherit' }}; font-size: {{ block.settings.font_size | default: 16 }}px !important;">
         {{- block.settings.heading_1 -}}
       </span>
     </li>
@@ -79,7 +98,7 @@
           loading="lazy"
         >
       {%- endif -%}
-      <span class="h4 inline-richtext">
+      <span class="h4 inline-richtext" style="color: {{ block.settings.text_color | default: 'inherit' }}; font-size: {{ block.settings.font_size | default: 16 }}px !important;">
         {{- block.settings.heading_2 -}}
       </span>
     </li>
@@ -101,7 +120,7 @@
           loading="lazy"
         >
       {%- endif -%}
-      <span class="h4 inline-richtext">
+      <span class="h4 inline-richtext" style="color: {{ block.settings.text_color | default: 'inherit' }}; font-size: {{ block.settings.font_size | default: 16 }}px !important;">
         {{- block.settings.heading_3 -}}
       </span>
     </li>

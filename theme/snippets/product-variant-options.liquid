@@ -66,6 +66,34 @@
       {{ label_unavailable }}
     {%- endcapture -%}
 
+    {%- liquid
+      assign variant_for_value = null
+      for variant in product.variants
+        if option.position == 1 and variant.option1 == value
+          assign variant_for_value = variant
+          break
+        elsif option.position == 2 and variant.option2 == value
+          assign variant_for_value = variant
+          break
+        elsif option.position == 3 and variant.option3 == value
+          assign variant_for_value = variant
+          break
+        endif
+      endfor
+
+      assign swatch_color = null
+      assign swatch_image_url = null
+
+      if variant_for_value != null
+        if variant_for_value.metafields.custom.swatch_color != blank
+          assign swatch_color = variant_for_value.metafields.custom.swatch_color.value | default: variant_for_value.metafields.custom.swatch_color
+        endif
+        if variant_for_value.metafields.custom.swatch_image != blank
+          assign swatch_image_url = variant_for_value.metafields.custom.swatch_image.value | image_url: width: 50
+        endif
+      endif
+    -%}
+
     {%
       render 'swatch-input',
       id: input_id,
@@ -77,7 +105,9 @@
       visually_disabled: option_disabled,
       shape: block.settings.swatch_shape,
       help_text: help_text,
-      additional_props: input_dataset
+      additional_props: input_dataset,
+      swatch_color: swatch_color,
+      swatch_image_url: swatch_image_url
     %}
   {%- elsif picker_type == 'button' -%}
     <input

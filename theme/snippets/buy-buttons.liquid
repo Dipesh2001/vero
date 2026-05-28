@@ -69,32 +69,112 @@
             if product.selected_or_first_available_variant.quantity_rule.min > product.selected_or_first_available_variant.inventory_quantity and check_against_inventory
               assign quantity_rule_soldout = true
             endif
+
+            assign is_out_of_stock = false
+            if product.selected_or_first_available_variant.available == false or quantity_rule_soldout or product.selected_or_first_available_variant == null
+              assign is_out_of_stock = true
+            endif
           -%}
-          <button
-            id="ProductSubmitButton-{{ section_id }}"
-            type="submit"
-            name="add"
-            class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
-            {% if product.selected_or_first_available_variant.available == false
-              or quantity_rule_soldout
-              or product.selected_or_first_available_variant == null
-            %}
+
+          {%- if is_out_of_stock -%}
+            <button
+              type="button"
+              class="product-form__submit button button--full-width"
               disabled
-            {% endif %}
-          >
-            <span>
-              {%- if product.selected_or_first_available_variant == null -%}
-                {{ 'products.product.unavailable' | t }}
-              {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
-                {{ 'products.product.sold_out' | t }}
-              {%- else -%}
+              style="height: 60px !important; background-color: #f2eadf !important; border: 1px solid #c4c4c4 !important; border-radius: 4px !important; color: #868686 !important; font-family: 'Poppins', sans-serif !important; font-size: 2rem !important; font-weight: 600 !important; text-transform: uppercase !important; display: flex !important; align-items: center; justify-content: center; width: 100% !important; cursor: not-allowed !important; flex: 1 0 100% !important;"
+            >
+              OUT OF STOCK
+            </button>
+          {%- else -%}
+            <button
+              id="ProductSubmitButton-{{ section_id }}"
+              type="submit"
+              name="add"
+              class="product-form__submit button button--full-width"
+            >
+              <span>
                 {{ 'products.product.add_to_cart' | t }}
-              {%- endif -%}
-            </span>
-            {%- render 'loading-spinner' -%}
-          </button>
-          {%- if show_dynamic_checkout -%}
-            {{ form | payment_button }}
+              </span>
+              {%- render 'loading-spinner' -%}
+            </button>
+            {%- if show_dynamic_checkout -%}
+              <button
+                id="ProductBuyNowButton-{{ section_id }}"
+                type="button"
+                class="product-form__buynow button button--full-width"
+              >
+                <span>
+                  Buy It Now
+                </span>
+                <span class="loading__spinner hidden" style="margin-left: 10px;">
+                  {%- render 'loading-spinner' -%}
+                </span>
+              </button>
+
+              <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                  const buyNowBtn = document.getElementById('ProductBuyNowButton-{{ section_id }}');
+                  if (!buyNowBtn) return;
+                  
+                  buyNowBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (buyNowBtn.hasAttribute('disabled')) return;
+                    
+                    const form = buyNowBtn.closest('form');
+                    if (!form) return;
+                    
+                    const variantIdInput = form.querySelector('[name="id"]');
+                    const quantityInput = form.querySelector('[name="quantity"]');
+                    
+                    if (!variantIdInput) return;
+                    
+                    const variantId = variantIdInput.value;
+                    const quantity = quantityInput ? quantityInput.value : 1;
+                    
+                    buyNowBtn.setAttribute('disabled', 'true');
+                    const spinner = buyNowBtn.querySelector('.loading__spinner');
+                    if (spinner) spinner.classList.remove('hidden');
+                    
+                    const errorWrapper = form.querySelector('.product-form__error-message-wrapper');
+                    if (errorWrapper) errorWrapper.setAttribute('hidden', 'true');
+                    
+                    const formData = {
+                      'items': [{
+                        'id': variantId,
+                        'quantity': parseInt(quantity, 10)
+                      }]
+                    };
+                    
+                    fetch(window.Shopify.routes.root + 'cart/add.js', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify(formData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                      if (data.status) {
+                        if (errorWrapper) {
+                          errorWrapper.removeAttribute('hidden');
+                          const errorMsg = errorWrapper.querySelector('.product-form__error-message');
+                          if (errorMsg) errorMsg.textContent = data.description || data.message;
+                        }
+                        buyNowBtn.removeAttribute('disabled');
+                        if (spinner) spinner.classList.add('hidden');
+                      } else {
+                        window.location.href = window.Shopify.routes.root + 'checkout';
+                      }
+                    })
+                    .catch((error) => {
+                      console.error('Error:', error);
+                      buyNowBtn.removeAttribute('disabled');
+                      if (spinner) spinner.classList.add('hidden');
+                    });
+                  });
+                });
+              </script>
+            {%- endif -%}
           {%- endif -%}
         </div>
       {%- endform -%}

@@ -59,13 +59,15 @@
   endif
 
   assign display_sold_out = false
-  if variant != null
-    if variant.available == false
-      assign display_sold_out = true
-    endif
-  else
-    if product.available == false
-      assign display_sold_out = true
+  if hide_sold_out != true
+    if variant != null
+      if variant.available == false
+        assign display_sold_out = true
+      endif
+    else
+      if product.available == false
+        assign display_sold_out = true
+      endif
     endif
   endif
 -%}
