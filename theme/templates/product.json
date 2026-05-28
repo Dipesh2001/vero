@@ -1,15 +1,17 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-product",
       "blocks": {
-        "vendor": {
-          "type": "text",
-          "settings": {
-            "text": "{{ product.vendor }}",
-            "text_style": "uppercase"
-          }
-        },
         "title": {
           "type": "title",
           "settings": {}
@@ -17,6 +19,20 @@
         "price": {
           "type": "price",
           "settings": {}
+        },
+        "text_NbVgJT": {
+          "type": "text",
+          "settings": {
+            "text": "Or shop by paypal or UPI for exclusive offer",
+            "text_style": "body"
+          }
+        },
+        "payment_icons_XEihVW": {
+          "type": "payment_icons",
+          "settings": {
+            "payment_image": "shopify://shop_images/paymet-footer.png",
+            "image_width": 260
+          }
         },
         "variant_picker": {
           "type": "variant_picker",
@@ -36,9 +52,17 @@
             "show_gift_card_recipient": true
           }
         },
-        "description": {
-          "type": "description",
-          "settings": {}
+        "icon_with_text_AJmtab": {
+          "type": "icon-with-text",
+          "settings": {
+            "layout": "horizontal",
+            "icon_1": "none",
+            "heading_1": "Easy 30 Day Return",
+            "icon_2": "none",
+            "heading_2": "Heading",
+            "icon_3": "none",
+            "heading_3": "Heading"
+          }
         },
         "share": {
           "type": "share",
@@ -48,13 +72,14 @@
         }
       },
       "block_order": [
-        "vendor",
         "title",
         "price",
+        "text_NbVgJT",
+        "payment_icons_XEihVW",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
-        "description",
+        "icon_with_text_AJmtab",
         "share"
       ],
       "settings": {
@@ -75,6 +100,7 @@
     },
     "related-products": {
       "type": "related-products",
+      "disabled": true,
       "settings": {
         "heading": "You may also like",
         "heading_size": "h2",
@@ -93,6 +119,7 @@
     },
     "faq": {
       "type": "pdp-faq",
+      "disabled": true,
       "settings": {
         "heading": "Frequently Asked Questions",
         "color_scheme": "scheme-7",
