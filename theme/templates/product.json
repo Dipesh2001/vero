@@ -50,17 +50,18 @@
           "settings": {
             "layout": "horizontal",
             "icon_1": "none",
-            "heading_1": "Easy 30 Day Return",
+            "heading_1": "1-Year Warranty",
             "icon_2": "none",
-            "heading_2": "Heading",
+            "heading_2": "7-Day No-Question Return",
             "icon_3": "none",
-            "heading_3": "Heading"
-          }
-        },
-        "share": {
-          "type": "share",
-          "settings": {
-            "share_label": "Share"
+            "heading_3": "COD Available",
+            "text_color": "#454545",
+            "font_size": 16,
+            "border_top": false,
+            "border_bottom": false,
+            "border_left": false,
+            "border_right": false,
+            "border_color": "#eeeaea"
           }
         }
       },
@@ -86,7 +87,11 @@
         "hide_variants": true,
         "enable_video_looping": false,
         "padding_top": 36,
-        "padding_bottom": 12
+        "padding_bottom": 12,
+        "show_arrows": true,
+        "enable_loop": false,
+        "accent_color": "#ffc357",
+        "accent_text_color": "#00237d"
       }
     },
     "related-products": {
