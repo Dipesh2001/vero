@@ -24,7 +24,7 @@
     font-family: var(--font-body-custom);
     font-weight: 700;
     font-size: 2.8rem;
-    color: rgb(var(--color-foreground)) !important;
+    color: rgb(var(--color-foreground));
     margin: 0;
     line-height: 1.2;
   }
@@ -301,12 +301,12 @@
 
   /* Add to Bag Button */
   .product-card-submit-btn {
-    background-color: #00237d !important;
-    color: #ffffff !important;
+    background-color: rgb(var(--color-button, 0, 35, 125)) !important;
+    color: rgb(var(--color-button-text, 255, 255, 255)) !important;
     border: none;
-    border-radius: 0;
+    border-radius: 4px;
     height: 62px;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body-family, 'Inter', sans-serif);
     font-size: 1.4rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -323,7 +323,7 @@
     padding: 0;
   }
   .product-card-submit-btn:hover {
-    background-color: #001a5e !important;
+    opacity: 0.9;
   }
   .product-card-submit-btn:active {
     transform: scale(0.98);
@@ -335,12 +335,17 @@
   }
 
   /* Loader spinner */
+  .product-card-submit-btn.loading > span {
+    opacity: 0;
+  }
   .product-card-submit-btn .loading__spinner {
     width: 20px;
     height: 20px;
     display: inline-block;
     position: absolute;
-    right: 20px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
   .product-card-submit-btn .loading__spinner.hidden {
     display: none;
@@ -413,6 +418,7 @@
   }
 </style>
 
+<slider-product-recommendations class="product-recommendations" {% if section.settings.data_source == 'recommendations' %}data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}&intent=related"{% endif %}>
 <div class="featured-collection-slider-{{ section.id }} color-{{ section.settings.color_scheme }} gradient">
   {%- if section.settings.heading != blank -%}
     <div class="section-header page-width">
@@ -424,9 +430,38 @@
     <div class="swiper-container-outer">
       <div class="swiper swiper-container-main swiper-container-{{ section.id }}">
         <div class="swiper-wrapper">
-          {%- assign featured_collection = section.settings.collection -%}
-          {%- if featured_collection != blank and featured_collection.all_products_count > 0 -%}
-            {%- for product in featured_collection.products limit: section.settings.products_to_show -%}
+          {%- assign data_source = section.settings.data_source -%}
+          {%- assign fallback_used = false -%}
+          {%- assign current_page_product = product -%}
+          
+          {%- if data_source == 'recommendations' -%}
+            {%- if recommendations.performed and recommendations.products_count > 0 -%}
+              {%- assign items = recommendations.products -%}
+              {%- assign items_count = recommendations.products_count -%}
+            {%- elsif recommendations.performed and recommendations.products_count == 0 -%}
+              {%- assign fallback_collection = product.collections | first -%}
+              {%- if fallback_collection -%}
+                {%- assign items = fallback_collection.products -%}
+                {%- assign items_count = fallback_collection.all_products_count -%}
+                {%- assign fallback_used = true -%}
+              {%- else -%}
+                {%- assign items_count = 0 -%}
+              {%- endif -%}
+            {%- else -%}
+              {%- assign items_count = 0 -%}
+            {%- endif -%}
+          {%- else -%}
+            {%- assign items = section.settings.collection.products -%}
+            {%- assign items_count = section.settings.collection.all_products_count -%}
+          {%- endif -%}
+
+          {%- if items_count > 0 -%}
+            {%- assign limit = section.settings.products_to_show -%}
+            {%- assign count = 0 -%}
+            {%- for product in items -%}
+              {%- if fallback_used and product.id == current_page_product.id -%}{%- continue -%}{%- endif -%}
+              {%- if count >= limit -%}{%- break -%}{%- endif -%}
+              {%- assign count = count | plus: 1 -%}
               <div class="swiper-slide">
                 <div class="product-card-premium js-product-card" data-product-id="{{ product.id }}">
                   
@@ -523,21 +558,36 @@
                         <svg viewBox="0 0 100 100" class="icon icon-chevron-right"><path d="M29.3,9.5L69.8,50L29.3,90.5" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
                       </button>
                     </div>
+                  {%- else -%}
+                    <div class="product-swatches-outer-wrapper" style="visibility: hidden; pointer-events: none;">
+                      <div class="color-swatch-btn-wrapper">
+                        <div class="color-swatch-btn"></div>
+                      </div>
+                    </div>
                   {%- endif -%}
 
-                  <!-- Color / Option Descriptor -->
                   {%- liquid
-                    assign size_val = '30oz'
-                    if size_option_index >= 0
-                      assign size_val = product.variants[0].options[size_option_index]
+                    assign has_options = false
+                    if size_option_index >= 0 or color_option_index >= 0
+                      assign has_options = true
                     endif
-                    assign active_color_name = 'Selected Color'
+                    
+                    assign size_val = ''
+                    if size_option_index >= 0
+                      assign size_val = product.variants[0].options[size_option_index] | escape | append: ' | '
+                    endif
+                    
+                    assign active_color_name = ''
                     if color_option_index >= 0
-                      assign active_color_name = color_option.values[0]
+                      assign active_color_name = color_option.values[0] | escape
                     endif
                   -%}
-                  <p class="selected-color-text js-selected-color-text" data-size="{{ size_val | escape }}">
-                    {{ size_val | escape }} | {{ active_color_name | escape }}
+                  <p class="selected-color-text js-selected-color-text" data-size="{{ size_val }}" style="{% unless has_options %}visibility: hidden; pointer-events: none;{% endunless %}">
+                    {% if has_options %}
+                      {{ size_val }}{{ active_color_name }}
+                    {% else %}
+                      &nbsp;
+                    {% endif %}
                   </p>
 
                   <!-- Product details (Title and Price) -->
@@ -607,13 +657,14 @@
         </div>
       </div>
 
-      {% if section.settings.show_arrows and featured_collection != blank %}
+      {% if section.settings.show_arrows and items_count > 0 %}
         <div class="swiper-button-prev-{{ section.id }} swiper-button-prev"></div>
         <div class="swiper-button-next-{{ section.id }} swiper-button-next"></div>
       {% endif %}
     </div>
   </div>
 </div>
+</slider-product-recommendations>
 
 <script>
   // Product Card Controller Class
@@ -852,6 +903,44 @@
       initFeaturedCollectionSlider{{ section.id | replace: '-', '_' }}();
     }
   });
+
+  class SliderProductRecommendations extends HTMLElement {
+    constructor() {
+      super();
+    }
+
+    connectedCallback() {
+      const handleIntersection = (entries, observer) => {
+        if (!entries[0].isIntersecting) return;
+        observer.unobserve(this);
+
+        fetch(this.dataset.url)
+          .then(response => response.text())
+          .then(text => {
+            const html = document.createElement('div');
+            html.innerHTML = text;
+            const recommendations = html.querySelector('slider-product-recommendations');
+
+            if (recommendations && recommendations.innerHTML.trim().length) {
+              this.innerHTML = recommendations.innerHTML;
+              // Re-initialize slider after dynamically injecting HTML
+              initFeaturedCollectionSlider{{ section.id | replace: '-', '_' }}();
+            }
+          })
+          .catch(e => {
+            console.error(e);
+          });
+      };
+
+      if (this.dataset.url) {
+        new IntersectionObserver(handleIntersection.bind(this), {rootMargin: '0px 0px 400px 0px'}).observe(this);
+      }
+    }
+  }
+
+  if (!customElements.get('slider-product-recommendations')) {
+    customElements.define('slider-product-recommendations', SliderProductRecommendations);
+  }
 </script>
 
 {% schema %}
@@ -891,12 +980,29 @@
     },
     {
       "type": "header",
-      "content": "Collection Settings"
+      "content": "Data Source"
+    },
+    {
+      "type": "select",
+      "id": "data_source",
+      "label": "Data Source",
+      "options": [
+        {
+          "value": "collection",
+          "label": "Manual Collection"
+        },
+        {
+          "value": "recommendations",
+          "label": "PDP Related Products"
+        }
+      ],
+      "default": "recommendations"
     },
     {
       "type": "collection",
       "id": "collection",
-      "label": "Collection"
+      "label": "Collection",
+      "info": "Only used if Data Source is 'Manual Collection'"
     },
     {
       "type": "range",

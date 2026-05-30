@@ -397,6 +397,14 @@
     }
 
     /* Cleaned up inline styles selectors */
+    .product-form__submit, .product-form__buynow {
+      border: none !important;
+      border-radius: 4px !important;
+    }
+    .product-form__submit::after, .product-form__buynow::after,
+    .product-form__submit::before, .product-form__buynow::before {
+      display: none !important;
+    }
     .product__text {
       color: var(--text-color) !important;
       font-size: var(--font-size) !important;
@@ -753,7 +761,7 @@
   -%}
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
   <div class="page-width">
-    <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 or has_metafield_gallery %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
+    <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col grid--2-col-tablet">
       <div class="grid__item product__media-wrapper">
         <div class="pdp-gallery-wrapper">
           <meta itemprop="image" content="{{ seo_media | image_url: width: 1920 }}">
@@ -761,7 +769,13 @@
           <div class="swiper pdp-gallery-main">
             <div class="swiper-wrapper">
 
-              {%- if has_metafield_gallery -%}
+              {%- if product.media.size == 0 -%}
+                <div class="swiper-slide" data-media-id="placeholder">
+                  <div class="product-media-placeholder" style="width:100%; aspect-ratio: 1/1; background: #faf9f9; display: flex; align-items: center; justify-content: center;">
+                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                </div>
+              {%- elsif has_metafield_gallery -%}
                 {%- assign all_metafield_media_urls = "" -%}
                 {%- for variant in product.variants -%}
                   {%- if variant.metafields.custom.variant_gallery.value != blank -%}
@@ -846,7 +860,13 @@
           <!-- Thumbnail Slider -->
           <div class="swiper pdp-gallery-thumbs">
             <div class="swiper-wrapper">
-              {%- if has_metafield_gallery -%}
+              {%- if product.media.size == 0 -%}
+                <div class="swiper-slide" data-media-id="placeholder">
+                  <div class="product-media-placeholder" style="width:100%; aspect-ratio: 1/1; background: #faf9f9; display: flex; align-items: center; justify-content: center;">
+                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                </div>
+              {%- elsif has_metafield_gallery -%}
                 {%- assign all_metafield_thumb_urls = "" -%}
                 {%- for variant in product.variants -%}
                   {%- if variant.metafields.custom.variant_gallery.value != blank -%}
