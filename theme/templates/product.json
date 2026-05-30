@@ -20,13 +20,6 @@
           "type": "price",
           "settings": {}
         },
-        "text_NbVgJT": {
-          "type": "text",
-          "settings": {
-            "text": "Or shop by paypal or UPI for exclusive offer",
-            "text_style": "body"
-          }
-        },
         "payment_icons_XEihVW": {
           "type": "payment_icons",
           "settings": {
@@ -74,13 +67,11 @@
       "block_order": [
         "title",
         "price",
-        "text_NbVgJT",
         "payment_icons_XEihVW",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
-        "icon_with_text_AJmtab",
-        "share"
+        "icon_with_text_AJmtab"
       ],
       "settings": {
         "enable_sticky_info": true,

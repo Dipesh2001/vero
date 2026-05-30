@@ -18,6 +18,10 @@
       .product:not(.product--no-media) .product__media-wrapper {
         max-width: 50% !important;
         width: calc(50% - var(--grid-desktop-horizontal-spacing) / 2) !important;
+        position: sticky !important;
+        top: 3rem !important;
+        height: fit-content !important;
+        align-self: start !important;
       }
       .product:not(.product--no-media) .product__info-wrapper {
         max-width: 50% !important;
@@ -32,61 +36,66 @@
       width: 100%;
     }
     .pdp-gallery-main {
-      width: 100%;
-      aspect-ratio: 455 / 523;
-      background-color: #faf9f9;
-      border: 1px solid #f2eadf;
-      border-radius: 8px;
-      overflow: hidden;
-      position: relative;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 auto !important;
+      aspect-ratio: 1 / 1 !important;
+      background-color: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      overflow: hidden !important;
+      position: relative !important;
+      padding: 0 !important;
     }
     .pdp-gallery-main .swiper-slide {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+      height: 100% !important;
+      padding: 0 80px !important;
+      box-sizing: border-box !important;
     }
     .pdp-gallery-main img {
-      max-width: 90%;
-      max-height: 90%;
-      object-fit: contain;
-      display: block;
+      max-width: 100% !important;
+      max-height: 100% !important;
+      object-fit: contain !important;
+      display: block !important;
     }
     .pdp-gallery-main .pdp-media-non-image {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain !important;
+      padding: 0 60px !important;
+      box-sizing: border-box !important;
     }
     .pdp-gallery-thumbs {
       width: 100%;
-      margin-top: 15px;
+      max-width: 423px;
+      margin: 15px auto 0 auto;
       overflow: hidden;
     }
     .pdp-gallery-thumbs .swiper-wrapper {
       display: flex;
       flex-direction: row;
-      gap: 12px;
     }
     .pdp-gallery-thumbs .swiper-slide {
-      width: 89px !important;
-      height: 112px;
-      background-color: #faf9f9;
-      border: 1px solid #c4c4c4;
-      border-radius: 4px;
+      aspect-ratio: 89 / 112;
+      height: auto;
+      background-color: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
       cursor: pointer;
-      opacity: 0.6;
+      opacity: 0.5;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       flex-shrink: 0;
-      transition: opacity 0.2s, border-color 0.2s;
+      transition: opacity 0.2s;
     }
     .pdp-gallery-thumbs .swiper-slide-thumb-active {
-      opacity: 1;
-      border-color: #00237d;
-      border-width: 2px;
+      opacity: 1 !important;
     }
     .pdp-gallery-thumbs img {
       width: 100%;
@@ -102,7 +111,7 @@
       z-index: 10;
       width: 37px;
       height: 37px;
-      background: #ffffff;
+      background: rgb(var(--color-background));
       border-radius: 50%;
       display: none; /* Kept hidden as requested */
       align-items: center;
@@ -113,7 +122,7 @@
 
     /* Variant fieldset border boxes */
     fieldset.product-form__input {
-      border: 1px solid #eeeaea !important;
+      border: 1px solid rgba(var(--color-foreground), 0.15) !important;
       border-radius: 10px !important;
       padding: 2.5rem 2rem 2rem 2rem !important;
       margin: 3rem 0 !important;
@@ -122,8 +131,8 @@
       display: block !important;
     }
     fieldset.product-form__input legend.form__label {
-      background-color: #c8e8fb !important;
-      color: #000000 !important;
+      background-color: var(--color-brand-secondary, #C8E8FB) !important;
+      color: rgb(var(--color-foreground)) !important;
       font-family: 'Inter', sans-serif !important;
       font-size: 1.3rem !important;
       font-weight: 500 !important;
@@ -139,25 +148,29 @@
       float: none !important;
     }
 
-    /* Radio button custom styling */
+    /* Radio button custom styling — accessible, mobile-bulletproof hiding */
     fieldset.product-form__input input[type="radio"] {
       position: absolute !important;
       opacity: 0 !important;
-      width: 0 !important;
-      height: 0 !important;
-      margin: 0 !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      border: 0 !important;
     }
-    fieldset.product-form__input input[type="radio"] + label {
+    .product-form__input--pill input[type="radio"] + label {
       display: inline-flex !important;
       align-items: center !important;
       justify-content: center !important;
       min-width: 50px !important;
       height: 50px !important;
       padding: 0 15px !important;
-      border: 1px solid #00237d !important;
+      border: 1px solid rgba(var(--color-button), 0.15) !important;
       border-radius: 4px !important;
       background-color: transparent !important;
-      color: #00237d !important;
+      color: rgba(var(--color-button), 0.15) !important;
       font-family: 'Public Sans', sans-serif !important;
       font-size: 1.6rem !important;
       font-weight: 600 !important;
@@ -167,10 +180,10 @@
       margin-right: 10px !important;
       margin-bottom: 10px !important;
     }
-    fieldset.product-form__input input[type="radio"]:checked + label {
-      background-color: #ffc356 !important;
-      border-color: #00237d !important;
-      color: #00237d !important;
+    .product-form__input--pill input[type="radio"]:checked + label {
+      background-color: transparent !important;
+      border-color: rgb(var(--color-button)) !important;
+      color: rgb(var(--color-button)) !important;
     }
 
     /* Quantity Selector Styling */
@@ -184,13 +197,13 @@
       font-family: 'Poppins', sans-serif !important;
       font-size: 2rem !important;
       font-weight: 400 !important;
-      color: #000000 !important;
+      color: rgb(var(--color-foreground)) !important;
       margin: 0 !important;
     }
     .product-form__quantity quantity-input.quantity {
       width: 120px !important;
       height: 44px !important;
-      background-color: #00237d !important;
+      background-color: rgb(var(--color-button)) !important;
       border: none !important;
       border-radius: 8px !important;
       padding: 0 !important;
@@ -254,24 +267,42 @@
     }
     .product-form__submit {
       height: 60px !important;
-      background-color: #00237d !important;
+      background-color: rgb(var(--color-button)) !important;
       border: none !important;
       border-radius: 4px !important;
-      color: #ffffff !important;
+      color: rgb(var(--color-button-text)) !important;
       font-family: 'Poppins', sans-serif !important;
       font-size: 2rem !important;
       font-weight: 600 !important;
       text-transform: uppercase !important;
     }
     .product-form__submit:hover {
-      background-color: #001a5e !important;
+      background-color: rgb(var(--color-button)) !important;
+      opacity: 0.9 !important;
+    }
+    .product-form__submit[disabled] {
+      height: 60px !important;
+      background-color: #f2eadf !important;
+      border: 1px solid #c4c4c4 !important;
+      border-radius: 4px !important;
+      color: #868686 !important;
+      font-family: 'Poppins', sans-serif !important;
+      font-size: 2rem !important;
+      font-weight: 600 !important;
+      text-transform: uppercase !important;
+      cursor: not-allowed !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: auto !important;
+      flex: 1 !important;
     }
     .product-form__buynow {
       height: 60px !important;
-      background-color: #ffc356 !important;
-      border: 1px solid #00237d !important;
+      background-color: {{ section.settings.accent_color | default: '#ffc357' }} !important;
+      border: 1px solid rgb(var(--color-button)) !important;
       border-radius: 4px !important;
-      color: #00237d !important;
+      color: {{ section.settings.accent_text_color | default: 'rgb(var(--color-button))' }} !important;
       font-family: 'Poppins', sans-serif !important;
       font-size: 2rem !important;
       font-weight: 600 !important;
@@ -282,7 +313,8 @@
       justify-content: center;
     }
     .product-form__buynow:hover {
-      background-color: #e5af4d !important;
+      background-color: {{ section.settings.accent_color | default: '#ffc357' }} !important;
+      opacity: 0.9 !important;
     }
     .product-form__buynow[disabled] {
       opacity: 0.5 !important;
@@ -290,22 +322,356 @@
     }
     .pdp-gallery-main .swiper-button-prev,
     .pdp-gallery-main .swiper-button-next {
-      color: #00237d !important;
-      background-color: rgba(255, 255, 255, 0.8) !important;
-      width: 40px !important;
-      height: 40px !important;
-      border-radius: 50% !important;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-      transition: background-color 0.2s, color 0.2s !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      z-index: 10 !important;
+      color: rgb(var(--color-button)) !important;
+      background-color: transparent !important;
+      background: none !important;
+      width: 44px !important;
+      height: 44px !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      top: 50% !important;
+      margin-top: 0 !important;
+      transform: translateY(-50%) !important;
     }
-    .pdp-gallery-main .swiper-button-prev:hover,
-    .pdp-gallery-main .swiper-button-next:hover {
-      background-color: rgba(255, 255, 255, 1) !important;
+    .pdp-gallery-main .swiper-button-prev {
+      left: 20px !important;
+    }
+    .pdp-gallery-main .swiper-button-next {
+      right: 20px !important;
     }
     .pdp-gallery-main .swiper-button-prev::after,
     .pdp-gallery-main .swiper-button-next::after {
-      font-size: 18px !important;
+      font-size: 38px !important;
       font-weight: bold !important;
+    }
+
+    /* Icon with Text - Bordered Table View matching Figma */
+    .product__info-container .icon-with-text--horizontal {
+      display: flex !important;
+      flex-direction: row !important;
+      width: 100% !important;
+      border: 1px solid rgba(var(--color-foreground), 0.15) !important;
+      border-radius: 5px !important;
+      background-color: transparent !important;
+      padding: 0 !important;
+      margin: 3rem 0 !important;
+      gap: 0 !important;
+    }
+    .product__info-container .icon-with-text--horizontal .icon-with-text__item {
+      flex-direction: row !important;
+      justify-content: center !important;
+      align-items: center !important;
+      gap: 0.8rem !important;
+      padding: 1.5rem 1rem !important;
+      width: 33.33% !important;
+      border-right: 1px solid rgba(var(--color-foreground), 0.15) !important;
+      margin: 0 !important;
+      flex: 1 !important;
+      box-sizing: border-box !important;
+    }
+    .product__info-container .icon-with-text--horizontal .icon-with-text__item:last-child {
+      border-right: none !important;
+    }
+    .product__info-container .icon-with-text--horizontal .icon-with-text__item span {
+      display: -webkit-box !important;
+      -webkit-line-clamp: 2 !important;
+      -webkit-box-orient: vertical !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: normal !important;
+      line-height: 1.3 !important;
+      font-size: 1.4rem !important;
+      text-align: center !important;
+    }
+    .product__info-container .icon-with-text--horizontal .svg-wrapper,
+    .product__info-container .icon-with-text--horizontal img {
+      margin-bottom: 0 !important;
+      margin-right: 0.5rem !important;
+      width: 2rem !important;
+      height: 2rem !important;
+      flex-shrink: 0 !important;
+    }
+
+    /* Cleaned up inline styles selectors */
+    .product__text {
+      color: var(--text-color) !important;
+      font-size: var(--font-size) !important;
+    }
+    .product__title h1 {
+      font-family: var(--font-heading) !important;
+      font-size: 3.6rem !important;
+      font-weight: 600 !important;
+      color: var(--color-brand-primary) !important;
+      margin: 0 !important;
+      line-height: 1.2 !important;
+    }
+    .product__title .product__subtitle {
+      font-family: var(--font-body) !important;
+      font-size: 2rem !important;
+      font-weight: 400 !important;
+      color: var(--color-text-secondary) !important;
+      margin: 1rem 0 0 0 !important;
+      line-height: 1.4 !important;
+    }
+    .pdp-price-wrapper {
+      margin-top: 1.5rem !important;
+      margin-bottom: 1.5rem !important;
+    }
+    .pdp-price-inner-flex {
+      display: flex !important;
+      align-items: center !important;
+      gap: 15px !important;
+      font-family: var(--font-body) !important;
+    }
+    .pdp-price-current {
+      font-size: 3.2rem !important;
+      font-weight: 500 !important;
+      color: var(--color-brand-primary) !important;
+    }
+    .pdp-price-compare {
+      font-size: 3.2rem !important;
+      font-weight: 400 !important;
+      color: rgba(var(--color-foreground), 0.2) !important;
+      text-decoration: line-through !important;
+    }
+    .pdp-price-discount {
+      font-size: 2.2rem !important;
+      font-weight: 500 !important;
+      color: var(--color-brand-accent) !important;
+    }
+    .pdp-price-tax-notice,
+    .pdp-price-tax-notice p,
+    .pdp-price-tax-notice h1,
+    .pdp-price-tax-notice h2,
+    .pdp-price-tax-notice h3,
+    .pdp-price-tax-notice h4,
+    .pdp-price-tax-notice h5,
+    .pdp-price-tax-notice h6 {
+      font-family: var(--font-body) !important;
+      font-size: 1.8rem !important;
+      font-weight: 500 !important;
+      color: var(--color-text-secondary) !important;
+      margin: 0 !important;
+      margin-top: 0.5rem !important;
+      line-height: 1.6 !important;
+    }
+    .pdp-price-tax-notice strong,
+    .pdp-price-tax-notice b {
+      font-weight: 600 !important;
+      color: var(--color-text-secondary) !important;
+    }
+    .product__tax.caption {
+      margin-top: -1rem !important;
+      margin-bottom: 1.5rem !important;
+    }
+    .pdp-inventory-status--low {
+      color: rgb(238, 148, 65) !important;
+    }
+    .pdp-inventory-status--in {
+      color: rgb(62, 214, 96) !important;
+    }
+    .pdp-inventory-status--out {
+      color: rgb(200, 200, 200) !important;
+    }
+    .product-payment-icons {
+      margin: 2.5rem 0 !important;
+    }
+    .product-payment-image {
+      max-width: var(--max-width, 100%) !important;
+      width: 100% !important;
+      height: auto !important;
+      display: block !important;
+    }
+
+    /* =============================================
+       MOBILE RESPONSIVE — matches Figma 375px spec
+       ============================================= */
+    /* =============================================
+       MOBILE RESPONSIVE — matches Figma 375px spec
+       ============================================= */
+    @media screen and (max-width: 749px) {
+      /* Full-width single column layout */
+      .product.grid--2-col-tablet {
+        display: flex !important;
+        flex-direction: column !important;
+        grid-template-columns: 1fr !important;
+      }
+      .product__media-wrapper,
+      .product__info-wrapper {
+        max-width: 100% !important;
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+      /* Sticky only on desktop */
+      .product__column-sticky {
+        position: relative !important;
+        top: auto !important;
+        height: auto !important;
+      }
+
+      /* Gallery: main image 1:1 ratio for mobile, full screen width with no padding */
+      .pdp-gallery-main {
+        aspect-ratio: 1 / 1 !important;
+        border-radius: 0 !important;
+      }
+      .pdp-gallery-main .swiper-slide {
+        padding: 0 !important;
+      }
+      .pdp-gallery-main img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+      }
+      /* Hide arrows on mobile gallery per Figma */
+      .pdp-gallery-main .swiper-button-prev,
+      .pdp-gallery-main .swiper-button-next {
+        display: none !important;
+      }
+      /* Thumbs strip: slightly smaller padding on mobile */
+      .pdp-gallery-thumbs {
+        max-width: 100% !important;
+        margin-top: 10px !important;
+        padding: 0 1.5rem !important;
+      }
+
+      /* Title: smaller font on mobile matching Figma 30px / 12px */
+      .product__title h1 {
+        font-size: 3.0rem !important;
+        line-height: 1.2 !important;
+      }
+      .product__title .product__subtitle {
+        font-size: 1.2rem !important;
+        margin-top: 0.5rem !important;
+      }
+
+      /* Price: compact Figma layout 20px / 20px / 15px */
+      .pdp-price-current {
+        font-size: 2.0rem !important;
+      }
+      .pdp-price-compare {
+        font-size: 2.0rem !important;
+      }
+      .pdp-price-discount {
+        font-size: 1.5rem !important;
+      }
+      .pdp-price-inner-flex {
+        gap: 10px !important;
+        flex-wrap: wrap !important;
+      }
+      .pdp-price-tax-notice,
+      .pdp-price-tax-notice p,
+      .pdp-price-tax-notice h1,
+      .pdp-price-tax-notice h2,
+      .pdp-price-tax-notice h3,
+      .pdp-price-tax-notice h4,
+      .pdp-price-tax-notice h5,
+      .pdp-price-tax-notice h6 {
+        font-size: 1.0rem !important;
+        margin-top: 0.3rem !important;
+      }
+
+      /* Variant fieldsets — tighter padding and spacing */
+      fieldset.product-form__input {
+        padding: 1.5rem 1rem 1rem 1rem !important;
+        margin: 1.5rem 0 !important;
+      }
+      fieldset.product-form__input legend.form__label {
+        font-size: 1.0rem !important;
+        padding: 2px 8px !important;
+        top: -10px !important;
+      }
+
+      /* Size pills on mobile matching Figma 54x27px and 10px font */
+      .product-form__input--pill input[type="radio"] + label {
+        min-width: 54px !important;
+        height: 27px !important;
+        font-size: 1.0rem !important;
+        padding: 0 8px !important;
+        margin-right: 6px !important;
+        margin-bottom: 6px !important;
+        border-radius: 4px !important;
+      }
+
+      /* Swatch size override on mobile matching Figma 24x24px */
+      .product-form__input--swatch .swatch-input__input + .swatch-input__label {
+        --swatch-input--size: 2.4rem !important;
+        margin: 0 8px 8px 0 !important;
+      }
+
+      /* Quantity selector */
+      .product-form__quantity {
+        gap: 10px !important;
+        margin: 1.5rem 0 !important;
+      }
+      .product-form__quantity .quantity__label {
+        font-size: 1.0rem !important;
+      }
+      .quantity {
+        width: 110px !important;
+        min-height: 36px !important;
+        height: 36px !important;
+      }
+      .quantity__button {
+        width: 35px !important;
+      }
+      .quantity__input {
+        font-size: 1.2rem !important;
+      }
+
+      /* Side by side buttons, height 39px per Figma mobile, equal size */
+      .product-form__buttons {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 10px !important;
+        margin: 1.5rem 0 !important;
+      }
+      .product-form__submit,
+      .product-form__buynow,
+      .product-form__submit[disabled] {
+        height: 39px !important;
+        font-size: 1.0rem !important;
+        border-radius: 4px !important;
+        flex: 1 !important;
+        padding: 0 0.5rem !important;
+        white-space: nowrap !important;
+        letter-spacing: 0 !important;
+      }
+
+      /* Icon-with-text stays 3-col but tighter */
+      .product__info-container .icon-with-text--horizontal {
+        margin: 1.5rem 0 !important;
+        border: none !important;
+      }
+      .product__info-container .icon-with-text--horizontal .icon-with-text__item {
+        padding: 1rem 0.5rem !important;
+      }
+      .product__info-container .icon-with-text--horizontal .icon-with-text__item span {
+        font-size: 1.1rem !important;
+        -webkit-line-clamp: 2 !important;
+      }
+
+      /* Payment image smaller on mobile */
+      .product-payment-image {
+        max-width: 220px !important;
+        margin: 0 auto !important;
+      }
+
+      /* Section padding tighter on mobile */
+      .section-{{ section.id }}-padding {
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+      }
+
+      /* Info wrapper padding */
+      .product__info-container {
+        padding: 0 1.5rem !important; /* give content some padding so it doesn't touch the screen edge */
+      }
     }
   </style>
   {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
@@ -376,31 +742,93 @@
     else
       assign seo_media = product.featured_media
     endif
+
+    assign has_metafield_gallery = false
+    for variant in product.variants
+      if variant.metafields.custom.variant_gallery.value != blank
+        assign has_metafield_gallery = true
+        break
+      endif
+    endfor
   -%}
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
   <div class="page-width">
-    <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
+    <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 or has_metafield_gallery %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
       <div class="grid__item product__media-wrapper">
         <div class="pdp-gallery-wrapper">
           <meta itemprop="image" content="{{ seo_media | image_url: width: 1920 }}">
           <!-- Main Gallery Slider -->
           <div class="swiper pdp-gallery-main">
             <div class="swiper-wrapper">
-              {%- for media in product.media -%}
-                <div class="swiper-slide" data-media-id="{{ media.id }}">
-                  {%- if media.media_type == 'image' -%}
-                    <img
-                      src="{{ media | image_url: width: 800 }}"
-                      alt="{{ media.alt | default: product.title | escape }}"
-                      loading="lazy"
-                      width="{{ media.width | default: 800 }}"
-                      height="{{ media.height | default: 800 }}"
-                    >
-                  {%- else -%}
-                    {{ media | media_tag: loading: 'lazy', class: 'pdp-media-non-image' }}
+
+              {%- if has_metafield_gallery -%}
+                {%- assign all_metafield_media_urls = "" -%}
+                {%- for variant in product.variants -%}
+                  {%- if variant.metafields.custom.variant_gallery.value != blank -%}
+                    {%- assign color_val = "" -%}
+                    {%- for option in product.options -%}
+                      {%- assign downcased_opt = option | downcase -%}
+                      {%- if downcased_opt == 'color' or downcased_opt == 'colour' -%}
+                        {%- if forloop.index == 1 -%}{%- assign color_val = variant.option1 | downcase | trim -%}
+                        {%- elsif forloop.index == 2 -%}{%- assign color_val = variant.option2 | downcase | trim -%}
+                        {%- elsif forloop.index == 3 -%}{%- assign color_val = variant.option3 | downcase | trim -%}
+                        {%- endif -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+
+                    {%- for media in variant.metafields.custom.variant_gallery.value -%}
+                      {%- assign url_string = media | image_url: width: 800 -%}
+                      {%- unless all_metafield_media_urls contains url_string -%}
+                        {%- assign all_metafield_media_urls = all_metafield_media_urls | append: url_string | append: "|||" -%}
+                        <div class="swiper-slide" data-media-id="{{ media.id }}" data-color-value="{{ color_val | escape }}">
+                          <img
+                            src="{{ media | image_url: width: 800 }}"
+                            alt="{{ media.alt | default: product.title | escape }}"
+                            loading="lazy"
+                            width="{{ media.width | default: 800 }}"
+                            height="{{ media.height | default: 800 }}"
+                          >
+                        </div>
+                      {%- endunless -%}
+                    {%- endfor -%}
                   {%- endif -%}
-                </div>
-              {%- endfor -%}
+                {%- endfor -%}
+
+                {%- for media in product.media -%}
+                  {%- assign media_url_string = media | image_url: width: 800 -%}
+                  {%- unless all_metafield_media_urls contains media_url_string -%}
+                    <div class="swiper-slide" data-media-id="{{ media.id }}" data-color-value="common">
+                      {%- if media.media_type == 'image' -%}
+                        <img
+                          src="{{ media | image_url: width: 800 }}"
+                          alt="{{ media.alt | default: product.title | escape }}"
+                          loading="lazy"
+                          width="{{ media.width | default: 800 }}"
+                          height="{{ media.height | default: 800 }}"
+                        >
+                      {%- else -%}
+                        {{ media | media_tag: loading: 'lazy', class: 'pdp-media-non-image' }}
+                      {%- endif -%}
+                    </div>
+                  {%- endunless -%}
+                {%- endfor -%}
+              {%- else -%}
+                {%- for media in product.media -%}
+                  <div class="swiper-slide" data-media-id="{{ media.id }}">
+                    {%- if media.media_type == 'image' -%}
+                      <img
+                        src="{{ media | image_url: width: 800 }}"
+                        alt="{{ media.alt | default: product.title | escape }}"
+                        loading="lazy"
+                        width="{{ media.width | default: 800 }}"
+                        height="{{ media.height | default: 800 }}"
+                      >
+                    {%- else -%}
+                      {{ media | media_tag: loading: 'lazy', class: 'pdp-media-non-image' }}
+                    {%- endif -%}
+                  </div>
+                {%- endfor -%}
+              {%- endif -%}
             </div>
              <!-- Wishlist/Favorite Icon (hidden) -->
              <div class="pdp-wishlist-icon">
@@ -409,24 +837,75 @@
                </svg>
              </div>
              <!-- Swiper Navigation Arrows -->
-             <div class="swiper-button-prev pdp-gallery-nav-prev" style="color: #00237d !important;"></div>
-             <div class="swiper-button-next pdp-gallery-nav-next" style="color: #00237d !important;"></div>
+             {%- if section.settings.show_arrows -%}
+               <div class="swiper-button-prev pdp-gallery-nav-prev"></div>
+               <div class="swiper-button-next pdp-gallery-nav-next"></div>
+             {%- endif -%}
            </div>
 
           <!-- Thumbnail Slider -->
           <div class="swiper pdp-gallery-thumbs">
             <div class="swiper-wrapper">
-              {%- for media in product.media -%}
-                <div class="swiper-slide" data-media-id="{{ media.id }}">
-                  <img
-                    src="{{ media.preview_image | image_url: width: 150 }}"
-                    alt="{{ media.alt | default: product.title | escape }}"
-                    loading="lazy"
-                    width="89"
-                    height="112"
-                  >
-                </div>
-              {%- endfor -%}
+              {%- if has_metafield_gallery -%}
+                {%- assign all_metafield_thumb_urls = "" -%}
+                {%- for variant in product.variants -%}
+                  {%- if variant.metafields.custom.variant_gallery.value != blank -%}
+                    {%- assign color_val = "" -%}
+                    {%- for option in product.options -%}
+                      {%- assign downcased_opt = option | downcase -%}
+                      {%- if downcased_opt == 'color' or downcased_opt == 'colour' -%}
+                        {%- if forloop.index == 1 -%}{%- assign color_val = variant.option1 | downcase | trim -%}
+                        {%- elsif forloop.index == 2 -%}{%- assign color_val = variant.option2 | downcase | trim -%}
+                        {%- elsif forloop.index == 3 -%}{%- assign color_val = variant.option3 | downcase | trim -%}
+                        {%- endif -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+
+                    {%- for media in variant.metafields.custom.variant_gallery.value -%}
+                      {%- assign thumb_url_string = media.preview_image | image_url: width: 150 -%}
+                      {%- unless all_metafield_thumb_urls contains thumb_url_string -%}
+                        {%- assign all_metafield_thumb_urls = all_metafield_thumb_urls | append: thumb_url_string | append: "|||" -%}
+                        <div class="swiper-slide" data-media-id="{{ media.id }}" data-color-value="{{ color_val | escape }}">
+                          <img
+                            src="{{ media.preview_image | image_url: width: 150 }}"
+                            alt="{{ media.alt | default: product.title | escape }}"
+                            loading="lazy"
+                            width="{{ media.width | default: 150 }}"
+                            height="{{ media.height | default: 150 }}"
+                          >
+                        </div>
+                      {%- endunless -%}
+                    {%- endfor -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
+                {%- for media in product.media -%}
+                  {%- assign thumb_url_string = media.preview_image | image_url: width: 150 -%}
+                  {%- unless all_metafield_thumb_urls contains thumb_url_string -%}
+                    <div class="swiper-slide" data-media-id="{{ media.id }}" data-color-value="common">
+                      <img
+                        src="{{ media.preview_image | image_url: width: 150 }}"
+                        alt="{{ media.alt | default: product.title | escape }}"
+                        loading="lazy"
+                        width="89"
+                        height="112"
+                      >
+                    </div>
+                  {%- endunless -%}
+                {%- endfor -%}
+              {%- else -%}
+                {%- for media in product.media -%}
+                  <div class="swiper-slide" data-media-id="{{ media.id }}">
+                    <img
+                      src="{{ media.preview_image | image_url: width: 150 }}"
+                      alt="{{ media.alt | default: product.title | escape }}"
+                      loading="lazy"
+                      width="89"
+                      height="112"
+                    >
+                  </div>
+                {%- endfor -%}
+              {%- endif -%}
             </div>
           </div>
         </div>
@@ -436,7 +915,13 @@
           id="ProductInfo-{{ section.id }}"
           class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
         >
-          {%- render 'modern-badges', product: product, is_card: false, hide_sold_out: true -%}
+          {%- render 'modern-badges',
+            product: product,
+            is_card: false,
+            hide_sold_out: true,
+            badge_background: section.settings.accent_color,
+            badge_text_color: section.settings.accent_text_color
+          -%}
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
           {%- for block in section.blocks -%}
@@ -447,45 +932,43 @@
                 <p
                   class="product__text inline-richtext{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}"
                   {{ block.shopify_attributes }}
-                  style="color: {{ block.settings.text_color | default: '#00237d' }}; font-size: {{ block.settings.font_size | default: 16 }}px;"
+                  style="--text-color: {{ block.settings.text_color | default: '#00237d' }}; --font-size: {{ block.settings.font_size | default: 16 }}px;"
                 >
                   {{- block.settings.text -}}
                 </p>
               {%- when 'title' -%}
                 <div class="product__title" {{ block.shopify_attributes }}>
-                  <h1 style="font-family: 'Public Sans', sans-serif; font-size: 3.6rem; font-weight: 600; color: #00237d; margin: 0; line-height: 1.2;">
+                  <h1>
                     {{ product.title | escape }}
                   </h1>
                   {%- if product.metafields.custom.subtext != blank -%}
-                    <p class="product__subtitle" style="font-family: 'Public Sans', sans-serif; font-size: 2rem; font-weight: 400; color: #454545; margin: 1rem 0 0 0; line-height: 1.4;">
+                    <p class="product__subtitle">
                       {{ product.metafields.custom.subtext.value }}
-                    </p>
-                  {%- else -%}
-                    <p class="product__subtitle" style="font-family: 'Public Sans', sans-serif; font-size: 2rem; font-weight: 400; color: #454545; margin: 1rem 0 0 0; line-height: 1.4;">
-                      800ml . daily workout bottle by Sitapuriya
                     </p>
                   {%- endif -%}
                 </div>
               {%- when 'price' -%}
                 {%- assign current_variant = product.selected_or_first_available_variant -%}
-                <div class="pdp-price-wrapper" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }} style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
-                  <div style="display: flex; align-items: center; gap: 15px; font-family: 'Poppins', sans-serif;">
-                    <span class="pdp-price-current" style="font-size: 3.2rem; font-weight: 500; color: #00237d;">
+                <div class="pdp-price-wrapper" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+                  <div class="pdp-price-inner-flex">
+                    <span class="pdp-price-current">
                       MRP: {{ current_variant.price | money }}
                     </span>
                     {%- if current_variant.compare_at_price > current_variant.price -%}
-                      <s class="pdp-price-compare" style="font-size: 3.2rem; font-weight: 400; color: rgba(0,0,0,0.2); text-decoration: line-through;">
+                      <s class="pdp-price-compare">
                         {{ current_variant.compare_at_price | money }}
                       </s>
                       {%- assign discount = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
-                      <span class="pdp-price-discount" style="font-size: 2.2rem; font-weight: 500; color: #ffc356;">
+                      <span class="pdp-price-discount">
                         {{ discount }}%Off
                       </span>
                     {%- endif -%}
                   </div>
-                  <div style="font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 500; color: #868686; margin-top: 0.5rem;">
-                    inclusive all tax
-                  </div>
+                  {%- if product.metafields.custom.tax_info != blank -%}
+                    <div class="pdp-price-tax-notice rte">
+                      {{ product.metafields.custom.tax_info | metafield_tag }}
+                    </div>
+                  {%- endif -%}
                 </div>
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
@@ -493,7 +976,7 @@
                   </div>
                 {%- endif -%}
                 {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
-                  <div class="product__tax caption rte" style="margin-top: -1rem; margin-bottom: 1.5rem;">
+                  <div class="product__tax caption rte">
                     {%- if cart.duties_included and cart.taxes_included -%}
                       {{ 'products.product.duties_and_taxes_included' | t }}
                     {%- elsif cart.taxes_included -%}
@@ -525,7 +1008,7 @@
                       {%- if product.selected_or_first_available_variant.inventory_quantity
                           <= block.settings.inventory_threshold
                       -%}
-                        <span class="svg-wrapper" style="color: rgb(238, 148, 65)">
+                        <span class="svg-wrapper pdp-inventory-status--low">
                           {{- 'icon-inventory-status.svg' | inline_asset_content -}}
                         </span>
                         {%- if block.settings.show_inventory_quantity -%}
@@ -537,7 +1020,7 @@
                           {{- 'products.product.inventory_low_stock' | t -}}
                         {%- endif -%}
                       {%- else -%}
-                        <span class="svg-wrapper" style="color: rgb(62, 214, 96)">
+                        <span class="svg-wrapper pdp-inventory-status--in">
                           {{- 'icon-inventory-status.svg' | inline_asset_content -}}
                         </span>
                         {%- if block.settings.show_inventory_quantity -%}
@@ -551,12 +1034,12 @@
                       {%- endif -%}
                     {%- else -%}
                       {%- if product.selected_or_first_available_variant.inventory_policy == 'continue' -%}
-                        <span class="svg-wrapper" style="color: rgb(62, 214, 96)">
+                        <span class="svg-wrapper pdp-inventory-status--in">
                           {{- 'icon-inventory-status.svg' | inline_asset_content -}}
                         </span>
                         {{- 'products.product.inventory_out_of_stock_continue_selling' | t -}}
                       {%- else -%}
-                        <span class="svg-wrapper" style="color: rgb(200, 200, 200)">
+                        <span class="svg-wrapper pdp-inventory-status--out">
                           {{- 'icon-inventory-status.svg' | inline_asset_content -}}
                         </span>
                         {{- 'products.product.inventory_out_of_stock' | t -}}
@@ -1126,34 +1609,203 @@
             return;
           }
 
-          const thumbsSwiper = new Swiper('.pdp-gallery-thumbs', {
-            spaceBetween: 12,
-            slidesPerView: 4,
-            watchSlidesProgress: true,
-            centerInsufficientSlides: true
-          });
+          let mainSwiper = null;
+          let thumbsSwiper = null;
 
-          const mainSwiper = new Swiper('.pdp-gallery-main', {
-            spaceBetween: 10,
-            navigation: {
-              nextEl: '.swiper-button-next',
-              prevEl: '.swiper-button-prev',
-            },
-            thumbs: {
-              swiper: thumbsSwiper,
-            },
-          });
+          // 1. Store memory references to all original slides in the main and thumb galleries
+          const allMainSlides = Array.from(document.querySelectorAll('.pdp-gallery-main .swiper-slide'));
+          const allThumbSlides = Array.from(document.querySelectorAll('.pdp-gallery-thumbs .swiper-slide'));
 
-          if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
-            subscribe(PUB_SUB_EVENTS.variantChange, (event) => {
-              const variant = event.data.variant;
-              if (variant && variant.featured_media) {
-                const mediaId = variant.featured_media.id;
-                const slides = Array.from(document.querySelectorAll('.pdp-gallery-main .swiper-slide'));
-                const slideIndex = slides.findIndex(slide => slide.dataset.mediaId == mediaId);
-                if (slideIndex > -1) {
-                  mainSwiper.slideTo(slideIndex);
+          // 2. Color option position mapping from Liquid
+          const productOptionNames = "{{ product.options | join: '|' }}".split('|');
+          const colorOptionIndex = productOptionNames.findIndex(o => {
+            const name = o.toLowerCase().trim();
+            return name === 'color' || name === 'colour';
+          });
+          console.log('[Gallery] Color option index:', colorOptionIndex, '| Options:', productOptionNames);
+
+          // 3. Gathering all color option values from Liquid dynamically
+          const allColors = [];
+          {%- for option in product.options_with_values -%}
+            {%- assign downcased_opt = option.name | downcase -%}
+            {%- if downcased_opt == 'color' or downcased_opt == 'colour' -%}
+            {%- for value in option.values -%}
+              allColors.push({{ value | json }}.toLowerCase().trim());
+            {%- endfor -%}
+          {%- endif -%}{%- endfor -%}
+          console.log('[Gallery] All product colors:', allColors);
+
+          // 4. Dynamic Slide Filter Function
+          function filterGalleryByColor(colorValue) {
+            try {
+              if (colorOptionIndex < 0 || !colorValue) return;
+              const lowerColor = colorValue.toLowerCase().trim();
+              console.log('[Gallery] Filtering gallery for color:', lowerColor);
+
+              // A. Destroy existing Swiper instances to prevent indexing crashes
+              if (mainSwiper && typeof mainSwiper.destroy === 'function') {
+                try { mainSwiper.destroy(true, true); } catch(e) {}
+                mainSwiper = null;
+              }
+              if (thumbsSwiper && typeof thumbsSwiper.destroy === 'function') {
+                try { thumbsSwiper.destroy(true, true); } catch(e) {}
+                thumbsSwiper = null;
+              }
+
+              const mainWrapper = document.querySelector('.pdp-gallery-main .swiper-wrapper');
+              const thumbsWrapper = document.querySelector('.pdp-gallery-thumbs .swiper-wrapper');
+              if (!mainWrapper || !thumbsWrapper) return;
+
+              // B. Clear current slides from DOM
+              mainWrapper.innerHTML = '';
+              thumbsWrapper.innerHTML = '';
+              
+              // D. Filter Logic
+              let matchCount = 0;
+              allMainSlides.forEach((slide, index) => {
+                const imgEl = slide.querySelector('img');
+                const slideAlt = imgEl ? (imgEl.getAttribute('alt') || '').toLowerCase().trim() : '';
+                const slideColor = slide.getAttribute('data-color-value');
+                
+                let isMatch = false;
+                
+                if (slideColor) {
+                  // Use robust metafield tagging logic if available
+                  isMatch = (slideColor === lowerColor || slideColor === 'common');
+                } else {
+                  // Fallback to legacy alt-text logic
+                  const isSelectedColor = slideAlt === lowerColor || slideAlt.includes(lowerColor);
+                  let isOtherColor = false;
+                  allColors.forEach(col => {
+                    if (col !== lowerColor && (slideAlt === col || slideAlt.includes(col))) {
+                      isOtherColor = true;
+                    }
+                  });
+                  isMatch = isSelectedColor || !isOtherColor;
                 }
+
+                if (isMatch) {
+                  // Clone slides to keep original memory reference pristine
+                  const mainClone = slide.cloneNode(true);
+                  mainWrapper.appendChild(mainClone);
+                  const thumbSlide = allThumbSlides[index];
+                  if (thumbSlide) {
+                    const thumbClone = thumbSlide.cloneNode(true);
+                    thumbsWrapper.appendChild(thumbClone);
+                  }
+                  matchCount++;
+                }
+              });
+
+              console.log('[Gallery] Filtered. Matches found:', matchCount);
+
+              // Fallback: If no slides match, show all slides
+              if (matchCount === 0) {
+                allMainSlides.forEach((slide, index) => {
+                  const mainClone = slide.cloneNode(true);
+                  mainWrapper.appendChild(mainClone);
+                  const thumbSlide = allThumbSlides[index];
+                  if (thumbSlide) {
+                    const thumbClone = thumbSlide.cloneNode(true);
+                    thumbsWrapper.appendChild(thumbClone);
+                  }
+                });
+              }
+
+              // C. Re-initialize Swiper instances fresh
+              thumbsSwiper = new Swiper('.pdp-gallery-thumbs', {
+                spaceBetween: 23,
+                slidesPerView: 4,
+                watchSlidesProgress: true,
+                centerInsufficientSlides: true,
+                loop: false
+              });
+
+              mainSwiper = new Swiper('.pdp-gallery-main', {
+                spaceBetween: 10,
+                {%- if section.settings.show_arrows -%}
+                navigation: {
+                  nextEl: '.pdp-gallery-main .swiper-button-next',
+                  prevEl: '.pdp-gallery-main .swiper-button-prev',
+                },
+                {%- endif -%}
+                thumbs: {
+                  swiper: thumbsSwiper,
+                },
+                loop: false,
+              });
+            } catch (error) {
+              console.error('[Gallery] Swiper filtering failed safely:', error);
+            }
+          }
+
+          {%- assign color_option_value = '' -%}
+          {%- for option in product.options -%}
+            {%- assign downcased_opt = option | downcase -%}
+            {%- if downcased_opt == 'color' or downcased_opt == 'colour' -%}
+              {%- if forloop.index == 1 -%}{%- assign color_option_value = product.selected_or_first_available_variant.option1 -%}
+              {%- elsif forloop.index == 2 -%}{%- assign color_option_value = product.selected_or_first_available_variant.option2 -%}
+              {%- elsif forloop.index == 3 -%}{%- assign color_option_value = product.selected_or_first_available_variant.option3 -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+
+          // 5. Initial filter based on selected variant's color
+
+          if (colorOptionIndex >= 0) {
+            const initialColor = {{ color_option_value | json }};
+            if (initialColor) {
+              filterGalleryByColor(initialColor);
+            }
+          } else {
+            // No color option, initialize swipers normally
+            thumbsSwiper = new Swiper('.pdp-gallery-thumbs', {
+              spaceBetween: 23,
+              slidesPerView: 4,
+              watchSlidesProgress: true,
+              centerInsufficientSlides: true
+            });
+
+            mainSwiper = new Swiper('.pdp-gallery-main', {
+              spaceBetween: 10,
+              {%- if section.settings.show_arrows -%}
+              navigation: {
+                nextEl: '.pdp-gallery-main .swiper-button-next',
+                prevEl: '.pdp-gallery-main .swiper-button-prev',
+              },
+              {%- endif -%}
+              thumbs: {
+                swiper: thumbsSwiper,
+              },
+              loop: false,
+            });
+          }
+
+          // 6. Listen for PUB_SUB events to handle color changes robustly across DOM updates
+          if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+            subscribe(PUB_SUB_EVENTS.optionValueSelectionChange, (event) => {
+              const target = event.data?.target;
+              if (target && target.tagName === 'INPUT' && target.type === 'radio') {
+                const fieldset = target.closest('fieldset');
+                if (fieldset) {
+                  const legend = fieldset.querySelector('legend');
+                  const legendText = legend ? legend.textContent.toLowerCase() : '';
+                  if (legendText.includes('color') || legendText.includes('colour')) {
+                    console.log('[Gallery] Color change detected via optionValueSelectionChange:', target.value);
+                    filterGalleryByColor(target.value);
+                  }
+                }
+              }
+            });
+
+            // Also listen to variantChange as a fallback
+            subscribe(PUB_SUB_EVENTS.variantChange, (event) => {
+              const variant = event.data?.variant;
+              if (!variant) return;
+              if (colorOptionIndex >= 0) {
+                const colorValue = variant['option' + (colorOptionIndex + 1)];
+                console.log('[Gallery] PUB_SUB variantChange detected color:', colorValue);
+                filterGalleryByColor(colorValue);
               }
             });
           }
@@ -2772,7 +3424,32 @@
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
       "default": 36
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "default": true,
+      "label": "Show Navigation Arrows"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_loop",
+      "default": false,
+      "label": "Enable Loop"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "default": "#ffc357",
+      "label": "Accent / Badge Background Color"
+    },
+    {
+      "type": "color",
+      "id": "accent_text_color",
+      "default": "#00237d",
+      "label": "Accent / Badge Text Color"
     }
   ]
 }
 {% endschema %}
+

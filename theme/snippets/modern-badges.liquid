@@ -73,6 +73,53 @@
 -%}
 
 {%- if display_promo or display_sale or display_new or display_bestseller or display_featured or display_sold_out -%}
+  {%- unless is_card -%}
+    <style>
+      .modern-badges-container:not(.modern-badges-container--overlay) {
+        margin: 1.5rem 0 2rem 0;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .modern-badges-container:not(.modern-badges-container--overlay) .modern-badge {
+        font-family: 'Public Sans', sans-serif;
+        font-size: 1.3rem;
+        font-weight: 600;
+        padding: 4px 8px;
+        border-radius: 2px;
+        text-transform: none;
+        letter-spacing: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.2;
+        background-color: {{ badge_background | default: 'rgb(var(--color-button))' }};
+        color: {{ badge_text_color | default: 'rgb(var(--color-button-text))' }};
+      }
+      .modern-badges-container:not(.modern-badges-container--overlay) .modern-badge--promo {
+        background-color: {{ badge_background | default: 'rgb(var(--color-button))' }};
+        color: {{ badge_text_color | default: 'rgb(var(--color-button-text))' }};
+      }
+      .modern-badges-container:not(.modern-badges-container--overlay) .modern-badge--sale {
+        background-color: {{ badge_background | default: 'rgb(var(--color-button))' }};
+        color: {{ badge_text_color | default: 'rgb(var(--color-button-text))' }};
+      }
+      .modern-badges-container:not(.modern-badges-container--overlay) .modern-badge--new {
+        background-color: {{ badge_background | default: 'rgb(var(--color-button))' }};
+        color: {{ badge_text_color | default: 'rgb(var(--color-button-text))' }};
+      }
+      .modern-badges-container:not(.modern-badges-container--overlay) .modern-badge--bestseller {
+        background-color: {{ badge_background | default: 'rgb(var(--color-button))' }};
+        color: {{ badge_text_color | default: 'rgb(var(--color-button-text))' }};
+      }
+      .modern-badges-container:not(.modern-badges-container--overlay) .modern-badge--featured {
+        background-color: {{ badge_background | default: 'rgb(var(--color-button))' }};
+        color: {{ badge_text_color | default: 'rgb(var(--color-button-text))' }};
+      }
+    </style>
+  {%- endunless -%}
   <div class="modern-badges-container{% if is_card %} modern-badges-container--overlay{% endif %}" data-product-id="{{ product.id }}">
     <div class="modern-badges-left">
       {%- if display_promo -%}

@@ -196,10 +196,31 @@ if (!customElements.get('product-info')) {
           this.querySelector(`#Quantity-Rules-${this.dataset.section}`)?.classList.remove('hidden');
           this.querySelector(`#Volume-Note-${this.dataset.section}`)?.classList.remove('hidden');
 
-          this.productForm?.toggleSubmitButton(
-            html.getElementById(`ProductSubmitButton-${this.sectionId}`)?.hasAttribute('disabled') ?? true,
-            window.variantStrings.soldOut
-          );
+          const newSoldOutBtn = html.getElementById(`ProductSoldOutButton-${this.sectionId}`);
+          const isSoldOut = newSoldOutBtn && !newSoldOutBtn.hasAttribute('style');
+
+          const submitBtn = this.querySelector(`#ProductSubmitButton-${this.dataset.section}`);
+          const buyNowBtn = this.querySelector(`#ProductBuyNowButton-${this.dataset.section}`);
+          const soldOutBtn = this.querySelector(`#ProductSoldOutButton-${this.dataset.section}`);
+
+          if (isSoldOut) {
+            if (submitBtn) submitBtn.style.setProperty('display', 'none', 'important');
+            if (buyNowBtn) buyNowBtn.style.setProperty('display', 'none', 'important');
+            if (soldOutBtn) {
+              soldOutBtn.style.removeProperty('display');
+              const soldOutText = soldOutBtn.querySelector('span');
+              if (soldOutText) soldOutText.textContent = window.variantStrings.soldOut;
+            }
+          } else {
+            if (submitBtn) {
+              submitBtn.style.removeProperty('display');
+              submitBtn.removeAttribute('disabled');
+              const submitBtnText = submitBtn.querySelector('span');
+              if (submitBtnText) submitBtnText.textContent = window.variantStrings.addToCart;
+            }
+            if (buyNowBtn) buyNowBtn.style.removeProperty('display');
+            if (soldOutBtn) soldOutBtn.style.setProperty('display', 'none', 'important');
+          }
 
           publish(PUB_SUB_EVENTS.variantChange, {
             data: {
@@ -231,7 +252,17 @@ if (!customElements.get('product-info')) {
       }
 
       setUnavailable() {
-        this.productForm?.toggleSubmitButton(true, window.variantStrings.unavailable);
+        const submitBtn = this.querySelector(`#ProductSubmitButton-${this.dataset.section}`);
+        const buyNowBtn = this.querySelector(`#ProductBuyNowButton-${this.dataset.section}`);
+        const soldOutBtn = this.querySelector(`#ProductSoldOutButton-${this.dataset.section}`);
+
+        if (submitBtn) submitBtn.style.setProperty('display', 'none', 'important');
+        if (buyNowBtn) buyNowBtn.style.setProperty('display', 'none', 'important');
+        if (soldOutBtn) {
+          soldOutBtn.style.removeProperty('display');
+          const soldOutText = soldOutBtn.querySelector('span');
+          if (soldOutText) soldOutText.textContent = window.variantStrings.unavailable;
+        }
 
         const selectors = ['price', 'Inventory', 'Sku', 'Price-Per-Item', 'Volume-Note', 'Volume', 'Quantity-Rules']
           .map((id) => `#${id}-${this.dataset.section}`)

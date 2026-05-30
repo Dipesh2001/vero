@@ -402,6 +402,36 @@
     ]
   },
   {
+    "name": "Swatches",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Controls the shape and style of color swatches on product pages and collection cards."
+      },
+      {
+        "type": "select",
+        "id": "swatch_shape",
+        "label": "Swatch shape",
+        "options": [
+          {
+            "value": "circle",
+            "label": "Circle"
+          },
+          {
+            "value": "square",
+            "label": "Square (rounded corners)"
+          },
+          {
+            "value": "square-filled",
+            "label": "Square filled (no radius, edge-to-edge color)"
+          }
+        ],
+        "default": "circle",
+        "info": "Circle: fully rounded. Square: slight radius. Square filled: sharp corners, color fills entire swatch with no spacing or border."
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.inputs.name",
     "settings": [
       {

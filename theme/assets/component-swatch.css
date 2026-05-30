@@ -19,6 +19,15 @@
   --swatch--border-radius: var(--swatch-input--border-radius, 0.2rem);
 }
 
+/* Square-filled: color goes completely edge-to-edge, no visible border gap */
+.swatch--square-filled {
+  --swatch--border-radius: 0;
+  border: none;
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.18);
+  outline-offset: 0;
+  overflow: hidden;
+}
+
 .swatch--unavailable {
   border-style: dashed;
   border-color: rgba(var(--color-foreground), 0.5);

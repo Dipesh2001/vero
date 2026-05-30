@@ -44,14 +44,15 @@
 >
 <label
   for="{{ id }}"
-  title="{{ value }}"
-  class="swatch-input__label{% if shape == 'square' %} swatch-input__label--square{% endif %}"
+  data-swatch-value="{{ value }}"
+  class="swatch-input__label{% if shape == 'square' or shape == 'square-filled' %} swatch-input__label--square{% endif %}{% if shape == 'square-filled' %} swatch-input__label--square-filled{% endif %}"
 >
   {% render 'swatch',
     swatch: swatch,
     shape: shape,
     swatch_color: swatch_color,
-    swatch_image_url: swatch_image_url
+    swatch_image_url: swatch_image_url,
+    fallback_value: value
   %}
   {{ help_text }}
 </label>

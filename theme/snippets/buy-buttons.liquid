@@ -10,7 +10,7 @@
   Usage:
   {% render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true %}
 {% endcomment %}
-<div {{ block.shopify_attributes }}>
+<div id="buy-buttons-{{ section_id }}" {{ block.shopify_attributes }}>
   {%- if product != blank -%}
     {%- liquid
       assign gift_card_recipient_feature_active = false
@@ -76,40 +76,43 @@
             endif
           -%}
 
-          {%- if is_out_of_stock -%}
+          <button
+            id="ProductSubmitButton-{{ section_id }}"
+            type="submit"
+            name="add"
+            class="product-form__submit button button--full-width"
+            {% if is_out_of_stock %}style="display: none !important;"{% endif %}
+          >
+            <span>
+              {{ 'products.product.add_to_cart' | t }}
+            </span>
+            {%- render 'loading-spinner' -%}
+          </button>
+
+          <button
+            id="ProductSoldOutButton-{{ section_id }}"
+            type="button"
+            class="product-form__submit button button--full-width"
+            disabled
+            {% unless is_out_of_stock %}style="display: none !important;"{% endunless %}
+          >
+            <span>OUT OF STOCK</span>
+          </button>
+          
+          {%- if show_dynamic_checkout -%}
             <button
+              id="ProductBuyNowButton-{{ section_id }}"
               type="button"
-              class="product-form__submit button button--full-width"
-              disabled
-              style="height: 60px !important; background-color: #f2eadf !important; border: 1px solid #c4c4c4 !important; border-radius: 4px !important; color: #868686 !important; font-family: 'Poppins', sans-serif !important; font-size: 2rem !important; font-weight: 600 !important; text-transform: uppercase !important; display: flex !important; align-items: center; justify-content: center; width: 100% !important; cursor: not-allowed !important; flex: 1 0 100% !important;"
-            >
-              OUT OF STOCK
-            </button>
-          {%- else -%}
-            <button
-              id="ProductSubmitButton-{{ section_id }}"
-              type="submit"
-              name="add"
-              class="product-form__submit button button--full-width"
+              class="product-form__buynow button button--full-width"
+              {% if is_out_of_stock %}style="display: none !important;"{% endif %}
             >
               <span>
-                {{ 'products.product.add_to_cart' | t }}
+                Buy It Now
               </span>
-              {%- render 'loading-spinner' -%}
+              <span class="loading__spinner hidden" style="margin-left: 10px;">
+                {%- render 'loading-spinner' -%}
+              </span>
             </button>
-            {%- if show_dynamic_checkout -%}
-              <button
-                id="ProductBuyNowButton-{{ section_id }}"
-                type="button"
-                class="product-form__buynow button button--full-width"
-              >
-                <span>
-                  Buy It Now
-                </span>
-                <span class="loading__spinner hidden" style="margin-left: 10px;">
-                  {%- render 'loading-spinner' -%}
-                </span>
-              </button>
 
               <script>
                 document.addEventListener('DOMContentLoaded', () => {
@@ -175,7 +178,6 @@
                 });
               </script>
             {%- endif -%}
-          {%- endif -%}
         </div>
       {%- endform -%}
     </product-form>

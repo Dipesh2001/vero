@@ -1,2 +1,8 @@
 sections/*.json
 section/*.json
+
+node_modules
+playwright-report
+*.md
+tests
+test-results

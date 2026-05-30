@@ -19,11 +19,14 @@
         assign swatch_count = option.values | map: 'swatch' | compact | size
         assign picker_type = block.settings.picker_type
 
-        if swatch_count > 0 and block.settings.swatch_shape != 'none'
-          if block.settings.picker_type == 'dropdown'
-            assign picker_type = 'swatch_dropdown'
-          else
-            assign picker_type = 'swatch'
+        assign downcased_option_name = option.name | downcase
+        if swatch_count > 0 or downcased_option_name == 'color' or downcased_option_name == 'colour'
+          if block.settings.swatch_shape != 'none'
+            if block.settings.picker_type == 'dropdown'
+              assign picker_type = 'swatch_dropdown'
+            else
+              assign picker_type = 'swatch'
+            endif
           endif
         endif
       -%}
@@ -39,9 +42,6 @@
               block: block,
               picker_type: picker_type
             %}
-          </div>
-          <div class="swatch-selected-value-under" style="font-family: 'Public Sans', sans-serif; font-size: 1.4rem; color: #454545; margin-top: 1rem; font-weight: 500;">
-            Selected: <span data-selected-value>{{ option.selected_value }}</span>
           </div>
         </fieldset>
       {%- elsif picker_type == 'button' -%}

@@ -2,7 +2,7 @@
   Renders a swatch component.
   Accepts:
   - swatch: {Object} a swatch object
-  - shape: {String} swatch shape. Accepts 'square', defaults to circle.
+  - shape: {String} swatch shape. Accepts 'circle', 'square', 'square-filled'. Defaults to settings.swatch_shape.
 
   Usage:
   {% render 'swatch',
@@ -10,6 +10,7 @@
     shape: 'square'
   %}
 {% endcomment %}
+{%- assign swatch_shape = shape | default: settings.swatch_shape | default: 'circle' -%}
 
 {%- liquid
   assign swatch_value = null
@@ -24,14 +25,36 @@
     assign swatch_value = 'url(' | append: swatch_image_url | append: ')'
   elsif swatch_color != blank
     assign swatch_value = swatch_color
+  elsif fallback_value != blank
+    assign downcased_val = fallback_value | downcase | strip
+    if downcased_val == 'coral pink'
+      assign swatch_value = '#F3A382'
+    elsif downcased_val == 'arctic white'
+      assign swatch_value = '#FFFFFF'
+    elsif downcased_val == 'midnight black'
+      assign swatch_value = '#1C1C1C'
+    elsif downcased_val == 'ocean blue'
+      assign swatch_value = '#3D85C6'
+    else
+      assign swatch_value = downcased_val | remove: ' '
+    endif
+  endif
+-%}
+
+{%- liquid
+  assign shape_class = ''
+  if swatch_shape == 'square'
+    assign shape_class = ' swatch--square'
+  elsif swatch_shape == 'square-filled'
+    assign shape_class = ' swatch--square swatch--square-filled'
   endif
 -%}
 
 <span
   {% if swatch_value %}
-    class="swatch{% if shape == 'square' %} swatch--square{% endif %}"
+    class="swatch{{ shape_class }}"
     style="--swatch--background: {{ swatch_value }};{% if swatch_focal_point %} --swatch-focal-point: {{ swatch_focal_point }};{% endif %}"
   {% else %}
-    class="swatch swatch--unavailable{% if shape == 'square' %} swatch--square{% endif %}"
+    class="swatch swatch--unavailable{{ shape_class }}"
   {% endif %}
 ></span>
