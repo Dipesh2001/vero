@@ -94,6 +94,49 @@
         "accent_text_color": "#00237d"
       }
     },
+    "product_additional_info_hENpdw": {
+      "type": "product-additional-info",
+      "blocks": {
+        "accordion_yjxDJa": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Description",
+            "icon": "none",
+            "content": "{{ product.description }}"
+          }
+        },
+        "accordion_V6NBUw": {
+          "type": "accordion",
+          "settings": {
+            "heading": "How to use",
+            "icon": "none",
+            "content": "{{ product.metafields.custom.how_to_use | metafield_tag }}"
+          }
+        },
+        "accordion_MUhAwj": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Special features",
+            "icon": "none",
+            "content": "{{ product.metafields.custom.special_feature | metafield_tag }}"
+          }
+        }
+      },
+      "block_order": [
+        "accordion_yjxDJa",
+        "accordion_V6NBUw",
+        "accordion_MUhAwj"
+      ],
+      "name": "Additional Info",
+      "settings": {
+        "color_scheme": "",
+        "page_width": "page-width",
+        "padding_top": 0,
+        "padding_bottom": 36,
+        "padding_top_mobile": 24,
+        "padding_bottom_mobile": 24
+      }
+    },
     "related-products": {
       "type": "related-products",
       "disabled": true,
@@ -115,9 +158,22 @@
     },
     "faq": {
       "type": "pdp-faq",
-      "disabled": true,
+      "blocks": {
+        "faq_item_REqLU9": {
+          "type": "faq_item",
+          "settings": {
+            "heading": "{{ product.metafields.custom.question_1.value }}",
+            "content": "<p>{{ product.metafields.custom.answer_1 | metafield_tag }}</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_item_REqLU9"
+      ],
       "settings": {
-        "heading": "Frequently Asked Questions",
+        "heading": "FAQs",
+        "heading_color": "#ffc357",
+        "heading_alignment": "left",
         "color_scheme": "scheme-7",
         "padding_top": 36,
         "padding_bottom": 36
@@ -126,6 +182,7 @@
   },
   "order": [
     "main",
+    "product_additional_info_hENpdw",
     "related-products",
     "faq"
   ]
