@@ -13,6 +13,22 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  {%- if section.settings.video_height != 'adapt' -%}
+    .section-{{ section.id }}-media {
+      padding-bottom: 0 !important;
+    }
+    @media screen and (max-width: 749px) {
+      .section-{{ section.id }}-media {
+        height: {% if section.settings.video_height == 'small' %}28rem{% elsif section.settings.video_height == 'medium' %}34rem{% else %}39rem{% endif %};
+      }
+    }
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-media {
+        height: {% if section.settings.video_height == 'small' %}42rem{% elsif section.settings.video_height == 'medium' %}56rem{% else %}72rem{% endif %};
+      }
+    }
+  {%- endif -%}
 {%- endstyle -%}
 
 {%- liquid
@@ -52,10 +68,16 @@
       {%- endunless -%}
     </div>
     <deferred-media
-      class="video-section__media deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+      class="video-section__media section-{{ section.id }}-media deferred-media gradient global-media-settings{% if section.settings.full_width %} global-media-settings--full-width{% endif %}{% if fix_ratio %} media-fit-cover{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
       data-media-id="{{ video_id }}"
-      {% if poster != null %}
-        style="--ratio-percent: {{ 1 | divided_by: poster.aspect_ratio | times: 100 }}%;"
+      {% if section.settings.video_height == 'adapt' %}
+        {% if poster != null %}
+          style="--ratio-percent: {{ 1 | divided_by: poster.aspect_ratio | times: 100 }}%;"
+        {% elsif section.settings.video != null %}
+          style="--ratio-percent: {{ 1 | divided_by: section.settings.video.aspect_ratio | times: 100 }}%;"
+        {% else %}
+          style="--ratio-percent: 56.25%;"
+        {% endif %}
       {% endif %}
     >
       <button
@@ -168,6 +190,30 @@
       "id": "enable_video_looping",
       "label": "t:sections.video.settings.enable_video_looping.label",
       "default": false
+    },
+    {
+      "type": "select",
+      "id": "video_height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to video"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "adapt",
+      "label": "Video height"
     },
     {
       "type": "header",

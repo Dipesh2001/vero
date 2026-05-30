@@ -1,0 +1,435 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+  }
+  .section-{{ section.id }}-bg {
+    background-color: {{ section.settings.background_color }};
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* Block 1: Icon + Text + Subtext row */
+  .dynamic-blocks-icon-row {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 30px;
+    justify-content: center; /* Centered from left to right */
+    align-items: flex-start;
+    padding: 20px 0; /* Minimum 20px spacing top/bottom */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    margin-bottom: 2rem;
+  }
+  .dynamic-blocks-icon-row::-webkit-scrollbar {
+    display: none;
+  }
+  @media screen and (max-width: 749px) {
+    .dynamic-blocks-icon-row {
+      justify-content: flex-start; /* Better scrolling on mobile */
+      padding: 20px;
+      gap: 15px; /* Tighter gap to fit 2.5 items */
+    }
+  }
+  @media screen and (min-width: 750px) {
+    .dynamic-blocks-icon-row {
+      gap: 150px;
+    }
+  }
+
+  .dynamic-icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 100px; /* Reduced to fit more on mobile */
+    flex: 0 0 auto;
+  }
+  .dynamic-icon-item .icon {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  @media screen and (min-width: 750px) {
+    .dynamic-icon-item .icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 15px;
+    }
+  }
+  .dynamic-icon-item .icon svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .dynamic-icon-item img.custom-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    margin-bottom: 10px;
+  }
+  @media screen and (min-width: 750px) {
+    .dynamic-icon-item img.custom-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 15px;
+    }
+  }
+  .dynamic-icon-title {
+    font-family: var(--font-body-custom), 'Montserrat', sans-serif;
+    font-size: 1.0rem; /* Matches Figma 10px */
+    font-weight: 600; /* Figma SemiBold */
+    margin: 0 0 4px 0;
+    color: #868686; /* Figma color */
+    line-height: 1.2;
+  }
+  .dynamic-icon-subtext {
+    font-family: var(--font-body-custom), 'Montserrat', sans-serif;
+    font-size: 0.8rem; /* Matches Figma 8px */
+    font-weight: 400; /* Figma Regular */
+    margin: 0;
+    color: #868686; /* Figma color */
+    line-height: 1.4;
+  }
+  
+  @media screen and (min-width: 750px) {
+    .dynamic-icon-title {
+      font-size: 1.4rem;
+    }
+    .dynamic-icon-subtext {
+      font-size: 1.2rem;
+    }
+  }
+
+  /* Block 2: Image 1 : Content 2 ratio */
+  .dynamic-image-text-item {
+    display: flex;
+    flex-direction: row; /* Mobile 1:1 row */
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+  }
+  .dynamic-image-text-image {
+    flex: 1; /* 1 part */
+    max-width: 200px;
+  }
+  .dynamic-image-text-content {
+    flex: 1; /* 1 part on mobile */
+    max-width: 800px;
+  }
+  
+  @media screen and (min-width: 750px) {
+    .dynamic-image-text-content {
+      flex: 2; /* 2 parts on desktop */
+      padding-left: 40px;
+    }
+  }
+  .dynamic-image-text-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    display: block;
+  }
+  .dynamic-image-text-content .rte {
+    font-size: 1.6rem;
+    line-height: 1.6;
+    color: rgb(var(--color-foreground));
+  }
+  .dynamic-image-text-content .rte h1, 
+  .dynamic-image-text-content .rte h2, 
+  .dynamic-image-text-content .rte h3 {
+    font-family: var(--font-body-custom), 'Montserrat', sans-serif;
+    font-weight: 700;
+    margin-top: 0;
+  }
+{%- endstyle -%}
+
+<div class="section-{{ section.id }}-bg color-{{ section.settings.color_scheme }} gradient">
+  <div class="{{ section.settings.page_width }} section-{{ section.id }}-padding">
+    
+    {%- assign has_icon_blocks = false -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'icon_with_text' -%}
+        {%- assign has_icon_blocks = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if has_icon_blocks -%}
+      <div class="dynamic-blocks-icon-row">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'icon_with_text' -%}
+            {%- assign has_data = false -%}
+            {%- if block.settings.title != blank or block.settings.subtext != blank or block.settings.custom_icon != blank -%}
+              {%- assign has_data = true -%}
+            {%- endif -%}
+
+            {%- if has_data -%}
+              <div class="dynamic-icon-item" {{ block.shopify_attributes }}>
+                {%- if block.settings.custom_icon != blank -%}
+                  <img src="{{ block.settings.custom_icon | image_url: width: 100 }}" alt="{{ block.settings.title | escape }}" class="custom-icon" loading="lazy">
+                {%- elsif block.settings.icon != 'none' -%}
+                  <div class="icon">
+                    {% render 'icon-accordion', icon: block.settings.icon %}
+                  </div>
+                {%- endif -%}
+                
+                {%- if block.settings.title != blank -%}
+                  <h3 class="dynamic-icon-title">{{ block.settings.title | escape }}</h3>
+                {%- endif -%}
+                
+                {%- if block.settings.subtext != blank -%}
+                  <p class="dynamic-icon-subtext">{{ block.settings.subtext | escape }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'image_with_text' -%}
+        {%- assign has_data = false -%}
+        {%- if block.settings.image != blank or block.settings.content != blank -%}
+          {%- assign has_data = true -%}
+        {%- endif -%}
+
+        {%- if has_data -%}
+          <div class="dynamic-image-text-item" {{ block.shopify_attributes }}>
+            <div class="dynamic-image-text-image">
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.image.alt | escape }}" loading="lazy" width="{{ block.settings.image.width }}" height="{{ block.settings.image.height }}">
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+            </div>
+            <div class="dynamic-image-text-content">
+              {%- if block.settings.content != blank -%}
+                <div class="rte">
+                  {{ block.settings.content }}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Dynamic Features",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "page_width",
+      "label": "Section Width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Page Width"
+        },
+        {
+          "value": "full-width",
+          "label": "Full Width"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Custom Background Color",
+      "default": "#C8E8FB",
+      "info": "Overrides color scheme background. Matches Figma design."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Desktop Padding Top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Desktop Padding Bottom",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Padding Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Padding Bottom",
+      "default": 24
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon_with_text",
+      "name": "Icon with Text",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "apple", "label": "Apple" },
+            { "value": "banana", "label": "Banana" },
+            { "value": "bottle", "label": "Bottle" },
+            { "value": "box", "label": "Box" },
+            { "value": "carrot", "label": "Carrot" },
+            { "value": "chat_bubble", "label": "Chat bubble" },
+            { "value": "check_mark", "label": "Check mark" },
+            { "value": "clipboard", "label": "Clipboard" },
+            { "value": "dairy", "label": "Dairy" },
+            { "value": "dairy_free", "label": "Dairy free" },
+            { "value": "dryer", "label": "Dryer" },
+            { "value": "eye", "label": "Eye" },
+            { "value": "fire", "label": "Fire" },
+            { "value": "gluten_free", "label": "Gluten free" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "iron", "label": "Iron" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "leather", "label": "Leather" },
+            { "value": "lightning_bolt", "label": "Lightning bolt" },
+            { "value": "lipstick", "label": "Lipstick" },
+            { "value": "lock", "label": "Lock" },
+            { "value": "map_pin", "label": "Map pin" },
+            { "value": "nut_free", "label": "Nut free" },
+            { "value": "pants", "label": "Pants" },
+            { "value": "paw_print", "label": "Paw print" },
+            { "value": "pepper", "label": "Pepper" },
+            { "value": "perfume", "label": "Perfume" },
+            { "value": "plane", "label": "Plane" },
+            { "value": "plant", "label": "Plant" },
+            { "value": "price_tag", "label": "Price tag" },
+            { "value": "question_mark", "label": "Question mark" },
+            { "value": "recycle", "label": "Recycle" },
+            { "value": "return", "label": "Return" },
+            { "value": "ruler", "label": "Ruler" },
+            { "value": "serving_dish", "label": "Serving dish" },
+            { "value": "shirt", "label": "Shirt" },
+            { "value": "shoe", "label": "Shoe" },
+            { "value": "silhouette", "label": "Silhouette" },
+            { "value": "snowflake", "label": "Snowflake" },
+            { "value": "star", "label": "Star" },
+            { "value": "stopwatch", "label": "Stopwatch" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "washing", "label": "Washing" }
+          ],
+          "default": "check_mark",
+          "label": "Standard Icon"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Custom Icon Image",
+          "info": "Overrides standard icon if selected"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Feature Title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "subtext",
+          "default": "Feature subtext description",
+          "label": "Subtext"
+        }
+      ]
+    },
+    {
+      "type": "image_with_text",
+      "name": "Image with Text (1:2)",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "default": "<p>Add detailed descriptive text here.</p>",
+          "label": "Content"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dynamic Features",
+      "blocks": [
+        {
+          "type": "icon_with_text",
+          "settings": {
+            "title": "Keep it Cool",
+            "subtext": "24 Hours"
+          }
+        },
+        {
+          "type": "icon_with_text",
+          "settings": {
+            "title": "Keep it Hot",
+            "subtext": "12 Hours"
+          }
+        },
+        {
+          "type": "icon_with_text",
+          "settings": {
+            "title": "Leak Proof",
+            "subtext": "100% Secure"
+          }
+        },
+        {
+          "type": "image_with_text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
