@@ -4,6 +4,23 @@
     padding-bottom: {{ section.settings.padding_bottom | default: 40 }}px;
     background-color: rgb(var(--color-background));
   }
+  .pdp-faq-section .carousel__header {
+    text-align: {{ section.settings.heading_alignment | default: 'center' }};
+    margin-bottom: 3rem;
+  }
+  .pdp-faq-section .carousel__header h2 {
+    font-family: var(--font-body-custom), 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 2.8rem;
+    color: {{ section.settings.heading_color | default: '#ffc357' }} !important;
+    margin: 0;
+    line-height: 1.2;
+  }
+  @media screen and (min-width: 750px) {
+    .pdp-faq-section .carousel__header h2 {
+      font-size: 4rem;
+    }
+  }
   .pdp-faq-container {
     max-width: 1073px;
     margin: 0 auto;
@@ -89,77 +106,34 @@
 <div class="pdp-faq-section color-{{ section.settings.color_scheme }} gradient">
   <div class="pdp-faq-container">
     {%- if section.settings.heading != blank -%}
-      <h2 class="h1" style="font-family: 'Montserrat', sans-serif; font-weight: 700; color: #00237d; margin: 0 0 2rem 0; text-align: left;">
-        {{ section.settings.heading }}
-      </h2>
+      <div class="carousel__header">
+        <h2>{{ section.settings.heading | escape }}</h2>
+      </div>
     {%- endif -%}
 
-    {%- liquid
-      assign faq_items = product.metafields.custom.faq_list.value
-      assign show_onboarding = false
-      if faq_items == blank
-        assign show_onboarding = true
-      endif
-    -%}
-
     <div class="pdp-faq-list">
-      {%- if show_onboarding -%}
-        <!-- Fallback FAQ 1 -->
-        <div class="pdp-faq-item">
-          <details class="pdp-faq-details" id="pdp-faq-1">
-            <summary class="pdp-faq-summary">
-              <span class="pdp-faq-question">Does this bottle is leak proof ?</span>
-              <span class="pdp-faq-icon"></span>
-            </summary>
-            <div class="pdp-faq-content">
-              Yes, the bottle is designed with an airtight, vacuum-sealed cap and hypergrip silicone seal that makes it 100% leak-proof and spill-safe during workouts or travel.
-            </div>
-          </details>
-        </div>
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'faq_item' -%}
+          {%- assign content_has_data = false -%}
+          {%- if block.settings.content != blank -%}
+            {%- assign content_has_data = true -%}
+          {%- endif -%}
 
-        <!-- Fallback FAQ 2 -->
-        <div class="pdp-faq-item">
-          <details class="pdp-faq-details" id="pdp-faq-2">
-            <summary class="pdp-faq-summary">
-              <span class="pdp-faq-question">How to clean the bottle ?</span>
-              <span class="pdp-faq-icon"></span>
-            </summary>
-            <div class="pdp-faq-content">
-              We recommend hand washing the bottle with warm soapy water and a bottle brush. The lid is top-rack dishwasher safe, but hand washing preserves the double-wall coating and paint finishes.
-            </div>
-          </details>
-        </div>
-
-        <!-- Fallback FAQ 3 -->
-        <div class="pdp-faq-item">
-          <details class="pdp-faq-details" id="pdp-faq-3">
-            <summary class="pdp-faq-summary">
-              <span class="pdp-faq-question">Is this bottle of stainless steal material ?</span>
-              <span class="pdp-faq-icon"></span>
-            </summary>
-            <div class="pdp-faq-content">
-              Yes! The bottle is crafted from premium 18/8 food-grade double-wall vacuum insulated stainless steel, ensuring your drinks stay ice-cold for up to 24 hours or hot for up to 12 hours.
-            </div>
-          </details>
-        </div>
-
-      {%- else -%}
-        {%- for item in faq_items -%}
-          {%- if item.question != blank and item.answer != blank -%}
-            <div class="pdp-faq-item">
-              <details class="pdp-faq-details" id="pdp-faq-{{ forloop.index }}">
+          {%- if content_has_data and block.settings.heading != blank -%}
+            <div class="pdp-faq-item" {{ block.shopify_attributes }}>
+              <details class="pdp-faq-details" id="pdp-faq-{{ block.id }}">
                 <summary class="pdp-faq-summary">
-                  <span class="pdp-faq-question">{{ item.question | escape }}</span>
+                  <span class="pdp-faq-question">{{ block.settings.heading | escape }}</span>
                   <span class="pdp-faq-icon"></span>
                 </summary>
                 <div class="pdp-faq-content">
-                  {{ item.answer | escape }}
+                  {{ block.settings.content }}
                 </div>
               </details>
             </div>
           {%- endif -%}
-        {%- endfor -%}
-      {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
     </div>
   </div>
 </div>
@@ -175,6 +149,28 @@
       "id": "heading",
       "label": "Section Heading",
       "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading Color",
+      "default": "#ffc357"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "center"
     },
     {
       "type": "color_scheme",
@@ -203,9 +199,52 @@
       "default": 36
     }
   ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "FAQ Question",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "default": "<p>FAQ Answer content.</p>",
+          "label": "Content"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "PDP FAQs Accordion"
+      "name": "PDP FAQs Accordion",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "heading": "Does this bottle is leak proof ?",
+            "content": "<p>Yes, the bottle is designed with an airtight, vacuum-sealed cap and hypergrip silicone seal that makes it 100% leak-proof and spill-safe during workouts or travel.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "heading": "How to clean the bottle ?",
+            "content": "<p>We recommend hand washing the bottle with warm soapy water and a bottle brush. The lid is top-rack dishwasher safe, but hand washing preserves the double-wall coating and paint finishes.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "heading": "Is this bottle of stainless steal material ?",
+            "content": "<p>Yes! The bottle is crafted from premium 18/8 food-grade double-wall vacuum insulated stainless steel, ensuring your drinks stay ice-cold for up to 24 hours or hot for up to 12 hours.</p>"
+          }
+        }
+      ]
     }
   ]
 }

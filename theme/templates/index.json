@@ -329,24 +329,6 @@
       "settings": {
         "include_margins": true
       }
-    },
-    "custom_newsletter_PgKLfg": {
-      "type": "custom-newsletter",
-      "name": "Figma Newsletter",
-      "settings": {
-        "color_scheme": "scheme-2",
-        "full_width": false,
-        "heading": "Be the first to hear all things about Vero",
-        "subheading": "<p>Sign up to receive exclusive offers and news.</p>",
-        "subheading_color": "#a1a1a1",
-        "placeholder_text": "Enter your email address",
-        "button_text": "Subscribe",
-        "form_width": 600,
-        "padding_top": 40,
-        "padding_bottom": 40,
-        "padding_top_mobile": 32,
-        "padding_bottom_mobile": 32
-      }
     }
   },
   "order": [
@@ -356,7 +338,6 @@
     "collections_listing_mMtDcJ",
     "image_banner_EhHwJ6",
     "custom_carousel_reviews",
-    "1779906007860c7484",
-    "custom_newsletter_PgKLfg"
+    "1779906007860c7484"
   ]
 }
