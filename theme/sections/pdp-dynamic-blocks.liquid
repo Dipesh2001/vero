@@ -120,7 +120,7 @@
   }
   .dynamic-image-text-image {
     flex: 1; /* 1 part */
-    max-width: 200px;
+     max-width: 110px;
   }
   .dynamic-image-text-content {
     flex: 1; /* 1 part on mobile */
@@ -132,6 +132,9 @@
       flex: 2; /* 2 parts on desktop */
       padding-left: 40px;
     }
+    .dynamic-image-text-image {
+     max-width: 200px;
+    }
   }
   .dynamic-image-text-image img {
     width: 100%;
@@ -141,9 +144,14 @@
     display: block;
   }
   .dynamic-image-text-content .rte {
-    font-size: 1.6rem;
+    font-size: 1.0rem;
     line-height: 1.6;
     color: rgb(var(--color-foreground));
+  }
+  @media screen and (min-width: 750px) {
+    .dynamic-image-text-content .rte {
+      font-size: 1.6rem;
+    }
   }
   .dynamic-image-text-content .rte h1, 
   .dynamic-image-text-content .rte h2, 

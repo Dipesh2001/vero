@@ -135,7 +135,7 @@
 
   .swatches-scroll-container {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     overflow-x: auto;
     scroll-behavior: smooth;
     scrollbar-width: none; /* Hide standard Firefox scrollbar */
@@ -145,6 +145,38 @@
   }
   .swatches-scroll-container::-webkit-scrollbar {
     display: none; /* Hide Chrome/Safari scrollbar */
+  }
+
+  /* Card Swiper Arrows */
+  .card-swiper-btn {
+    position: absolute !important;
+    z-index: 10 !important;
+    width: 28px !important;
+    height: 28px !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    margin-top: 0 !important;
+    transform: translateY(-50%) !important;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .card-swiper-btn.swiper-button-prev {
+    left: 10px !important;
+  }
+  .card-swiper-btn.swiper-button-next {
+    right: 10px !important;
+  }
+  .product-card-image-box:hover .card-swiper-btn {
+    opacity: 1;
+  }
+  .card-swiper-btn::after {
+    font-size: 12px !important;
+    font-weight: 900;
+  }
+  .card-swiper-btn.swiper-button-disabled {
+    opacity: 0 !important;
   }
 
   /* Color Swatch Button */
@@ -412,7 +444,8 @@
   }
   @media screen and (max-width: 749px) {
     .swiper-button-prev-{{ section.id }},
-    .swiper-button-next-{{ section.id }} {
+    .swiper-button-next-{{ section.id }},
+    .card-swiper-btn {
       display: none !important;
     }
   }
@@ -471,18 +504,57 @@
                     
                     <div class="swiper product-card-media-swiper js-card-media-swiper">
                       <div class="swiper-wrapper">
-                        {%- for media in product.media -%}
-                          <div class="swiper-slide" data-media-alt="{{ media.alt | escape }}" data-variant-id="{%- for variant in product.variants -%}{%- if variant.featured_media.id == media.id -%}{{ variant.id }}{%- endif -%}{%- endfor -%}">
-                            <img
-                              src="{{ media | image_url: width: 533 }}"
-                              alt="{{ media.alt | default: product.title | escape }}"
-                              loading="lazy"
-                              width="{{ media.width | default: 500 }}"
-                              height="{{ media.height | default: 500 }}"
-                            >
-                          </div>
+                        {%- assign has_metafield_gallery = false -%}
+                        {%- for variant in product.variants -%}
+                          {%- if variant.metafields.custom.variant_gallery.value != blank -%}
+                            {%- assign has_metafield_gallery = true -%}
+                            {%- break -%}
+                          {%- endif -%}
                         {%- endfor -%}
+
+                        {%- assign all_metafield_media_urls = "" -%}
+                        {%- if has_metafield_gallery -%}
+                          {%- for variant in product.variants -%}
+                            {%- if variant.metafields.custom.variant_gallery.value != blank -%}
+                              {%- assign color_val = "" -%}
+                              {%- for option in product.options -%}
+                                {%- assign downcased_opt = option | downcase -%}
+                                {%- if downcased_opt == 'color' or downcased_opt == 'colour' -%}
+                                  {%- if forloop.index == 1 -%}{%- assign color_val = variant.option1 | downcase | trim -%}
+                                  {%- elsif forloop.index == 2 -%}{%- assign color_val = variant.option2 | downcase | trim -%}
+                                  {%- elsif forloop.index == 3 -%}{%- assign color_val = variant.option3 | downcase | trim -%}
+                                  {%- endif -%}
+                                {%- endif -%}
+                              {%- endfor -%}
+                              {%- for media in variant.metafields.custom.variant_gallery.value -%}
+                                {%- assign url_string = media | image_url: width: 533 -%}
+                                {%- unless all_metafield_media_urls contains url_string -%}
+                                  {%- assign all_metafield_media_urls = all_metafield_media_urls | append: url_string | append: "|||" -%}
+                                  <div class="swiper-slide" data-media-alt="{{ color_val | escape }}" data-variant-id="{{ variant.id }}">
+                                    <img src="{{ url_string }}" alt="{{ media.alt | default: product.title | escape }}" loading="lazy" width="{{ media.width | default: 500 }}" height="{{ media.height | default: 500 }}">
+                                  </div>
+                                {%- endunless -%}
+                              {%- endfor -%}
+                            {%- endif -%}
+                          {%- endfor -%}
+                          {%- for media in product.media -%}
+                            {%- assign media_url_string = media | image_url: width: 533 -%}
+                            {%- unless all_metafield_media_urls contains media_url_string -%}
+                              <div class="swiper-slide" data-media-alt="common" data-variant-id="">
+                                <img src="{{ media_url_string }}" alt="{{ media.alt | default: product.title | escape }}" loading="lazy" width="{{ media.width | default: 500 }}" height="{{ media.height | default: 500 }}">
+                              </div>
+                            {%- endunless -%}
+                          {%- endfor -%}
+                        {%- else -%}
+                          {%- for media in product.media -%}
+                            <div class="swiper-slide" data-media-alt="{{ media.alt | escape }}" data-variant-id="{%- for variant in product.variants -%}{%- if variant.featured_media.id == media.id -%}{{ variant.id }}{%- endif -%}{%- endfor -%}">
+                              <img src="{{ media | image_url: width: 533 }}" alt="{{ media.alt | default: product.title | escape }}" loading="lazy" width="{{ media.width | default: 500 }}" height="{{ media.height | default: 500 }}">
+                            </div>
+                          {%- endfor -%}
+                        {%- endif -%}
                       </div>
+                      <div class="swiper-button-prev card-swiper-btn js-card-swiper-prev"></div>
+                      <div class="swiper-button-next card-swiper-btn js-card-swiper-next"></div>
                     </div>
                   </div>
 
@@ -638,21 +710,7 @@
               </div>
             {%- endfor -%}
           {%- else -%}
-            {%- for i in (1..4) -%}
-              <div class="swiper-slide">
-                <div class="product-card-premium">
-                  <div class="product-card-image-box">
-                    {{ 'product-' | append: i | placeholder_svg_tag: 'placeholder-svg' }}
-                  </div>
-                  <div class="product-card-details">
-                    <span class="product-card-title">Onboarding Product {{ i }}</span>
-                    <div class="product-card-price-container">
-                      <span class="product-card-price-value">₹800</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            {%- endfor -%}
+            <!-- Empty state for recommendations until loaded -->
           {%- endif -%}
         </div>
       </div>
@@ -700,7 +758,11 @@
         resistanceRatio: 0,
         allowTouchMove: true,
         observer: true,
-        observeParents: true
+        observeParents: true,
+        navigation: {
+          nextEl: this.el.querySelector('.js-card-swiper-next'),
+          prevEl: this.el.querySelector('.js-card-swiper-prev'),
+        }
       });
       
       // Filter images for initial active color
@@ -730,13 +792,43 @@
 
     initSwatchesScroll() {
       if (this.prevSwatchBtn && this.nextSwatchBtn && this.swatchesContainer) {
+        const checkScroll = () => {
+          const isOverflowing = this.swatchesContainer.scrollWidth > this.swatchesContainer.clientWidth;
+          if (!isOverflowing) {
+            this.prevSwatchBtn.style.display = 'none';
+            this.nextSwatchBtn.style.display = 'none';
+          } else {
+            this.prevSwatchBtn.style.display = '';
+            this.nextSwatchBtn.style.display = '';
+          }
+        };
+        
+        checkScroll();
+        window.addEventListener('resize', checkScroll);
+
+        const selectAdjacentSwatch = (direction) => {
+          const activeSwatchWrapper = this.el.querySelector('.js-swatch-wrapper.is-active');
+          if (!activeSwatchWrapper) return;
+          const allWrappers = Array.from(this.el.querySelectorAll('.js-swatch-wrapper'));
+          const currentIndex = allWrappers.indexOf(activeSwatchWrapper);
+          
+          let newIndex = currentIndex + direction;
+          if (newIndex >= 0 && newIndex < allWrappers.length) {
+            const nextSwatchBtn = allWrappers[newIndex].querySelector('.js-swatch-btn');
+            if (nextSwatchBtn) {
+              this.selectSwatch(nextSwatchBtn, false);
+              nextSwatchBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+          }
+        };
+
         this.prevSwatchBtn.addEventListener('click', (e) => {
           e.preventDefault();
-          this.swatchesContainer.scrollBy({ left: -60, behavior: 'smooth' });
+          selectAdjacentSwatch(-1);
         });
         this.nextSwatchBtn.addEventListener('click', (e) => {
           e.preventDefault();
-          this.swatchesContainer.scrollBy({ left: 60, behavior: 'smooth' });
+          selectAdjacentSwatch(1);
         });
       }
     }
@@ -772,7 +864,7 @@
       this.updateButtonState(available);
 
       // Filter slider images
-      this.filterSwiperImages(colorName, variantId);
+      this.filterSwiperImages(swatch);
 
       // Update title text
       this.updateColorText(colorName);
@@ -826,33 +918,48 @@
       }
     }
 
-    filterSwiperImages(colorName, variantId) {
-      if (!this.swiper) return;
-
-      const lowerColor = colorName.toLowerCase().trim();
-      let filteredSlides = this.allSlides.filter(slide => {
-        const alt = (slide.dataset.mediaAlt || '').toLowerCase().trim();
-        return alt.includes(lowerColor);
+    filterSwiperImages(swatch) {
+      if (!this.swiper || !this.allSlides || this.allSlides.length === 0) return;
+      const colorName = swatch.dataset.colorName ? swatch.dataset.colorName.toLowerCase().trim() : '';
+      const variantId = swatch.dataset.variantId;
+      
+      const filteredSlides = [];
+      
+      // Step 1: Filter images specifically tagged for this color (metafield logic)
+      this.allSlides.forEach(slide => {
+        const mediaAlt = slide.dataset.mediaAlt ? slide.dataset.mediaAlt.toLowerCase().trim() : '';
+        if (mediaAlt === colorName) {
+          filteredSlides.push(slide);
+        }
       });
-
-      // Fallbacks
-      if (filteredSlides.length === 0) {
-        filteredSlides = this.allSlides.filter(slide => slide.dataset.variantId === variantId);
-      }
-      if (filteredSlides.length === 0) {
-        filteredSlides = [this.allSlides[0]];
-      }
-
-      // Rebuild wrapper
-      const wrapper = this.mediaSwiperEl.querySelector('.swiper-wrapper');
-      if (wrapper) {
-        wrapper.innerHTML = '';
-        filteredSlides.forEach(slide => {
-          wrapper.appendChild(slide.cloneNode(true));
+      
+      // Step 2: If no color-tagged images, fallback to variant_id matching
+      if (filteredSlides.length === 0 && variantId) {
+        this.allSlides.forEach(slide => {
+          if (slide.dataset.variantId === variantId) {
+            filteredSlides.push(slide);
+          }
         });
       }
+      
+      // Step 3: Append common images (not tagged with any specific color or variant)
+      this.allSlides.forEach(slide => {
+        const mediaAlt = slide.dataset.mediaAlt ? slide.dataset.mediaAlt.toLowerCase().trim() : '';
+        const slideVariantId = slide.dataset.variantId;
+        // Common images usually have 'common' alt or empty variant and alt
+        if (mediaAlt === 'common' || (mediaAlt === '' && !slideVariantId)) {
+          if (!filteredSlides.includes(slide)) {
+            filteredSlides.push(slide);
+          }
+        }
+      });
+      
+      // Step 4: If STILL empty, just show all slides
+      const slidesToShow = filteredSlides.length > 0 ? filteredSlides : this.allSlides;
 
-      // Update Swiper
+      // Ensure that Swiper's original wrapper is populated properly
+      this.swiper.removeAllSlides();
+      this.swiper.appendSlide(slidesToShow);
       this.swiper.update();
       this.swiper.slideTo(0, 0);
     }

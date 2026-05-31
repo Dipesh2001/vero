@@ -168,14 +168,28 @@
   
   /* Menus Layout */
   .vero-menus-grid {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+  .vero-menus-grid .vero-menu-column {
+    width: 50%;
+    padding: 0 15px;
+    margin-bottom: 30px;
   }
   @media screen and (min-width: 750px) {
     .vero-menus-grid {
-      grid-template-columns: repeat(3, 1fr);
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      margin: 0;
       gap: 20px;
+    }
+    .vero-menus-grid .vero-menu-column {
+      width: 100%;
+      padding: 0;
+      margin-bottom: 0;
     }
   }
 

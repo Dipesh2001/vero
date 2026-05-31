@@ -27,6 +27,11 @@ if (!customElements.get('product-form')) {
         this.submitButton.classList.add('loading');
         this.querySelector('.loading__spinner').classList.remove('hidden');
 
+        const buyNowBtn = this.form.querySelector('.product-form__buynow');
+        if (buyNowBtn) {
+          buyNowBtn.setAttribute('disabled', 'true');
+        }
+
         const config = fetchConfig('javascript');
         config.headers['X-Requested-With'] = 'XMLHttpRequest';
         delete config.headers['Content-Type'];
@@ -104,6 +109,11 @@ if (!customElements.get('product-form')) {
             if (this.cart && this.cart.classList.contains('is-empty')) this.cart.classList.remove('is-empty');
             if (!this.error) this.submitButton.removeAttribute('aria-disabled');
             this.querySelector('.loading__spinner').classList.add('hidden');
+
+            const buyNowBtn = this.form.querySelector('.product-form__buynow');
+            if (buyNowBtn) {
+              buyNowBtn.removeAttribute('disabled');
+            }
 
             CartPerformance.measureFromEvent("add:user-action", evt);
           });

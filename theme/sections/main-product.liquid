@@ -550,38 +550,80 @@
 
       /* Title: smaller font on mobile matching Figma 30px / 12px */
       .product__title h1 {
+        font-family: 'Public Sans', sans-serif !important;
         font-size: 3.0rem !important;
-        line-height: 1.2 !important;
+        font-weight: 600 !important;
+        line-height: 44px !important;
+        color: #00237d !important;
+        margin-top: 0 !important;
+        margin-bottom: 0px !important;
       }
-      .product__title .product__subtitle {
+      .product__title .product__subtitle,
+      .product__text.caption-with-letter-spacing {
+        font-family: 'Public Sans', sans-serif !important;
         font-size: 1.2rem !important;
-        margin-top: 0.5rem !important;
+        font-weight: 400 !important;
+        line-height: 44px !important;
+        color: #454545 !important;
+        margin-top: 0 !important;
+        text-transform: none !important;
       }
 
       /* Price: compact Figma layout 20px / 20px / 15px */
-      .pdp-price-current {
-        font-size: 2.0rem !important;
+      .pdp-price-current,
+      .price__regular .price-item--regular,
+      .price__sale .price-item--sale {
+        font-family: 'Poppins', sans-serif !important;
+        font-weight: 500 !important;
+        font-size: 1.6rem !important;
+        line-height: 24px !important;
+        color: #00237d !important;
       }
-      .pdp-price-compare {
-        font-size: 2.0rem !important;
+      .pdp-price-compare,
+      .price__sale .price-item--regular {
+        font-family: 'Poppins', sans-serif !important;
+        font-weight: 400 !important;
+        font-size: 1.6rem !important;
+        line-height: 24px !important;
+        color: #d9d9d9 !important;
+        text-decoration: line-through;
       }
       .pdp-price-discount {
-        font-size: 1.5rem !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-weight: 500 !important;
+        font-size: 1.2rem !important;
+        line-height: 18px !important;
       }
       .pdp-price-inner-flex {
-        gap: 10px !important;
-        flex-wrap: wrap !important;
+        gap: 4px !important;
+        align-items: center !important;
       }
       .pdp-price-tax-notice,
       .pdp-price-tax-notice p,
-      .pdp-price-tax-notice h1,
-      .pdp-price-tax-notice h2,
-      .pdp-price-tax-notice h3,
-      .pdp-price-tax-notice h4,
-      .pdp-price-tax-notice h5,
-      .pdp-price-tax-notice h6 {
-        font-size: 1.0rem !important;
+      .product__tax {
+        font-family: 'Poppins', sans-serif !important;
+        font-weight: 500 !important;
+        font-size: 8px !important;
+        line-height: 12px !important;
+        color: #868686 !important;
         margin-top: 0.3rem !important;
+      }
+      .pdp-price-tax-notice h5 {
+        font-family: 'Public Sans', sans-serif !important;
+        font-weight: 400 !important;
+        font-size: 10px !important;
+        line-height: 28px !important;
+        color: #868686 !important;
+        letter-spacing: -0.4px !important;
+      }
+      .product__description,
+      .product__description p {
+        font-family: 'Public Sans', sans-serif !important;
+        font-weight: 400 !important;
+        font-size: 1.0rem !important;
+        line-height: 28px !important;
+        color: #868686 !important;
+        letter-spacing: -0.4px !important;
       }
 
       /* Variant fieldsets — tighter padding and spacing */
@@ -597,18 +639,21 @@
 
       /* Size pills on mobile matching Figma 54x27px and 10px font */
       .product-form__input--pill input[type="radio"] + label {
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 400 !important;
         min-width: 54px !important;
         height: 27px !important;
         font-size: 1.0rem !important;
+        line-height: 15px !important;
         padding: 0 8px !important;
         margin-right: 6px !important;
         margin-bottom: 6px !important;
         border-radius: 4px !important;
       }
 
-      /* Swatch size override on mobile matching Figma 24x24px */
+      /* Swatch size override on mobile matching Figma 21x21px */
       .product-form__input--swatch .swatch-input__input + .swatch-input__label {
-        --swatch-input--size: 2.4rem !important;
+        --swatch-input--size: 2.1rem !important;
         margin: 0 8px 8px 0 !important;
       }
 
@@ -618,18 +663,34 @@
         margin: 1.5rem 0 !important;
       }
       .product-form__quantity .quantity__label {
+        font-family: 'Poppins', sans-serif !important;
+        font-weight: 400 !important;
         font-size: 1.0rem !important;
+        line-height: 15px !important;
+        color: #454545 !important;
       }
       .quantity {
-        width: 110px !important;
-        min-height: 36px !important;
-        height: 36px !important;
+        width: 64px !important;
+        min-height: 18px !important;
+        height: 18px !important;
+        background-color: #00237d !important;
+        border-radius: 8px !important;
+        border: none !important;
       }
       .quantity__button {
-        width: 35px !important;
+        width: 20px !important;
+        color: #d9d9d9 !important;
+      }
+      .quantity__button svg {
+        fill: #d9d9d9 !important;
+        stroke: #d9d9d9 !important;
+        width: 10px !important;
+        height: 10px !important;
       }
       .quantity__input {
-        font-size: 1.2rem !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 1.0rem !important;
+        color: #d9d9d9 !important;
       }
 
       /* Side by side buttons, height 39px per Figma mobile, equal size */
@@ -972,11 +1033,11 @@
                 <div class="pdp-price-wrapper" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
                   <div class="pdp-price-inner-flex">
                     <span class="pdp-price-current">
-                      MRP: {{ current_variant.price | money }}
+                      MRP: {{ current_variant.price | money_without_trailing_zeros }}
                     </span>
                     {%- if current_variant.compare_at_price > current_variant.price -%}
                       <s class="pdp-price-compare">
-                        {{ current_variant.compare_at_price | money }}
+                        {{ current_variant.compare_at_price | money_without_trailing_zeros }}
                       </s>
                       {%- assign discount = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
                       <span class="pdp-price-discount">
@@ -1128,14 +1189,7 @@
                     aria-labelledby="quantity-label-{{ section.id }}"
                   >
                     <span aria-hidden="true">{{ 'products.product.quantity.label' | t }}</span>
-                    <span class="quantity__rules-cart{% if cart_qty == 0 %} hidden{% endif %}" aria-hidden="true">
-                      {%- render 'loading-spinner' -%}
-                      <span
-                        >(
-                        {{- 'products.product.quantity.in_cart_html' | t: quantity: cart_qty -}}
-                        )</span
-                      >
-                    </span>
+
                   </label>
                   <div class="price-per-item__container">
                     <quantity-input class="quantity" data-url="{{ product.url }}" data-section="{{ section.id }}">

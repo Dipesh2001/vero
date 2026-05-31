@@ -119,6 +119,20 @@
                   const buyNowBtn = document.getElementById('ProductBuyNowButton-{{ section_id }}');
                   if (!buyNowBtn) return;
                   
+                  window.addEventListener('pageshow', (event) => {
+                    if (event.persisted) {
+                      buyNowBtn.removeAttribute('disabled');
+                      const spinner = buyNowBtn.querySelector('.loading__spinner');
+                      if (spinner) spinner.classList.add('hidden');
+                      
+                      const form = buyNowBtn.closest('form');
+                      if (form) {
+                        const submitBtn = form.querySelector('.product-form__submit');
+                        if (submitBtn) submitBtn.removeAttribute('disabled');
+                      }
+                    }
+                  });
+                  
                   buyNowBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     if (buyNowBtn.hasAttribute('disabled')) return;
@@ -137,6 +151,9 @@
                     buyNowBtn.setAttribute('disabled', 'true');
                     const spinner = buyNowBtn.querySelector('.loading__spinner');
                     if (spinner) spinner.classList.remove('hidden');
+                    
+                    const submitBtn = form.querySelector('.product-form__submit');
+                    if (submitBtn) submitBtn.setAttribute('disabled', 'true');
                     
                     const errorWrapper = form.querySelector('.product-form__error-message-wrapper');
                     if (errorWrapper) errorWrapper.setAttribute('hidden', 'true');
@@ -165,6 +182,7 @@
                         }
                         buyNowBtn.removeAttribute('disabled');
                         if (spinner) spinner.classList.add('hidden');
+                        if (submitBtn) submitBtn.removeAttribute('disabled');
                       } else {
                         window.location.href = window.Shopify.routes.root + 'checkout';
                       }
@@ -173,6 +191,7 @@
                       console.error('Error:', error);
                       buyNowBtn.removeAttribute('disabled');
                       if (spinner) spinner.classList.add('hidden');
+                      if (submitBtn) submitBtn.removeAttribute('disabled');
                     });
                   });
                 });

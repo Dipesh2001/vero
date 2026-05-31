@@ -44,8 +44,7 @@
     width: 24px;
     height: 24px;
     fill: none;
-    stroke: #363636;
-    stroke-width: 1.5;
+    color: #363636;
   }
   
   .list-menu__item--link, .list-menu__item span, .header__menu-item, .header__menu-item span, summary.list-menu__item, summary.list-menu__item span {
@@ -154,6 +153,90 @@
     .list-menu__item--link {
       padding-bottom: 0.5rem;
       padding-top: 0.5rem;
+    }
+  }
+
+  /* Custom Mobile Layout Override */
+  @media screen and (max-width: 989px) {
+    .header {
+      display: flex !important;
+      justify-content: flex-end !important;
+      align-items: center !important;
+      padding-top: 15px !important;
+      padding-bottom: 15px !important;
+    }
+    
+    .header.drawer-menu {
+      grid-template-columns: none !important;
+    }
+
+    .header__heading, .header__heading-link {
+      order: 1 !important;
+      margin-right: auto !important;
+      justify-self: flex-start !important;
+      text-align: left !important;
+      flex: 1 !important;
+    }
+
+    .header__heading-logo {
+      max-width: 120px !important;
+      height: auto !important;
+    }
+
+    /* Remove huge native paddings from icons */
+    .header__icon, .header__icon--menu, .custom-header-search {
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 24px !important;
+      height: 24px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    .header__icons {
+      order: 2 !important;
+      display: flex !important;
+      gap: 15px !important;
+      align-items: center !important;
+      justify-content: flex-end !important;
+      margin-right: 0 !important;
+    }
+
+    header-drawer {
+      order: 3 !important;
+      margin-left: 15px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    .header__icon--account, .header__icon--wishlist {
+      display: none !important;
+    }
+
+    .custom-header-search {
+      display: flex !important;
+      border: none !important;
+    }
+    .custom-header-search span:not(.svg-wrapper) {
+      display: none !important;
+    }
+    .custom-header-search .svg-wrapper {
+      margin-right: 0 !important;
+      width: 22px !important;
+      height: 22px !important;
+    }
+    .custom-header-search .svg-wrapper svg {
+      width: 22px !important;
+      height: 22px !important;
+      stroke-width: .3;
+      stroke: #363636;
+    }
+    /* Fix cart bubble position after removing padding */
+    .cart-count-bubble {
+      top: -6px !important;
+      right: -8px !important;
     }
   }
 </style>
