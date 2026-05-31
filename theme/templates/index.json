@@ -71,7 +71,7 @@
         "pagination_color_inactive": "#ffffff",
         "padding_top": 0,
         "padding_bottom": 0,
-        "padding_top_mobile": 20,
+        "padding_top_mobile": 0,
         "padding_bottom_mobile": 24
       }
     },
