@@ -188,8 +188,9 @@
       "type": "featured-collection-slider",
       "name": "Featured Collection Slider",
       "settings": {
-        "heading": "Shop Best Sellers",
+        "heading": "You may also like",
         "heading_alignment": "center",
+        "data_source": "recommendations",
         "collection": "frontpage",
         "products_to_show": 8,
         "show_arrows": false,
