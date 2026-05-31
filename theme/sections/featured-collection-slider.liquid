@@ -24,7 +24,7 @@
     font-family: var(--font-body-custom);
     font-weight: 700;
     font-size: 2.8rem;
-    color: rgb(var(--color-foreground));
+    color: {{ section.settings.title_color | default: 'rgb(var(--color-foreground))' }} !important;
     margin: 0;
     line-height: 1.2;
   }
@@ -168,15 +168,17 @@
   .card-swiper-btn.swiper-button-next {
     right: 10px !important;
   }
-  .product-card-image-box:hover .card-swiper-btn {
-    opacity: 1;
+  .product-card-image-box:hover .card-swiper-btn:not(.swiper-button-disabled) {
+    opacity: 1 !important;
   }
   .card-swiper-btn::after {
     font-size: 12px !important;
     font-weight: 900;
+    display: block;
   }
   .card-swiper-btn.swiper-button-disabled {
     opacity: 0 !important;
+    pointer-events: none;
   }
 
   /* Color Swatch Button */
@@ -1068,6 +1070,12 @@
       "id": "heading",
       "label": "Heading",
       "default": "Shop Best Sellers"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#ffc356"
     },
     {
       "type": "select",
