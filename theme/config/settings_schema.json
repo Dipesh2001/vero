@@ -1449,7 +1449,7 @@
             "label": "t:settings_schema.cart.settings.cart_type.notification.label"
           }
         ],
-        "default": "notification",
+        "default": "drawer",
         "label": "t:settings_schema.cart.settings.cart_type.label"
       },
       {
@@ -1479,6 +1479,24 @@
         "id": "cart_color_scheme",
         "label": "t:sections.all.colors.label",
         "default": "scheme-1"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_cart_promo_banner",
+        "label": "Enable Promo Banner (Buy 2 Get 1 Free)",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_cart_recommendations",
+        "label": "Enable Product Recommendations",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_discount_input",
+        "label": "Enable Discount Input",
+        "default": true
       }
     ]
   }
