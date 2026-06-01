@@ -108,7 +108,7 @@ class CartRecommendations extends HTMLElement {
         const items = doc.querySelectorAll('.grid__item .card-wrapper');
         
         if (items.length > 0) {
-          let recsHtml = `<h3 class="cart-recommendations-heading">You may also like</h3>`;
+          let recsHtml = `<h3 class="cart-recommendations-heading">Grab More</h3>`;
           
           items.forEach((item, index) => {
             if (index >= 4) return; // Limit to 4

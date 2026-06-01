@@ -47,7 +47,6 @@
 
       <div class="drawer__header">
         <h2 class="drawer__heading">My Bag</h2>
-        <span class="drawer__item-count">{{ cart.item_count }} items</span>
         <button class="drawer__close" type="button" onclick="this.closest('cart-drawer').close()" aria-label="{{ 'accessibility.close' | t }}">
           <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
         </button>
@@ -70,11 +69,6 @@
                     <div class="cart-item__details">
                       <div class="cart-item__title-row">
                         <a href="{{ item.url }}" class="cart-item__name h4 break">{{- item.product.title | escape -}}</a>
-                        <cart-remove-button id="CartDrawer-Remove-{{ item.index | plus: 1 }}" data-index="{{ item.index | plus: 1 }}">
-                          <button type="button" class="cart-remove-button" aria-label="Remove {{ item.title | escape }}" data-variant-id="{{ item.variant.id }}">
-                            <span class="svg-wrapper">{{- 'icon-remove.svg' | inline_asset_content -}}</span>
-                          </button>
-                        </cart-remove-button>
                       </div>
 
                       {%- if item.product.has_only_default_variant == false -%}
@@ -95,18 +89,26 @@
                           {%- endif -%}
                         </div>
 
-                        <div class="cart-item__quantity">
-                          <quantity-popover>
-                            <quantity-input class="quantity cart-quantity">
-                              <button class="quantity__button" name="minus" type="button" aria-label="Decrease quantity">
-                                <span class="svg-wrapper">{{- 'icon-minus.svg' | inline_asset_content -}}</span>
-                              </button>
-                              <input class="quantity__input" type="number" data-quantity-variant-id="{{ item.variant.id }}" name="updates[]" value="{{ item.quantity }}" data-cart-quantity="{{ cart | item_count_for_variant: item.variant.id }}" min="0" data-min="{{ item.variant.quantity_rule.min }}" {% if item.variant.quantity_rule.max != null %}max="{{ item.variant.quantity_rule.max }}"{% endif %} step="{{ item.variant.quantity_rule.increment }}" aria-label="Quantity" id="Drawer-quantity-{{ item.index | plus: 1 }}" data-index="{{ item.index | plus: 1 }}">
-                              <button class="quantity__button" name="plus" type="button" aria-label="Increase quantity">
-                                <span class="svg-wrapper">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
-                              </button>
-                            </quantity-input>
-                          </quantity-popover>
+                        <div class="cart-item__actions-wrapper" style="display: flex; align-items: center; gap: 12px;">
+                          <div class="cart-item__quantity">
+                            <quantity-popover>
+                              <quantity-input class="quantity cart-quantity">
+                                <button class="quantity__button" name="minus" type="button" aria-label="Decrease quantity">
+                                  <span class="svg-wrapper">{{- 'icon-minus.svg' | inline_asset_content -}}</span>
+                                </button>
+                                <input class="quantity__input" type="number" data-quantity-variant-id="{{ item.variant.id }}" name="updates[]" value="{{ item.quantity }}" data-cart-quantity="{{ cart | item_count_for_variant: item.variant.id }}" min="0" data-min="{{ item.variant.quantity_rule.min }}" {% if item.variant.quantity_rule.max != null %}max="{{ item.variant.quantity_rule.max }}"{% endif %} step="{{ item.variant.quantity_rule.increment }}" aria-label="Quantity" id="Drawer-quantity-{{ item.index | plus: 1 }}" data-index="{{ item.index | plus: 1 }}">
+                                <button class="quantity__button" name="plus" type="button" aria-label="Increase quantity">
+                                  <span class="svg-wrapper">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
+                                </button>
+                              </quantity-input>
+                            </quantity-popover>
+                          </div>
+                          
+                          <cart-remove-button id="CartDrawer-Remove-{{ item.index | plus: 1 }}" data-index="{{ item.index | plus: 1 }}">
+                            <button type="button" class="cart-remove-button" aria-label="Remove {{ item.title | escape }}" data-variant-id="{{ item.variant.id }}">
+                              <span class="svg-wrapper" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; background: #f0f0f0;">{{- 'icon-remove.svg' | inline_asset_content -}}</span>
+                            </button>
+                          </cart-remove-button>
                         </div>
                       </div>
                       
