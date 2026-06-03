@@ -379,7 +379,7 @@ if (!customElements.get('product-info')) {
             this.updateQuantityRules(this.dataset.section, html);
           })
           .catch((e) => console.error(e))
-          .finally(() => this.querySelector('.quantity__rules-cart .loading__spinner').classList.add('hidden'));
+          .finally(() => this.querySelector('.quantity__rules-cart .loading__spinner')?.classList?.add('hidden'));
       }
 
       updateQuantityRules(sectionId, html) {

@@ -1459,6 +1459,12 @@
         "default": false
       },
       {
+        "type": "text",
+        "id": "cart_drawer_title",
+        "label": "Cart drawer title",
+        "default": "Your Cart"
+      },
+      {
         "type": "checkbox",
         "id": "show_cart_note",
         "label": "t:settings_schema.cart.settings.show_cart_note.label",

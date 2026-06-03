@@ -1,83 +1,65 @@
-class CartDiscount {
-  constructor() {
-    this.init();
+async function applyCartDrawerDiscount() {
+  const input = document.getElementById('CartDrawer-Discount');
+  const code = input ? input.value.trim() : '';
+  const btn = document.querySelector('.cart-discount-apply');
+
+  if (!code) {
+    alert('Please enter a discount code.');
+    return;
   }
 
-  init() {
-    const applyBtn = document.getElementById('CartDrawer-ApplyDiscount');
-    if (!applyBtn) return;
-    
-    applyBtn.addEventListener('click', this.applyDiscount.bind(this));
-  }
-
-  async applyDiscount() {
-    const input = document.getElementById('CartDrawer-DiscountInput');
-    const msg = document.getElementById('CartDrawer-DiscountMessage');
-    const code = input.value.trim();
-
-    if (!code) {
-      msg.textContent = 'Please enter a code.';
-      msg.className = 'cart-discount-message error';
-      return;
-    }
-
-    const btn = document.getElementById('CartDrawer-ApplyDiscount');
-    btn.textContent = 'Applying...';
+  if (btn) {
+    btn.textContent = '...';
     btn.disabled = true;
+  }
 
-    try {
-      // Hit the Shopify discount URL to set the cookie
-      await fetch(`/discount/${code}`);
+  try {
+    // Shopify native AJAX discount application
+    await fetch(window.Shopify.routes.root + 'cart/update.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/javascript'
+      },
+      body: JSON.stringify({ discount: code })
+    });
+
+    // To trigger a re-render of the Dawn cart drawer, we can fetch the cart again
+    // and re-render sections. Since cart-drawer.js handles section rendering, we can trigger an event or manually refresh.
+    // The easiest way is to mimic a cart update event or refresh the page if event is too complex.
+    // Or we can just call the native fetchConfig logic if available.
+    
+    // Quick refresh of the cart drawer section
+    const response = await fetch(`${window.location.pathname}?section_id=cart-drawer`);
+    if (response.ok) {
+      const html = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
       
-      // Also apply it to the form action
+      const newItems = doc.getElementById('CartDrawer-CartItems');
+      const oldItems = document.getElementById('CartDrawer-CartItems');
+      if (newItems && oldItems) oldItems.innerHTML = newItems.innerHTML;
+
+      const newTotals = doc.querySelector('.cart-drawer__footer-totals');
+      const oldTotals = document.querySelector('.cart-drawer__footer-totals');
+      if (newTotals && oldTotals) oldTotals.innerHTML = newTotals.innerHTML;
+      
+      // Update form action to include discount code on checkout
       const form = document.getElementById('CartDrawer-Form');
       if (form) {
-        // Append discount to form action so it carries over directly
         const actionUrl = new URL(form.action, window.location.origin);
         actionUrl.searchParams.set('discount', code);
         form.action = actionUrl.toString();
       }
 
-      msg.textContent = `Discount '${code}' applied! Will reflect at checkout.`;
-      msg.className = 'cart-discount-message success';
-      
-      // If we want to try and show it in the UI immediately, we can re-fetch the cart-drawer section
-      this.refreshCartDrawer();
-
-    } catch (e) {
-      msg.textContent = 'Error applying discount.';
-      msg.className = 'cart-discount-message error';
-    } finally {
+      if (btn) btn.textContent = 'Applied';
+    }
+  } catch (error) {
+    console.error('Error applying discount:', error);
+    alert('Error applying discount code.');
+    if (btn) {
       btn.textContent = 'Apply';
       btn.disabled = false;
-    }
-  }
-
-  async refreshCartDrawer() {
-    // We can fetch the current page with the cart-drawer section to get updated HTML
-    try {
-      const response = await fetch(`${window.location.pathname}?section_id=cart-drawer`);
-      if (response.ok) {
-        const html = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        
-        // Update Cart Items
-        const newCartItems = doc.getElementById('CartDrawer-CartItems');
-        const oldCartItems = document.getElementById('CartDrawer-CartItems');
-        if (newCartItems && oldCartItems) {
-          oldCartItems.innerHTML = newCartItems.innerHTML;
-        }
-
-        // Update Totals row
-        const newTotals = doc.querySelector('.cart-drawer__footer-totals');
-        const oldTotals = document.querySelector('.cart-drawer__footer-totals');
-        if (newTotals && oldTotals) {
-          oldTotals.innerHTML = newTotals.innerHTML;
-        }
-      }
-    } catch(e) {
-      console.warn("Failed to refresh cart drawer HTML", e);
     }
   }
 }
@@ -209,6 +191,21 @@ window.addToCartFromRecs = async function(variantId) {
   }
 };
 
+// Fix stuck spinner on quantity errors
 document.addEventListener('DOMContentLoaded', () => {
-  new CartDiscount();
+  const drawer = document.querySelector('cart-drawer');
+  if (!drawer) return;
+
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'childList' && mutation.target.classList && mutation.target.classList.contains('cart-item__error-text')) {
+        const cartItem = mutation.target.closest('.custom-cart-item');
+        if (cartItem && cartItem.classList.contains('item-updating')) {
+          cartItem.classList.remove('item-updating');
+        }
+      }
+    });
+  });
+
+  observer.observe(drawer, { childList: true, subtree: true, characterData: true });
 });

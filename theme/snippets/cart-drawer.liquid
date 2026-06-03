@@ -9,7 +9,6 @@
 {{ 'custom-cart-drawer.css' | asset_url | stylesheet_tag }}
 
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
-<script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'custom-cart-drawer.js' | asset_url }}" defer="defer"></script>
 
@@ -20,10 +19,10 @@
 </style>
 
 <cart-drawer class="drawer{% if cart == empty %} is-empty{% endif %}">
-  <div id="CartDrawer" class="cart-drawer custom-cart-drawer">
+  <div id="CartDrawer" class="cart-drawer">
     <div id="CartDrawer-Overlay" class="cart-drawer__overlay"></div>
     <div
-      class="drawer__inner gradient color-{{ settings.cart_color_scheme }}"
+      class="drawer__inner custom-drawer__inner gradient color-{{ settings.cart_color_scheme }}"
       role="dialog"
       aria-modal="true"
       aria-label="{{ 'sections.cart.title' | t }}"
@@ -45,15 +44,18 @@
         </div>
       {%- endif -%}
 
-      <div class="drawer__header">
-        <h2 class="drawer__heading">My Bag</h2>
-        <button class="drawer__close" type="button" onclick="this.closest('cart-drawer').close()" aria-label="{{ 'accessibility.close' | t }}">
-          <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
+      <div class="drawer__header custom-drawer__header">
+        <h2 class="drawer__heading">{{ settings.cart_drawer_title | default: 'Your Cart' }}</h2>
+        <button class="drawer__close custom-drawer__close" type="button" onclick="this.classList.add('closing'); setTimeout(() => { this.closest('cart-drawer').close(); this.classList.remove('closing'); }, 300);" aria-label="{{ 'accessibility.close' | t }}">
+          <div class="close-line line-1">&nbsp;</div>
+          <div class="close-line line-2">&nbsp;</div>
         </button>
       </div>
 
       <cart-drawer-items {% if cart == empty %}class=" is-empty"{% endif %}>
         <form action="{{ routes.cart_url }}" id="CartDrawer-Form" class="cart__contents cart-drawer__form" method="post">
+          
+
           <div id="CartDrawer-CartItems" class="drawer__contents js-contents">
             {%- if cart != empty -%}
               <div class="custom-cart-items-wrapper">
@@ -66,69 +68,85 @@
                       {% endif %}
                     </div>
 
-                    <div class="cart-item__details">
-                      <div class="cart-item__title-row">
-                        <a href="{{ item.url }}" class="cart-item__name h4 break">{{- item.product.title | escape -}}</a>
+                    <!-- Loading Overlay -->
+                    <div class="custom-cart-item-loader">
+                      <svg aria-hidden="true" focusable="false" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                        <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                      </svg>
+                    </div>
+                    
+                    <div class="cart-item__details custom-item-details">
+                      
+                      <!-- Center Column: Title, Variant, QTY -->
+                      <div class="custom-item-main-info">
+                        <div class="cart-item__title-row">
+                          <a href="{{ item.url }}" class="cart-item__name custom-item-title h4 break" title="{{ item.product.title | escape }}">{{- item.product.title | escape -}}</a>
+                        </div>
+                        
+                        {%- if item.product.has_only_default_variant == false -%}
+                          <div class="cart-item__variant-options custom-variant-title">
+                            {%- for option in item.options_with_values -%}
+                              <span>{{ option.value -}}{%- unless forloop.last %} | {% endunless %}</span>
+                            {%- endfor -%}
+                          </div>
+                        {%- endif -%}
+
+                        <div class="cart-item__quantity custom-item-qty">
+                          <quantity-popover>
+                            <quantity-input class="quantity cart-quantity">
+                              <button class="quantity__button" name="minus" type="button" aria-label="Decrease quantity" onclick="this.closest('.custom-cart-item').classList.add('item-updating')">
+                                <span>-</span>
+                              </button>
+                              <input class="quantity__input" type="number" data-quantity-variant-id="{{ item.variant.id }}" name="updates[]" value="{{ item.quantity }}" data-cart-quantity="{{ cart | item_count_for_variant: item.variant.id }}" min="0" data-min="{{ item.variant.quantity_rule.min }}" {% if item.variant.quantity_rule.max != null %}max="{{ item.variant.quantity_rule.max }}"{% endif %} step="{{ item.variant.quantity_rule.increment }}" aria-label="Quantity" id="Drawer-quantity-{{ item.index | plus: 1 }}" data-index="{{ item.index | plus: 1 }}">
+                              <button class="quantity__button" name="plus" type="button" aria-label="Increase quantity" onclick="this.closest('.custom-cart-item').classList.add('item-updating')">
+                                <span>+</span>
+                              </button>
+                              <div class="quantity__rules-cart" style="display: none;">
+                                <div class="loading__spinner hidden"></div>
+                              </div>
+                            </quantity-input>
+                          </quantity-popover>
+                        </div>
                       </div>
 
-                      {%- if item.product.has_only_default_variant == false -%}
-                        <div class="cart-item__variant-options">
-                          {%- for option in item.options_with_values -%}
-                            <span>{{ option.value -}}{%- unless forloop.last %} | {% endunless %}</span>
-                          {%- endfor -%}
+                      <!-- Right Column: Remove, Price -->
+                      <div class="custom-item-actions-price">
+                        <div class="cart-item__actions-wrapper custom-item-remove-wrapper">
+                          <cart-remove-button id="CartDrawer-Remove-{{ item.index | plus: 1 }}" data-index="{{ item.index | plus: 1 }}">
+                            <button type="button" class="cart-remove-button custom-remove-btn" aria-label="Remove {{ item.title | escape }}" data-variant-id="{{ item.variant.id }}" onclick="this.closest('.custom-cart-item').classList.add('item-updating')">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                            </button>
+                          </cart-remove-button>
                         </div>
-                      {%- endif -%}
 
-                      <div class="cart-item__price-wrapper">
-                        <div class="cart-item__prices">
-                          {%- if item.original_line_price != item.final_line_price -%}
-                            <s class="cart-item__old-price">{{ item.original_line_price | money }}</s>
-                            <span class="cart-item__final-price">{{ item.final_line_price | money }}</span>
+                        <div class="cart-item__prices custom-item-prices">
+                          {%- if item.variant.compare_at_price > item.original_line_price -%}
+                            <div class="cart-item__discounted-prices">
+                              <s class="cart-item__old-price">{{ item.variant.compare_at_price | money }}</s>
+                              <span class="cart-item__final-price">{{ item.original_line_price | money }}</span>
+                              <span class="cart-item__discount-badge">
+                                {{ item.variant.compare_at_price | minus: item.original_line_price | times: 100.0 | divided_by: item.variant.compare_at_price | round }}% OFF
+                              </span>
+                            </div>
+                          {%- elsif item.original_line_price != item.final_line_price -%}
+                            <div class="cart-item__discounted-prices">
+                              <s class="cart-item__old-price">{{ item.original_line_price | money }}</s>
+                              <span class="cart-item__final-price">{{ item.final_line_price | money }}</span>
+                            </div>
                           {%- else -%}
                             <span class="cart-item__final-price">{{ item.original_line_price | money }}</span>
                           {%- endif -%}
                         </div>
-
-                        <div class="cart-item__actions-wrapper" style="display: flex; align-items: center; gap: 12px;">
-                          <div class="cart-item__quantity">
-                            <quantity-popover>
-                              <quantity-input class="quantity cart-quantity">
-                                <button class="quantity__button" name="minus" type="button" aria-label="Decrease quantity">
-                                  <span class="svg-wrapper">{{- 'icon-minus.svg' | inline_asset_content -}}</span>
-                                </button>
-                                <input class="quantity__input" type="number" data-quantity-variant-id="{{ item.variant.id }}" name="updates[]" value="{{ item.quantity }}" data-cart-quantity="{{ cart | item_count_for_variant: item.variant.id }}" min="0" data-min="{{ item.variant.quantity_rule.min }}" {% if item.variant.quantity_rule.max != null %}max="{{ item.variant.quantity_rule.max }}"{% endif %} step="{{ item.variant.quantity_rule.increment }}" aria-label="Quantity" id="Drawer-quantity-{{ item.index | plus: 1 }}" data-index="{{ item.index | plus: 1 }}">
-                                <button class="quantity__button" name="plus" type="button" aria-label="Increase quantity">
-                                  <span class="svg-wrapper">{{- 'icon-plus.svg' | inline_asset_content -}}</span>
-                                </button>
-                              </quantity-input>
-                            </quantity-popover>
-                          </div>
-                          
-                          <cart-remove-button id="CartDrawer-Remove-{{ item.index | plus: 1 }}" data-index="{{ item.index | plus: 1 }}">
-                            <button type="button" class="cart-remove-button" aria-label="Remove {{ item.title | escape }}" data-variant-id="{{ item.variant.id }}">
-                              <span class="svg-wrapper" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; background: #f0f0f0;">{{- 'icon-remove.svg' | inline_asset_content -}}</span>
-                            </button>
-                          </cart-remove-button>
-                        </div>
                       </div>
-                      
-                      <div id="CartDrawer-LineItemError-{{ item.index | plus: 1 }}" class="cart-item__error" role="alert">
-                        <small class="cart-item__error-text"></small>
-                      </div>
+                    </div>
+                    
+                    <!-- Full Width Error Message at Bottom -->
+                    <div id="CartDrawer-LineItemError-{{ item.index | plus: 1 }}" class="cart-item__error custom-cart-error" role="alert">
+                      <small class="cart-item__error-text"></small>
                     </div>
                   </div>
                 {%- endfor -%}
               </div>
-
-              {%- if settings.enable_cart_promo_banner -%}
-              <div class="cart-promo-banner">
-                <div class="cart-promo-banner__content">
-                  <span class="cart-promo-banner__badge">Offer</span>
-                  <span class="cart-promo-banner__text">Buy 2 Get 1 Free on all Highlighters!</span>
-                </div>
-              </div>
-              {%- endif -%}
-
             {%- endif -%}
             
             <p id="CartDrawer-LiveRegionText" class="visually-hidden" role="status"></p>
@@ -137,10 +155,12 @@
           <div id="CartDrawer-CartErrors" role="alert"></div>
         </form>
         
+        <!-- Grab some extras section -->
         {%- if settings.enable_cart_recommendations and cart != empty -%}
           <cart-recommendations data-url="{{ routes.product_recommendations_url }}?section_id=cart-drawer&product_id={{ cart.items.first.product_id }}&limit=4&intent=complementary">
-            <div class="cart-recommendations-wrapper">
-              <!-- Replaced via JS -->
+            <div class="cart-recommendations-wrapper custom-cart-recommendations">
+              <h3 class="cart-recommendations-heading">Grab some extras!</h3>
+              <!-- Recommendations list generated by JS -->
             </div>
           </cart-recommendations>
         {%- endif -%}
@@ -148,24 +168,45 @@
       </cart-drawer-items>
 
       <div class="drawer__footer custom-drawer-footer">
-        {%- if settings.enable_discount_input -%}
-          <div class="cart-discount-wrapper">
-            <input type="text" id="CartDrawer-DiscountInput" class="cart-discount-input" placeholder="Coupon Code">
-            <button type="button" id="CartDrawer-ApplyDiscount" class="cart-discount-btn">Apply</button>
+        <!-- Discount Section -->
+        <div class="cart-discount-section">
+          <div class="cart-discount-slider">
+            <!-- View 1: Toggle -->
+            <div class="cart-discount-view cart-discount-toggle" onclick="this.closest('.cart-discount-section').classList.add('show-input')">
+              <div class="cart-reward-content">
+                <span class="reward-title">Coupons<br>Apply now and save extra !</span>
+              </div>
+              <span class="cart-promo-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </span>
+            </div>
+            
+            <!-- View 2: Input -->
+            <div class="cart-discount-view cart-discount-input-view">
+              <div class="cart-discount-header">
+                <button type="button" class="cart-discount-back" aria-label="Back" onclick="this.closest('.cart-discount-section').classList.remove('show-input')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <span class="cart-discount-header-title">Enter Coupon Code</span>
+              </div>
+              <div class="cart-discount-input-wrapper">
+                <input type="text" id="CartDrawer-Discount" class="cart-discount-input" placeholder="Enter discount code" form="CartDrawer-Form">
+                <button type="button" class="cart-discount-apply button" onclick="applyCartDrawerDiscount()">Apply</button>
+              </div>
+            </div>
           </div>
-          <div id="CartDrawer-DiscountMessage" class="cart-discount-message"></div>
-        {%- endif -%}
+        </div>
 
-        <div class="cart-drawer__footer-totals">
+        <div class="cart-drawer__footer-totals custom-totals">
           <div class="totals-row">
-            <span class="totals-label">Grand Total</span>
+            <span class="totals-label">{{ settings.cart_drawer_total_title | default: 'Grand Total' }}</span>
             <span class="totals-value">{{ cart.total_price | money_with_currency }}</span>
           </div>
         </div>
 
-        <div class="cart__ctas">
+        <div class="cart__ctas custom-cart-ctas">
           <button type="submit" id="CartDrawer-Checkout" class="cart__checkout-button button custom-checkout-btn" name="checkout" form="CartDrawer-Form" {% if cart == empty %}disabled{% endif %}>
-            Proceed Order
+            Checkout
           </button>
         </div>
       </div>
