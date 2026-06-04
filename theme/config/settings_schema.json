@@ -1471,16 +1471,6 @@
         "default": false
       },
       {
-        "type": "header",
-        "content": "t:settings_schema.cart.settings.cart_drawer.header"
-      },
-      {
-        "type": "collection",
-        "id": "cart_drawer_collection",
-        "label": "t:settings_schema.cart.settings.cart_drawer.collection.label",
-        "info": "t:settings_schema.cart.settings.cart_drawer.collection.info"
-      },
-      {
         "type": "color_scheme",
         "id": "cart_color_scheme",
         "label": "t:sections.all.colors.label",
@@ -1497,6 +1487,12 @@
         "id": "enable_cart_recommendations",
         "label": "Enable Product Recommendations",
         "default": true
+      },
+      {
+        "type": "collection",
+        "id": "cart_drawer_collection",
+        "label": "Fallback Recommendations Collection",
+        "info": "Used only if no matching recommendations are found for the cart items."
       },
       {
         "type": "checkbox",

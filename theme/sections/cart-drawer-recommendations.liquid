@@ -1,0 +1,30 @@
+{%- if recommendations.performed and recommendations.products_count > 0 -%}
+  <div class="custom-cart-recommendations">
+    <h3 class="cart-recommendations-heading">{{ section.settings.heading | default: 'Grab some extras!' }}</h3>
+    
+    <div class="swiper cart-upsell-swiper">
+      <div class="swiper-wrapper">
+        {%- for product in recommendations.products -%}
+          {% render 'cart-upsell-item', product: product %}
+        {%- endfor -%}
+      </div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Cart Upsell",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Grab some extras!"
+    }
+  ]
+}
+{% endschema %}

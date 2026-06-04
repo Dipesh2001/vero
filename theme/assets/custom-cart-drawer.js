@@ -191,6 +191,111 @@ window.addToCartFromRecs = async function(variantId) {
   }
 };
 
+class CartDrawerRecommendations extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.initSwiper();
+
+    const productId = this.dataset.productId;
+    if (!productId) return;
+
+    fetch(`${window.Shopify.routes.root}recommendations/products?product_id=${productId}&section_id=cart-drawer-recommendations&intent=related`)
+      .then(response => response.text())
+      .then(text => {
+        const html = document.createElement('div');
+        html.innerHTML = text;
+        const recommendations = html.querySelector('.custom-cart-recommendations');
+        
+        if (recommendations && recommendations.querySelector('.custom-upsell-item')) {
+          this.innerHTML = recommendations.outerHTML;
+          this.classList.remove('hidden');
+          this.initSwiper();
+        }
+      })
+      .catch(e => console.error(e));
+  }
+
+  initSwiper() {
+    if (typeof Swiper !== 'undefined') {
+      new Swiper(this.querySelector('.cart-upsell-swiper'), {
+        slidesPerView: 1,
+        spaceBetween: 16,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+          750: {
+            slidesPerView: 1
+          }
+        }
+      });
+      
+      const swatchContainers = this.querySelectorAll('.upsell-swatches-container.swiper');
+      swatchContainers.forEach(container => {
+        new Swiper(container, {
+          slidesPerView: 'auto',
+          spaceBetween: 6,
+          navigation: {
+            nextEl: container.querySelector('.upsell-swatch-next'),
+            prevEl: container.querySelector('.upsell-swatch-prev'),
+          }
+        });
+      });
+    }
+  }
+}
+customElements.define('cart-drawer-recommendations', CartDrawerRecommendations);
+
+async function addUpsellToCart(variantId, btn) {
+  if (btn) {
+    btn.dataset.originalText = btn.textContent;
+    btn.textContent = '...';
+    btn.disabled = true;
+  }
+
+  try {
+    const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        items: [{ id: variantId, quantity: 1 }]
+      })
+    });
+    
+    if (response.ok) {
+      // Re-render cart drawer the Dawn way
+      const res = await fetch(window.Shopify.routes.root + '?section_id=cart-drawer');
+      const text = await res.text();
+      const cart = document.querySelector('cart-drawer');
+      if (cart) {
+        cart.renderContents(new DOMParser().parseFromString(text, 'text/html'), variantId, false);
+      }
+    } else {
+      console.error('Failed to add upsell');
+      if (btn) {
+        btn.textContent = btn.dataset.originalText;
+        btn.disabled = false;
+      }
+    }
+  } catch (error) {
+    console.error(error);
+    if (btn) {
+      btn.textContent = btn.dataset.originalText;
+      btn.disabled = false;
+    }
+  }
+}
+
 // Fix stuck spinner on quantity errors
 document.addEventListener('DOMContentLoaded', () => {
   const drawer = document.querySelector('cart-drawer');

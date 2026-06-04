@@ -1,0 +1,67 @@
+<div class="swiper-slide">
+  <div class="custom-upsell-item">
+  <div class="upsell-img-wrap">
+    <a href="{{ product.url }}" tabindex="-1">
+      {%- if product.featured_image != blank -%}
+        <img src="{{ product.featured_image | image_url: width: 150 }}" loading="lazy" alt="">
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      {%- endif -%}
+    </a>
+  </div>
+  
+  <div class="upsell-info-wrap">
+    <a href="{{ product.url }}" class="upsell-title" title="{{ product.title | escape }}">{{ product.title }}</a>
+    
+    {%- if product.first_available_variant and product.has_only_default_variant == false -%}
+      <p class="upsell-variant-title">{{ product.first_available_variant.title | escape }}</p>
+    {%- endif -%}
+    
+    <div class="upsell-price-row">
+      {%- if product.compare_at_price > product.price -%}
+        <span class="upsell-price-sale">{{ product.price | money }}</span>
+        <span class="upsell-price-compare">{{ product.compare_at_price | money }}</span>
+        {%- assign discount = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
+        <span class="upsell-discount-badge">-{{ discount }}%</span>
+      {%- else -%}
+        <span class="upsell-price">{{ product.price | money }}</span>
+      {%- endif -%}
+    </div>
+    
+    {%- assign color_option = null -%}
+    {%- for option in product.options_with_values -%}
+      {%- assign downcased_name = option.name | downcase -%}
+      {%- if downcased_name == 'color' or downcased_name == 'colour' -%}
+        {%- assign color_option = option -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+    
+    {%- if color_option -%}
+      <div class="upsell-swatches-container{% if color_option.values.size > 6 %} swiper{% endif %}">
+        <div class="upsell-swatches{% if color_option.values.size > 6 %} swiper-wrapper{% endif %}">
+          {%- for value in color_option.values -%}
+            <div class="{% if color_option.values.size > 6 %}swiper-slide {% endif %}upsell-swatch-slide">
+              <span class="upsell-swatch-item" title="{{ value | escape }}">
+                {%- if value.swatch -%}
+                  {% render 'swatch', swatch: value.swatch, shape: 'square' %}
+                {%- else -%}
+                  <span style="background-color: {{ value | split: ' ' | last | handle }};"></span>
+                {%- endif -%}
+              </span>
+            </div>
+          {%- endfor -%}
+        </div>
+        {%- if color_option.values.size > 6 -%}
+          <div class="swiper-button-prev upsell-swatch-prev"></div>
+          <div class="swiper-button-next upsell-swatch-next"></div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="upsell-action-wrap">
+    <button type="button" class="button upsell-add-btn" onclick="addUpsellToCart('{{ product.first_available_variant.id }}', this)">Add</button>
+  </div>
+  </div>
+</div>

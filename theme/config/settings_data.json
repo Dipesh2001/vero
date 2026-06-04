@@ -128,7 +128,7 @@
     "show_cart_note": false,
     "cart_drawer_collection": "",
     "cart_color_scheme": "scheme-1",
-    "enable_cart_recommendations": false,
+    "enable_cart_recommendations": true,
     "enable_discount_input": false,
     "sections": {
       "main-password-header": {
