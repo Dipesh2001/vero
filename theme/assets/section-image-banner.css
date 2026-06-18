@@ -214,7 +214,8 @@
 }
 
 .banner--adapt,
-.banner--adapt_image.banner--mobile-bottom .banner__media:not(.placeholder) {
+.banner--adapt_image.banner--mobile-bottom .banner__media:not(.placeholder),
+.banner--adapt.banner--mobile-bottom .banner__media:not(.placeholder) {
   height: auto;
 }
 

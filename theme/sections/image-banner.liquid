@@ -1,29 +1,61 @@
 {{ 'section-image-banner.css' | asset_url | stylesheet_tag }}
 
-{%- if section.settings.image_height == 'adapt' and section.settings.image != blank -%}
-  {%- style -%}
+{%- liquid
+  assign desktop_image = section.settings.image | default: section.settings.image_2
+  assign mobile_image = section.settings.image_mobile | default: desktop_image
+
+  assign mobile_height = section.settings.mobile_image_height
+  if mobile_height == 'desktop'
+    assign mobile_height = section.settings.image_height
+  endif
+-%}
+
+{%- style -%}
+  {%- if mobile_height == 'adapt' and mobile_image != blank -%}
     @media screen and (max-width: 749px) {
       #Banner-{{ section.id }}::before,
       #Banner-{{ section.id }} .banner__media::before,
       #Banner-{{ section.id }}:not(.banner--mobile-bottom) .banner__content::before {
-        padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;
+        padding-bottom: {{ 1 | divided_by: mobile_image.aspect_ratio | times: 100 }}%;
         content: '';
         display: block;
       }
+      #Banner-{{ section.id }}.banner--mobile-bottom .banner__media:not(.placeholder) {
+        height: auto !important;
+      }
     }
+  {%- elsif mobile_height != 'adapt' -%}
+    @media screen and (max-width: 749px) {
+      {%- assign mobile_rem_height = '34rem' -%}
+      {%- if mobile_height == 'small' -%}
+        {%- assign mobile_rem_height = '28rem' -%}
+      {%- elsif mobile_height == 'large' -%}
+        {%- assign mobile_rem_height = '39rem' -%}
+      {%- endif -%}
 
+      #Banner-{{ section.id }} .banner__media {
+        height: {{ mobile_rem_height }} !important;
+      }
+      #Banner-{{ section.id }} .banner__content {
+        min-height: {{ mobile_rem_height }} !important;
+      }
+      #Banner-{{ section.id }}::before {
+        display: none !important;
+      }
+    }
+  {%- endif -%}
+
+  {%- if section.settings.image_height == 'adapt' and desktop_image != blank -%}
     @media screen and (min-width: 750px) {
       #Banner-{{ section.id }}::before,
       #Banner-{{ section.id }} .banner__media::before {
-        padding-bottom: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;
+        padding-bottom: {{ 1 | divided_by: desktop_image.aspect_ratio | times: 100 }}%;
         content: '';
         display: block;
       }
     }
-  {%- endstyle -%}
-{%- endif -%}
+  {%- endif -%}
 
-{%- style -%}
   #Banner-{{ section.id }}::after {
     opacity: {{ section.settings.image_overlay_opacity | divided_by: 100.0 }};
   }
@@ -31,6 +63,21 @@
     padding-top: {{ section.settings.padding_top_mobile }}px;
     padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
   }
+  {%- if section.settings.make_full_width_mobile -%}
+    @media screen and (max-width: 749px) {
+      .section-{{ section.id }}-padding .page-width {
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+    }
+  {%- else -%}
+    @media screen and (max-width: 749px) {
+      .section-{{ section.id }}-padding .page-width-desktop-only {
+        padding: 0 1.5rem !important;
+        max-width: 100% !important;
+      }
+    }
+  {%- endif -%}
   @media screen and (min-width: 750px) {
     .section-{{ section.id }}-padding {
       padding-top: {{ section.settings.padding_top }}px;
@@ -50,6 +97,7 @@
     cursor: pointer;
   }
 {%- endstyle -%}
+
 
 {%- liquid
   assign full_width = '100vw'
@@ -74,7 +122,7 @@
 -%}
 
 <div class="section-{{ section.id }}-padding">
-  <div class="{% unless section.settings.make_full_width %}page-width{% endunless %}">
+  <div class="{% if section.settings.make_full_width %}{% if section.settings.make_full_width_mobile == false %}page-width-desktop-only{% endif %}{% else %}page-width{% endif %}">
     <div
       id="Banner-{{ section.id }}"
       class="banner banner--content-align-{{ section.settings.desktop_content_alignment }} banner--content-align-mobile-{{ section.settings.mobile_content_alignment }} banner--{{ section.settings.image_height }}{% if section.settings.stack_images_on_mobile and section.settings.image != blank and section.settings.image_2 != blank %} banner--stacked{% endif %}{% if section.settings.image_height == 'adapt' and section.settings.image != blank %} banner--adapt{% endif %}{% if section.settings.show_text_below %} banner--mobile-bottom{%- endif -%}{% if section.settings.show_text_box == false %} banner--desktop-transparent{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
@@ -164,6 +212,7 @@
       {%- endif -%}
     </div>
   {%- endif -%}
+  {%- if section.blocks.size > 0 -%}
   <div class="banner__content banner__content--{{ section.settings.desktop_content_position }} page-width{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
     <div class="banner__box content-container content-container--full-width-mobile color-{{ section.settings.color_scheme }} gradient">
       {%- for block in section.blocks -%}
@@ -214,6 +263,7 @@
       {%- endfor -%}
     </div>
   </div>
+  {%- endif -%}
     </div>
   </div>
 </div>
@@ -402,6 +452,12 @@
       "label": "Make section full width"
     },
     {
+      "type": "checkbox",
+      "id": "make_full_width_mobile",
+      "default": false,
+      "label": "Make section full width in mobile"
+    },
+    {
       "type": "header",
       "content": "Desktop Spacing"
     },
@@ -458,7 +514,35 @@
       "id": "stack_images_on_mobile",
       "default": true,
       "label": "t:sections.image-banner.settings.stack_images_on_mobile.label"
-    },    
+    },
+    {
+      "type": "select",
+      "id": "mobile_image_height",
+      "options": [
+        {
+          "value": "desktop",
+          "label": "Same as desktop"
+        },
+        {
+          "value": "adapt",
+          "label": "Adapt to first image"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "desktop",
+      "label": "Mobile image height"
+    },
     {
       "type": "select",
       "id": "mobile_content_alignment",

@@ -22,19 +22,25 @@
   /* Header Styling - 40px Bold matching Figma */
   .carousel__header {
     text-align: {{ section.settings.heading_alignment | default: 'center' }};
-    margin-bottom: 3rem;
+    margin-bottom: 1rem; /* 10px spacing from content on mobile */
+  }
+  @media screen and (min-width: 750px) {
+    .carousel__header {
+      margin-bottom: 3rem;
+    }
   }
   .carousel__header h2 {
-    font-family: var(--font-body-custom);
-    font-weight: 700;
-    font-size: 2.8rem;
+    font-family: 'Poppins', var(--font-body-custom), sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 17px !important;
+    line-height: 1.5 !important;
     color: rgb(var(--color-foreground)) !important;
     margin: 0;
-    line-height: 1.2;
   }
   @media screen and (min-width: 750px) {
     .carousel__header h2 {
-      font-size: 4rem; /* 40px */
+      font-size: 4rem !important; /* 40px */
+      line-height: 1.2 !important;
     }
   }
   
@@ -79,6 +85,8 @@
       justify-content: center;
       box-sizing: border-box;
       position: relative;
+      width: 332px; /* Figma width */
+      height: 178px; /* Figma height */
     }
 
     .slide-background-{{ section.id }} {
@@ -90,7 +98,7 @@
       .swiper-slide-{{ section.id }} {
         height: auto;
       }
-      .swiper-container-{{ section.id }} { height: auto; aspect-ratio: 851 / 434; }
+      .swiper-container-{{ section.id }} { height: auto; aspect-ratio: 324 / 178; }
     }
     
   {% else %}
@@ -171,16 +179,22 @@
       .swiper-button-prev-{{ section.id }} { left: 20px; }
       .swiper-button-next-{{ section.id }} { right: 20px; }
     {% endif %}
-    
     @media screen and (max-width: 749px) {
-      .carousel-wrapper-{{ section.id }} { padding: 20px 10px; }
-      .swiper-button-prev-{{ section.id }}, .swiper-button-next-{{ section.id }} { display: none; }
+      .carousel-wrapper-{{ section.id }} { padding: 20px 25px; }
     }
   {% else %}
     /* Arrow Position logic for Slider */
     .swiper-button-prev-{{ section.id }} { left: 20px; }
     .swiper-button-next-{{ section.id }} { right: 20px; }
   {% endif %}
+
+@media screen and (max-width: 749px) {
+  .carousel__header { margin-bottom: 0 !important; }
+  .swiper-button-prev-{{ section.id }}.swiper-button-prev,
+  .swiper-button-next-{{ section.id }}.swiper-button-next {
+    display: none !important;
+  }
+}
 
   /* Pagination Styling */
   .swiper-pagination-{{ section.id }} {
@@ -239,7 +253,7 @@
       bottom: -30px;
     }
     .carousel-wrapper-{{ section.id }} {
-      padding-bottom: 70px; 
+      padding-bottom: 30px; 
     }
   {% endif %}
 </style>
@@ -261,14 +275,29 @@
               <div class="swiper-slide swiper-slide-{{ section.id }}" {% if block.settings.link != blank %}data-link="{{ block.settings.link }}"{% endif %} {{ block.shopify_attributes }}>
                 <div class="slide-background-{{ section.id }}">
                   {%- if block.settings.image != blank -%}
-                    <img
-                      src="{{ block.settings.image | image_url: width: 1200 }}"
-                      alt="{{ block.settings.image.alt | default: 'Banner' | escape }}"
-                      width="{{ block.settings.image.width }}"
-                      height="{{ block.settings.image.height }}"
-                      loading="lazy"
-                      style="width: 100%; height: 100%; object-fit: cover;"
-                    >
+                    {%- if block.settings.image_mobile != blank -%}
+                      <picture style="width: 100%; height: 100%;">
+                        <source media="(max-width: 749px)" srcset="{{ block.settings.image_mobile | image_url: width: 750 }}">
+                        <source media="(min-width: 750px)" srcset="{{ block.settings.image | image_url: width: 1200 }}">
+                        <img
+                          src="{{ block.settings.image | image_url: width: 1200 }}"
+                          alt="{{ block.settings.image.alt | default: 'Banner' | escape }}"
+                          width="{{ block.settings.image.width }}"
+                          height="{{ block.settings.image.height }}"
+                          loading="lazy"
+                          style="width: 100%; height: 100%; object-fit: cover;"
+                        >
+                      </picture>
+                    {%- else -%}
+                      <img
+                        src="{{ block.settings.image | image_url: width: 1200 }}"
+                        alt="{{ block.settings.image.alt | default: 'Banner' | escape }}"
+                        width="{{ block.settings.image.width }}"
+                        height="{{ block.settings.image.height }}"
+                        loading="lazy"
+                        style="width: 100%; height: 100%; object-fit: cover;"
+                      >
+                    {%- endif -%}
                   {%- else -%}
                     {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
                   {%- endif -%}
@@ -278,13 +307,28 @@
               <div class="swiper-slide swiper-slide-{{ section.id }}" {% if block.settings.link != blank %}data-link="{{ block.settings.link }}"{% endif %} {{ block.shopify_attributes }}>
                 <div class="slide-background-{{ section.id }}">
                   {%- if block.settings.image != blank -%}
-                    <img
-                      src="{{ block.settings.image | image_url: width: 3840 }}"
-                      alt="{{ block.settings.image.alt | default: 'Slide' | escape }}"
-                      width="{{ block.settings.image.width }}"
-                      height="{{ block.settings.image.height }}"
-                      loading="lazy"
-                    >
+                    {%- if block.settings.image_mobile != blank -%}
+                      <picture style="width: 100%; height: 100%;">
+                        <source media="(max-width: 749px)" srcset="{{ block.settings.image_mobile | image_url: width: 750 }}">
+                        <source media="(min-width: 750px)" srcset="{{ block.settings.image | image_url: width: 3840 }}">
+                        <img
+                          src="{{ block.settings.image | image_url: width: 3840 }}"
+                          alt="{{ block.settings.image.alt | default: 'Slide' | escape }}"
+                          width="{{ block.settings.image.width }}"
+                          height="{{ block.settings.image.height }}"
+                          loading="lazy"
+                          style="width: 100%; height: 100%; object-fit: cover;"
+                        >
+                      </picture>
+                    {%- else -%}
+                      <img
+                        src="{{ block.settings.image | image_url: width: 3840 }}"
+                        alt="{{ block.settings.image.alt | default: 'Slide' | escape }}"
+                        width="{{ block.settings.image.width }}"
+                        height="{{ block.settings.image.height }}"
+                        loading="lazy"
+                      >
+                    {%- endif -%}
                   {%- else -%}
                     {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
                   {%- endif -%}
@@ -556,6 +600,12 @@
       "type": "checkbox",
       "id": "show_arrows",
       "label": "Show Navigation Arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_arrows_mobile",
+      "label": "Hide Arrows in Mobile",
       "default": true
     },
     {

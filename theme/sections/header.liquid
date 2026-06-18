@@ -162,8 +162,8 @@
       display: flex !important;
       justify-content: flex-end !important;
       align-items: center !important;
-      padding-top: 15px !important;
-      padding-bottom: 15px !important;
+      padding-top: {{ section.settings.padding_top_mobile }}px !important;
+      padding-bottom: {{ section.settings.padding_bottom_mobile }}px !important;
     }
     
     .header.drawer-menu {
@@ -825,6 +825,30 @@
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
       "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile Top Padding",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 36,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile Bottom Padding",
+      "default": 16
     }
   ],
   "blocks": [

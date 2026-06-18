@@ -18,7 +18,12 @@
   /* Header Styling matching custom-carousel */
   .collections-listing-section-{{ section.id }} .carousel__header {
     text-align: {{ section.settings.heading_alignment | default: 'center' }};
-    margin-bottom: 3rem;
+    margin-bottom: 1rem; /* 10px spacing from content on mobile */
+  }
+  @media screen and (min-width: 750px) {
+    .collections-listing-section-{{ section.id }} .carousel__header {
+      margin-bottom: 3rem;
+    }
   }
   .collections-listing-section-{{ section.id }} .carousel__header h2 {
     font-family: var(--font-body-custom);
@@ -26,11 +31,11 @@
     font-size: 2.8rem;
     color: rgb(var(--color-foreground)) !important;
     margin: 0;
-    line-height: 1.2;
   }
   @media screen and (min-width: 750px) {
     .collections-listing-section-{{ section.id }} .carousel__header h2 {
-      font-size: 4rem; /* 40px */
+      font-size: 4rem !important; /* 40px */
+      line-height: 1.2 !important;
     }
   }
 
@@ -259,10 +264,17 @@
   }
 
   @media screen and (max-width: 749px) {
-    .swiper-button-prev-{{ section.id }},
-    .swiper-button-next-{{ section.id }} {
-      display: none !important;
-    }
+    {%- if section.settings.hide_arrows_mobile or section.settings.hide_arrows_mobile == nil -%}
+      .swiper-button-prev-{{ section.id }},
+      .swiper-button-next-{{ section.id }} {
+        display: none !important;
+      }
+    {%- else -%}
+      .swiper-button-prev-{{ section.id }},
+      .swiper-button-next-{{ section.id }} {
+        display: flex !important;
+      }
+    {%- endif -%}
   }
 </style>
 
@@ -520,6 +532,12 @@
       "id": "show_arrows",
       "label": "Show Navigation Arrows",
       "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_arrows_mobile",
+      "label": "Hide Arrows in Mobile",
+      "default": true
     },
     {
       "type": "range",

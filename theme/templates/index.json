@@ -9,6 +9,22 @@
  */
 {
   "sections": {
+    "image_only_homepage": {
+      "type": "image-only",
+      "settings": {
+        "image": "",
+        "image_mobile": "",
+        "link": "",
+        "max_width": 1200,
+        "background_color": "#ffffff",
+        "make_full_width": false,
+        "make_full_width_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_top_mobile": 20,
+        "padding_bottom_mobile": 20
+      }
+    },
     "custom_carousel_9bhfxr": {
       "type": "custom-carousel",
       "blocks": {
@@ -146,6 +162,7 @@
         "show_text_box": true,
         "color_scheme": "",
         "make_full_width": false,
+        "make_full_width_mobile": true,
         "padding_top": 36,
         "padding_bottom": 36,
         "padding_top_mobile": 24,
@@ -291,6 +308,7 @@
         "image_behavior": "none",
         "color_scheme": "scheme-6",
         "show_arrows": true,
+        "hide_arrows_mobile": true,
         "arrow_position": "outside",
         "slider_visual": "none",
         "pagination_color_active": "#ffc357",
@@ -333,6 +351,7 @@
   },
   "order": [
     "custom_carousel_9bhfxr",
+    "image_only_homepage",
     "collections_listing_homepage",
     "image_banner_CXJ4xP",
     "collections_listing_mMtDcJ",
