@@ -308,7 +308,6 @@
         "image_behavior": "none",
         "color_scheme": "scheme-6",
         "show_arrows": true,
-        "hide_arrows_mobile": true,
         "arrow_position": "outside",
         "slider_visual": "none",
         "pagination_color_active": "#ffc357",
