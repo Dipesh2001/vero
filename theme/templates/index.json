@@ -9,22 +9,6 @@
  */
 {
   "sections": {
-    "image_only_homepage": {
-      "type": "image-only",
-      "settings": {
-        "image": "",
-        "image_mobile": "",
-        "link": "",
-        "max_width": 1200,
-        "background_color": "#ffffff",
-        "make_full_width": false,
-        "make_full_width_mobile": true,
-        "padding_top": 36,
-        "padding_bottom": 36,
-        "padding_top_mobile": 20,
-        "padding_bottom_mobile": 20
-      }
-    },
     "custom_carousel_9bhfxr": {
       "type": "custom-carousel",
       "blocks": {
@@ -81,6 +65,7 @@
         "image_behavior": "ambient",
         "color_scheme": "",
         "show_arrows": false,
+        "hide_arrows_mobile": true,
         "arrow_position": "outside",
         "slider_visual": "dots",
         "pagination_color_active": "#00237d",
@@ -88,7 +73,23 @@
         "padding_top": 0,
         "padding_bottom": 0,
         "padding_top_mobile": 0,
-        "padding_bottom_mobile": 24
+        "padding_bottom_mobile": 0
+      }
+    },
+    "image_only_homepage": {
+      "type": "image-only",
+      "settings": {
+        "image": "shopify://shop_images/Brand_desktop.png",
+        "image_mobile": "shopify://shop_images/Brand_mobile.png",
+        "link": "",
+        "max_width": 1200,
+        "background_color": "#00237D",
+        "make_full_width": false,
+        "make_full_width_mobile": false,
+        "padding_top": 12,
+        "padding_bottom": 12,
+        "padding_top_mobile": 8,
+        "padding_bottom_mobile": 8
       }
     },
     "collections_listing_homepage": {
@@ -138,6 +139,7 @@
         "title_color": "#00237d",
         "image_border_radius": 0,
         "show_arrows": false,
+        "hide_arrows_mobile": true,
         "slides_per_view_desktop": 3,
         "slides_per_view_mobile": "1.5",
         "color_scheme": "scheme-6",
@@ -152,6 +154,7 @@
       "name": "t:sections.image-banner.presets.name",
       "settings": {
         "image": "shopify://shop_images/Bag_banner_desktop.jpg",
+        "image_mobile": "shopify://shop_images/Bag_Mobile_Banner.jpg",
         "image_link_1": "",
         "image_link_2": "",
         "image_overlay_opacity": 0,
@@ -165,9 +168,10 @@
         "make_full_width_mobile": true,
         "padding_top": 36,
         "padding_bottom": 36,
-        "padding_top_mobile": 24,
-        "padding_bottom_mobile": 24,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0,
         "stack_images_on_mobile": true,
+        "mobile_image_height": "large",
         "mobile_content_alignment": "center",
         "show_text_below": true
       }
@@ -231,6 +235,7 @@
         "title_color": "#ffffff",
         "image_border_radius": 0,
         "show_arrows": false,
+        "hide_arrows_mobile": true,
         "slides_per_view_desktop": 4,
         "slides_per_view_mobile": "1.5",
         "color_scheme": "scheme-6",
@@ -245,6 +250,7 @@
       "name": "t:sections.image-banner.presets.name",
       "settings": {
         "image": "shopify://shop_images/Tumbler_banner_desktop.jpg",
+        "image_mobile": "shopify://shop_images/Banner_2_Mobile_4cc2701e-e5af-4ac6-8384-d4e589508a9e.jpg",
         "image_link_1": "",
         "image_link_2": "",
         "image_overlay_opacity": 0,
@@ -255,11 +261,13 @@
         "show_text_box": true,
         "color_scheme": "",
         "make_full_width": false,
+        "make_full_width_mobile": true,
         "padding_top": 36,
         "padding_bottom": 36,
-        "padding_top_mobile": 24,
-        "padding_bottom_mobile": 24,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0,
         "stack_images_on_mobile": true,
+        "mobile_image_height": "large",
         "mobile_content_alignment": "center",
         "show_text_below": true
       }
@@ -308,6 +316,7 @@
         "image_behavior": "none",
         "color_scheme": "scheme-6",
         "show_arrows": true,
+        "hide_arrows_mobile": true,
         "arrow_position": "outside",
         "slider_visual": "none",
         "pagination_color_active": "#ffc357",
@@ -344,7 +353,8 @@
         "instafeed_app_block_hxC9wt"
       ],
       "settings": {
-        "include_margins": true
+        "include_margins": true,
+        "title_font_size_mobile": 15
       }
     }
   },
