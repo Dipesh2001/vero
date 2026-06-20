@@ -22,7 +22,7 @@
     gap: 30px;
     justify-content: center; /* Centered from left to right */
     align-items: flex-start;
-    padding: 20px 0; /* Minimum 20px spacing top/bottom */
+    padding: 30px 0; /* Increased top/bottom spacing by 10px */
     scrollbar-width: none;
     -ms-overflow-style: none;
     margin-bottom: 2rem;
@@ -33,7 +33,7 @@
   @media screen and (max-width: 749px) {
     .dynamic-blocks-icon-row {
       justify-content: flex-start; /* Better scrolling on mobile */
-      padding: 20px;
+      padding: 30px 20px; /* Increased top/bottom padding to 30px */
       gap: 15px; /* Tighter gap to fit 2.5 items */
     }
   }
@@ -52,18 +52,18 @@
     flex: 0 0 auto;
   }
   .dynamic-icon-item .icon {
-    width: 32px;
-    height: 32px;
-    margin-bottom: 10px;
+    width: 42px; /* Increased mobile size */
+    height: 42px; /* Increased mobile size */
+    margin-bottom: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
   @media screen and (min-width: 750px) {
     .dynamic-icon-item .icon {
-      width: 48px;
-      height: 48px;
-      margin-bottom: 15px;
+      width: 60px; /* Increased desktop size */
+      height: 60px; /* Increased desktop size */
+      margin-bottom: 18px;
     }
   }
   .dynamic-icon-item .icon svg {
@@ -72,21 +72,21 @@
     object-fit: contain;
   }
   .dynamic-icon-item img.custom-icon {
-    width: 32px;
-    height: 32px;
+    width: 42px; /* Increased mobile size */
+    height: 42px; /* Increased mobile size */
     object-fit: contain;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
   @media screen and (min-width: 750px) {
     .dynamic-icon-item img.custom-icon {
-      width: 48px;
-      height: 48px;
-      margin-bottom: 15px;
+      width: 60px; /* Increased desktop size */
+      height: 60px; /* Increased desktop size */
+      margin-bottom: 18px;
     }
   }
   .dynamic-icon-title {
     font-family: var(--font-body-custom), 'Montserrat', sans-serif;
-    font-size: 1.0rem; /* Matches Figma 10px */
+    font-size: 1.2rem; /* Increased mobile font size */
     font-weight: 600; /* Figma SemiBold */
     margin: 0 0 4px 0;
     color: #868686; /* Figma color */
@@ -94,7 +94,7 @@
   }
   .dynamic-icon-subtext {
     font-family: var(--font-body-custom), 'Montserrat', sans-serif;
-    font-size: 0.8rem; /* Matches Figma 8px */
+    font-size: 1.0rem; /* Increased mobile font size */
     font-weight: 400; /* Figma Regular */
     margin: 0;
     color: #868686; /* Figma color */
@@ -103,10 +103,10 @@
   
   @media screen and (min-width: 750px) {
     .dynamic-icon-title {
-      font-size: 1.4rem;
+      font-size: 1.6rem; /* Increased desktop font size */
     }
     .dynamic-icon-subtext {
-      font-size: 1.2rem;
+      font-size: 1.4rem; /* Increased desktop font size */
     }
   }
 

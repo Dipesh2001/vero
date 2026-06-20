@@ -350,7 +350,7 @@
     }
 
     /* Icon with Text - Bordered Table View matching Figma */
-    .product__info-container .icon-with-text--horizontal {
+    .product__info-container .icon-with-text--horizontal.icon-with-text--bordered {
       display: flex !important;
       flex-direction: row !important;
       width: 100% !important;
@@ -361,7 +361,7 @@
       margin: 3rem 0 !important;
       gap: 0 !important;
     }
-    .product__info-container .icon-with-text--horizontal .icon-with-text__item {
+    .product__info-container .icon-with-text--horizontal.icon-with-text--bordered .icon-with-text__item {
       flex-direction: row !important;
       justify-content: center !important;
       align-items: center !important;
@@ -373,10 +373,10 @@
       flex: 1 !important;
       box-sizing: border-box !important;
     }
-    .product__info-container .icon-with-text--horizontal .icon-with-text__item:last-child {
+    .product__info-container .icon-with-text--horizontal.icon-with-text--bordered .icon-with-text__item:last-child {
       border-right: none !important;
     }
-    .product__info-container .icon-with-text--horizontal .icon-with-text__item span {
+    .product__info-container .icon-with-text--horizontal.icon-with-text--bordered .icon-with-text__item span {
       display: -webkit-box !important;
       -webkit-line-clamp: 2 !important;
       -webkit-box-orient: vertical !important;
@@ -387,8 +387,54 @@
       font-size: 1.4rem !important;
       text-align: center !important;
     }
-    .product__info-container .icon-with-text--horizontal .svg-wrapper,
-    .product__info-container .icon-with-text--horizontal img {
+    .product__info-container .icon-with-text--horizontal.icon-with-text--bordered .svg-wrapper,
+    .product__info-container .icon-with-text--horizontal.icon-with-text--bordered img {
+      margin-bottom: 0 !important;
+      margin-right: 0.5rem !important;
+      width: 2rem !important;
+      height: 2rem !important;
+      flex-shrink: 0 !important;
+    }
+
+    /* Icon with Text - Dotted connected View matching Figma */
+    .product__info-container .icon-with-text--horizontal.icon-with-text--dotted {
+      display: flex !important;
+      flex-direction: row !important;
+      justify-content: center !important;
+      align-items: center !important;
+      width: 100% !important;
+      border: none !important;
+      background-color: transparent !important;
+      padding: 0 !important;
+      margin: 2rem 0 !important;
+      gap: 1.5rem !important;
+    }
+    .product__info-container .icon-with-text--horizontal.icon-with-text--dotted .icon-with-text__item {
+      display: inline-flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      justify-content: center !important;
+      border-right: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      flex: 0 0 auto !important;
+      box-sizing: border-box !important;
+      gap: 0.8rem !important;
+    }
+    .product__info-container .icon-with-text--horizontal.icon-with-text--dotted .icon-with-text__item span {
+      line-height: 1.3 !important;
+      font-size: 1.4rem !important;
+      text-align: center !important;
+    }
+    .product__info-container .icon-with-text--horizontal.icon-with-text--dotted .icon-with-text__item:not(:last-child)::after {
+      content: "·" !important;
+      margin-left: 1.5rem !important;
+      font-size: 1.6rem !important;
+      color: rgba(var(--color-foreground), 0.5) !important;
+      pointer-events: none;
+    }
+    .product__info-container .icon-with-text--horizontal.icon-with-text--dotted .svg-wrapper,
+    .product__info-container .icon-with-text--horizontal.icon-with-text--dotted img {
       margin-bottom: 0 !important;
       margin-right: 0.5rem !important;
       width: 2rem !important;
@@ -713,16 +759,27 @@
       }
 
       /* Icon-with-text stays 3-col but tighter */
-      .product__info-container .icon-with-text--horizontal {
+      .product__info-container .icon-with-text--horizontal.icon-with-text--bordered {
         margin: 1.5rem 0 !important;
         border: none !important;
       }
-      .product__info-container .icon-with-text--horizontal .icon-with-text__item {
+      .product__info-container .icon-with-text--horizontal.icon-with-text--bordered .icon-with-text__item {
         padding: 1rem 0.5rem !important;
       }
-      .product__info-container .icon-with-text--horizontal .icon-with-text__item span {
+      .product__info-container .icon-with-text--horizontal.icon-with-text--bordered .icon-with-text__item span {
         font-size: 1.1rem !important;
         -webkit-line-clamp: 2 !important;
+      }
+
+      .product__info-container .icon-with-text--horizontal.icon-with-text--dotted {
+        margin: 1rem 0 !important;
+        gap: 0.8rem !important;
+      }
+      .product__info-container .icon-with-text--horizontal.icon-with-text--dotted .icon-with-text__item span {
+        font-size: 1.1rem !important;
+      }
+      .product__info-container .icon-with-text--horizontal.icon-with-text--dotted .icon-with-text__item:not(:last-child)::after {
+        margin-left: 0.8rem !important;
       }
 
       /* Payment image smaller on mobile */
@@ -2637,6 +2694,22 @@
       "type": "icon-with-text",
       "name": "t:sections.main-product.blocks.icon_with_text.name",
       "settings": [
+        {
+          "type": "select",
+          "id": "style_type",
+          "label": "Style Type",
+          "options": [
+            {
+              "value": "bordered",
+              "label": "Bordered"
+            },
+            {
+              "value": "dotted",
+              "label": "Dotted connected"
+            }
+          ],
+          "default": "bordered"
+        },
         {
           "type": "select",
           "id": "layout",
