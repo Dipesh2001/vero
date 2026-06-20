@@ -84,7 +84,7 @@
     top: 0;
     left: 0;
   }
-  .product-card-media-swiper .swiper-slide {
+  .product-card-media-swiper .card-swiper-slide {
     width: 100%;
     height: 100%;
     display: flex;
@@ -453,8 +453,14 @@
   }
 </style>
 
-<slider-product-recommendations class="product-recommendations" {% if section.settings.data_source == 'recommendations' %}data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}&intent=related"{% endif %}>
-<div class="featured-collection-slider-{{ section.id }} color-{{ section.settings.color_scheme }} gradient">
+{%- assign data_source = section.settings.data_source -%}
+{%- if data_source == 'recently-viewed' -%}
+  <recently-viewed-products class="recently-viewed-products" data-section-id="{{ section.id }}" data-current-product-handle="{{ product.handle }}" data-limit="{{ section.settings.products_to_show }}">
+{%- else -%}
+  <slider-product-recommendations class="product-recommendations" {% if section.settings.data_source == 'recommendations' %}data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}&intent=related"{% endif %}>
+{%- endif -%}
+
+<div class="featured-collection-slider-{{ section.id }} color-{{ section.settings.color_scheme }} gradient" {% if data_source == 'recently-viewed' and search.performed == false %}style="display: none;"{% endif %}>
   {%- if section.settings.heading != blank -%}
     <div class="section-header page-width">
       <h2>{{ section.settings.heading | escape }}</h2>
@@ -465,7 +471,6 @@
     <div class="swiper-container-outer">
       <div class="swiper swiper-container-main swiper-container-{{ section.id }}">
         <div class="swiper-wrapper">
-          {%- assign data_source = section.settings.data_source -%}
           {%- assign fallback_used = false -%}
           {%- assign current_page_product = product -%}
           
@@ -485,6 +490,13 @@
             {%- else -%}
               {%- assign items_count = 0 -%}
             {%- endif -%}
+          {%- elsif data_source == 'recently-viewed' -%}
+            {%- if search.performed and search.results_count > 0 -%}
+              {%- assign items = search.results -%}
+              {%- assign items_count = search.results_count -%}
+            {%- else -%}
+              {%- assign items_count = 0 -%}
+            {%- endif -%}
           {%- else -%}
             {%- assign items = section.settings.collection.products -%}
             {%- assign items_count = section.settings.collection.all_products_count -%}
@@ -495,17 +507,18 @@
             {%- assign count = 0 -%}
             {%- for product in items -%}
               {%- if fallback_used and product.id == current_page_product.id -%}{%- continue -%}{%- endif -%}
+              {%- if data_source == 'recently-viewed' and product.id == current_page_product.id -%}{%- continue -%}{%- endif -%}
               {%- if count >= limit -%}{%- break -%}{%- endif -%}
               {%- assign count = count | plus: 1 -%}
               <div class="swiper-slide">
-                <div class="product-card-premium js-product-card" data-product-id="{{ product.id }}">
+                <div class="product-card-premium js-product-card" data-product-id="{{ product.id }}" data-product-handle="{{ product.handle }}">
                   
                   <!-- Image Box with sub-swiper and badges -->
                   <div class="product-card-image-box">
                     {%- render 'modern-badges', product: product, is_card: true -%}
                     
                     <div class="swiper product-card-media-swiper js-card-media-swiper">
-                      <div class="swiper-wrapper">
+                      <div class="card-swiper-wrapper">
                         {%- assign has_metafield_gallery = false -%}
                         {%- for variant in product.variants -%}
                           {%- if variant.metafields.custom.variant_gallery.value != blank -%}
@@ -532,7 +545,7 @@
                                 {%- assign url_string = media | image_url: width: 533 -%}
                                 {%- unless all_metafield_media_urls contains url_string -%}
                                   {%- assign all_metafield_media_urls = all_metafield_media_urls | append: url_string | append: "|||" -%}
-                                  <div class="swiper-slide" data-media-alt="{{ color_val | escape }}" data-variant-id="{{ variant.id }}">
+                                  <div class="card-swiper-slide" data-media-alt="{{ color_val | escape }}" data-variant-id="{{ variant.id }}">
                                     <img src="{{ url_string }}" alt="{{ media.alt | default: product.title | escape }}" loading="lazy" width="{{ media.width | default: 500 }}" height="{{ media.height | default: 500 }}">
                                   </div>
                                 {%- endunless -%}
@@ -542,14 +555,14 @@
                           {%- for media in product.media -%}
                             {%- assign media_url_string = media | image_url: width: 533 -%}
                             {%- unless all_metafield_media_urls contains media_url_string -%}
-                              <div class="swiper-slide" data-media-alt="common" data-variant-id="">
+                              <div class="card-swiper-slide" data-media-alt="common" data-variant-id="">
                                 <img src="{{ media_url_string }}" alt="{{ media.alt | default: product.title | escape }}" loading="lazy" width="{{ media.width | default: 500 }}" height="{{ media.height | default: 500 }}">
                               </div>
                             {%- endunless -%}
                           {%- endfor -%}
                         {%- else -%}
                           {%- for media in product.media -%}
-                            <div class="swiper-slide" data-media-alt="{{ media.alt | escape }}" data-variant-id="{%- for variant in product.variants -%}{%- if variant.featured_media.id == media.id -%}{{ variant.id }}{%- endif -%}{%- endfor -%}">
+                            <div class="card-swiper-slide" data-media-alt="{{ media.alt | escape }}" data-variant-id="{%- for variant in product.variants -%}{%- if variant.featured_media.id == media.id -%}{{ variant.id }}{%- endif -%}{%- endfor -%}">
                               <img src="{{ media | image_url: width: 533 }}" alt="{{ media.alt | default: product.title | escape }}" loading="lazy" width="{{ media.width | default: 500 }}" height="{{ media.height | default: 500 }}">
                             </div>
                           {%- endfor -%}
@@ -726,55 +739,80 @@
     </div>
   </div>
 </div>
-</slider-product-recommendations>
+{%- if data_source == 'recently-viewed' -%}
+  </recently-viewed-products>
+{%- else -%}
+  </slider-product-recommendations>
+{%- endif -%}
+
+{%- if template.name == 'product' -%}
+  <script>
+    (function() {
+      try {
+        const handle = {{ product.handle | json }};
+        if (handle) {
+          let list = JSON.parse(localStorage.getItem('recently_viewed_products') || '[]');
+          list = list.filter(item => item !== handle);
+          list.unshift(handle);
+          list = list.slice(0, 12);
+          localStorage.setItem('recently_viewed_products', JSON.stringify(list));
+        }
+      } catch (e) {
+        console.error('Failed to track recently viewed product:', e);
+      }
+    })();
+  </script>
+{%- endif -%}
 
 <script>
-  // Product Card Controller Class
-  class PremiumProductCard {
-    constructor(el) {
-      this.el = el;
-      this.mediaSwiperEl = el.querySelector('.js-card-media-swiper');
-      this.swatches = el.querySelectorAll('.js-swatch-btn');
-      this.selectedColorEl = el.querySelector('.js-selected-color-text');
-      this.variantIdInput = el.querySelector('.js-product-variant-id');
-      this.priceEl = el.querySelector('.js-price-value');
-      this.comparePriceEl = el.querySelector('.js-compare-price');
-      this.discountEl = el.querySelector('.js-discount-percent');
-      this.submitBtn = el.querySelector('.js-product-submit-btn');
-      this.swatchesContainer = el.querySelector('.js-swatches-container');
-      this.prevSwatchBtn = el.querySelector('.swatch-scroll-prev');
-      this.nextSwatchBtn = el.querySelector('.swatch-scroll-next');
+  if (typeof window.PremiumProductCard === 'undefined') {
+    window.PremiumProductCard = class PremiumProductCard {
+      constructor(el) {
+        this.el = el;
+        this.mediaSwiperEl = el.querySelector('.js-card-media-swiper');
+        this.swatches = el.querySelectorAll('.js-swatch-btn');
+        this.selectedColorEl = el.querySelector('.js-selected-color-text');
+        this.variantIdInput = el.querySelector('.js-product-variant-id');
+        this.priceEl = el.querySelector('.js-price-value');
+        this.comparePriceEl = el.querySelector('.js-compare-price');
+        this.discountEl = el.querySelector('.js-discount-percent');
+        this.submitBtn = el.querySelector('.js-product-submit-btn');
+        this.swatchesContainer = el.querySelector('.js-swatches-container');
+        this.prevSwatchBtn = el.querySelector('.swatch-scroll-prev');
+        this.nextSwatchBtn = el.querySelector('.swatch-scroll-next');
 
-      // Save initial slides
-      if (this.mediaSwiperEl) {
-        this.allSlides = Array.from(this.mediaSwiperEl.querySelectorAll('.swiper-slide'));
-        this.initSwiper();
-      }
-
-      this.initSwatches();
-      this.initSwatchesScroll();
-    }
-
-    initSwiper() {
-      this.swiper = new Swiper(this.mediaSwiperEl, {
-        slidesPerView: 1,
-        nested: true,
-        resistanceRatio: 0,
-        allowTouchMove: true,
-        observer: true,
-        observeParents: true,
-        navigation: {
-          nextEl: this.el.querySelector('.js-card-swiper-next'),
-          prevEl: this.el.querySelector('.js-card-swiper-prev'),
+        // Save initial slides
+        if (this.mediaSwiperEl) {
+          this.allSlides = Array.from(this.mediaSwiperEl.querySelectorAll('.card-swiper-slide'));
+          this.initSwiper();
         }
-      });
-      
-      // Filter images for initial active color
-      const initialActiveSwatch = this.el.querySelector('.js-swatch-btn.is-active') || this.swatches[0];
-      if (initialActiveSwatch) {
-        this.selectSwatch(initialActiveSwatch, true);
+
+        this.initSwatches();
+        this.initSwatchesScroll();
       }
-    }
+
+      initSwiper() {
+        this.swiper = new Swiper(this.mediaSwiperEl, {
+          wrapperClass: 'card-swiper-wrapper',
+          slideClass: 'card-swiper-slide',
+          slidesPerView: 1,
+          nested: true,
+          resistanceRatio: 0,
+          allowTouchMove: true,
+          observer: true,
+          observeParents: true,
+          navigation: {
+            nextEl: this.el.querySelector('.js-card-swiper-next'),
+            prevEl: this.el.querySelector('.js-card-swiper-prev'),
+          }
+        });
+        
+        // Filter images for initial active color
+        const initialActiveSwatch = this.el.querySelector('.js-swatch-btn.is-active') || this.swatches[0];
+        if (initialActiveSwatch) {
+          this.selectSwatch(initialActiveSwatch, true);
+        }
+      }
 
     initSwatches() {
       this.swatches.forEach(swatch => {
@@ -967,10 +1005,11 @@
       this.swiper.update();
       this.swiper.slideTo(0, 0);
     }
-  }
+  };
+}
 
-  function initFeaturedCollectionSlider{{ section.id | replace: '-', '_' }}() {
-    const init = () => {
+window['initFeaturedCollectionSlider{{ section.id | replace: '-', '_' }}'] = function() {
+  const init = () => {
       // Initialize main slider
       new Swiper('.swiper-container-{{ section.id }}', {
         slidesPerView: {{ section.settings.slides_per_view_mobile | default: 1.2 }},
@@ -1005,52 +1044,131 @@
       script.onload = init;
       document.head.appendChild(script);
     }
-  }
+  };
 
-  document.addEventListener('DOMContentLoaded', initFeaturedCollectionSlider{{ section.id | replace: '-', '_' }});
+  document.addEventListener('DOMContentLoaded', window['initFeaturedCollectionSlider{{ section.id | replace: '-', '_' }}']);
   
   document.addEventListener('shopify:section:load', function(event) {
     if (event.detail.sectionId === '{{ section.id }}') {
-      initFeaturedCollectionSlider{{ section.id | replace: '-', '_' }}();
+      window['initFeaturedCollectionSlider{{ section.id | replace: '-', '_' }}']();
     }
   });
 
-  class SliderProductRecommendations extends HTMLElement {
-    constructor() {
-      super();
-    }
-
-    connectedCallback() {
-      const handleIntersection = (entries, observer) => {
-        if (!entries[0].isIntersecting) return;
-        observer.unobserve(this);
-
-        fetch(this.dataset.url)
-          .then(response => response.text())
-          .then(text => {
-            const html = document.createElement('div');
-            html.innerHTML = text;
-            const recommendations = html.querySelector('slider-product-recommendations');
-
-            if (recommendations && recommendations.innerHTML.trim().length) {
-              this.innerHTML = recommendations.innerHTML;
-              // Re-initialize slider after dynamically injecting HTML
-              initFeaturedCollectionSlider{{ section.id | replace: '-', '_' }}();
-            }
-          })
-          .catch(e => {
-            console.error(e);
-          });
-      };
-
-      if (this.dataset.url) {
-        new IntersectionObserver(handleIntersection.bind(this), {rootMargin: '0px 0px 400px 0px'}).observe(this);
+  if (!customElements.get('slider-product-recommendations')) {
+    customElements.define('slider-product-recommendations', class SliderProductRecommendations extends HTMLElement {
+      constructor() {
+        super();
       }
-    }
+
+      connectedCallback() {
+        const handleIntersection = (entries, observer) => {
+          if (!entries[0].isIntersecting) return;
+          observer.unobserve(this);
+
+          fetch(this.dataset.url)
+            .then(response => response.text())
+            .then(text => {
+              const html = document.createElement('div');
+              html.innerHTML = text;
+              const recommendations = html.querySelector('slider-product-recommendations');
+
+              if (recommendations && recommendations.innerHTML.trim().length) {
+                this.innerHTML = recommendations.innerHTML;
+                // Re-initialize slider after dynamically injecting HTML
+                window['initFeaturedCollectionSlider{{ section.id | replace: '-', '_' }}']();
+              }
+            })
+            .catch(e => {
+              console.error(e);
+            });
+        };
+
+        if (this.dataset.url) {
+          new IntersectionObserver(handleIntersection.bind(this), {rootMargin: '0px 0px 400px 0px'}).observe(this);
+        }
+      }
+    });
   }
 
-  if (!customElements.get('slider-product-recommendations')) {
-    customElements.define('slider-product-recommendations', SliderProductRecommendations);
+  if (!customElements.get('recently-viewed-products')) {
+    customElements.define('recently-viewed-products', class RecentlyViewedProducts extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        const currentHandle = this.dataset.currentProductHandle;
+        const limit = parseInt(this.dataset.limit) || 8;
+        const sectionId = this.dataset.sectionId;
+
+        try {
+          let list = JSON.parse(localStorage.getItem('recently_viewed_products') || '[]');
+          list = list.filter(item => item !== currentHandle);
+
+          if (list.length === 0) {
+            this.style.display = 'none';
+            return;
+          }
+
+          const itemsToFetch = list.slice(0, limit);
+          const queryTerms = itemsToFetch.map(handle => `handle:${handle}`).join(' OR ');
+          const url = `/search?type=product&q=${encodeURIComponent(queryTerms)}&sections=${sectionId}`;
+
+          fetch(url)
+            .then(response => response.json())
+            .then(json => {
+              const htmlString = json[sectionId];
+              if (htmlString && htmlString.trim().length > 0) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlString, 'text/html');
+                const innerContent = doc.querySelector('.recently-viewed-products');
+                
+                if (innerContent && doc.querySelector('.swiper-container-main .swiper-slide')) {
+                  const swiperWrapper = innerContent.querySelector('.swiper-container-main > .swiper-wrapper') 
+                    || innerContent.querySelector('.swiper-container-main > * > .swiper-wrapper');
+                  if (swiperWrapper) {
+                    const slides = Array.from(swiperWrapper.children).filter(child => child.classList.contains('swiper-slide'));
+                    slides.sort((a, b) => {
+                      const cardA = a.querySelector('.js-product-card');
+                      const cardB = b.querySelector('.js-product-card');
+                      if (!cardA || !cardB) return 0;
+                      
+                      const handleA = cardA.dataset.productHandle;
+                      const handleB = cardB.dataset.productHandle;
+                      
+                      const indexA = itemsToFetch.indexOf(handleA);
+                      const indexB = itemsToFetch.indexOf(handleB);
+                      
+                      return indexA - indexB;
+                    });
+                    
+                    swiperWrapper.innerHTML = '';
+                    slides.forEach(slide => swiperWrapper.appendChild(slide));
+                  }
+
+                  this.innerHTML = innerContent.innerHTML;
+                  
+                  const initFnName = `initFeaturedCollectionSlider${sectionId.replace(/-/g, '_')}`;
+                  if (typeof window[initFnName] === 'function') {
+                    window[initFnName]();
+                  }
+                } else {
+                  this.style.display = 'none';
+                }
+              } else {
+                this.style.display = 'none';
+              }
+            })
+            .catch(err => {
+              console.error('Failed to fetch recently viewed products:', err);
+              this.style.display = 'none';
+            });
+        } catch (e) {
+          console.error('Failed to parse recently viewed products list:', e);
+          this.style.display = 'none';
+        }
+      }
+    });
   }
 </script>
 
@@ -1111,6 +1229,10 @@
         {
           "value": "recommendations",
           "label": "PDP Related Products"
+        },
+        {
+          "value": "recently-viewed",
+          "label": "Recently Viewed Products"
         }
       ],
       "default": "recommendations"
