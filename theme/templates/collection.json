@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "banner": {
@@ -5,8 +14,21 @@
       "settings": {
         "show_collection_description": true,
         "show_collection_image": true,
-        "fallback_image": "shopify://shop_images/Hompage_banner_desktop.jpg",
-        "color_scheme": "scheme-1"
+        "show_title_on_image": false,
+        "fallback_image": "shopify://shop_images/collection-banner-desktop.jpg",
+        "image_mobile": "shopify://shop_images/collection-banner-mobile.jpg",
+        "image_height": "adapt",
+        "mobile_image_height": "desktop",
+        "banner_height_desktop": 408,
+        "banner_height_mobile": 200,
+        "image_overlay_opacity": 0,
+        "color_scheme": "scheme-1",
+        "make_full_width": true,
+        "make_full_width_mobile": true,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0
       }
     },
     "product-grid": {
@@ -14,6 +36,7 @@
       "settings": {
         "products_per_page": 16,
         "columns_desktop": 3,
+        "columns_mobile": "2",
         "color_scheme": "scheme-1",
         "image_ratio": "adapt",
         "image_shape": "default",
@@ -24,7 +47,6 @@
         "enable_filtering": true,
         "filter_type": "vertical",
         "enable_sorting": true,
-        "columns_mobile": "2",
         "padding_top": 36,
         "padding_bottom": 36
       }
