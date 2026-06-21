@@ -1,0 +1,229 @@
+{% comment %}
+  Renders a premium product card with variation swatches and multi-image swiper.
+
+  Accepts:
+  - card_product: {Object} Product object (required)
+  - section_id: {String} The ID of the section rendering this card (optional)
+
+  Usage:
+  {% render 'premium-product-card', card_product: product, section_id: section.id %}
+{% endcomment %}
+
+{%- liquid
+  assign product = card_product
+  assign section_id = section_id | default: section.id
+-%}
+
+<div class="product-card-premium js-product-card" data-product-id="{{ product.id }}" data-product-handle="{{ product.handle }}">
+  
+  <!-- Image Box with sub-swiper and badges -->
+  <div class="product-card-image-box">
+    {%- render 'modern-badges', product: product, is_card: true -%}
+    
+    <div class="swiper product-card-media-swiper js-card-media-swiper">
+      <div class="card-swiper-wrapper">
+        {%- assign has_metafield_gallery = false -%}
+        {%- for variant in product.variants -%}
+          {%- if variant.metafields.custom.variant_gallery.value != blank -%}
+            {%- assign has_metafield_gallery = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- assign all_metafield_media_urls = "" -%}
+        {%- if has_metafield_gallery -%}
+          {%- for variant in product.variants -%}
+            {%- if variant.metafields.custom.variant_gallery.value != blank -%}
+              {%- assign color_val = "" -%}
+              {%- for option in product.options -%}
+                {%- assign downcased_opt = option | downcase -%}
+                {%- if downcased_opt == 'color' or downcased_opt == 'colour' -%}
+                  {%- if forloop.index == 1 -%}{%- assign color_val = variant.option1 | downcase | strip -%}
+                  {%- elsif forloop.index == 2 -%}{%- assign color_val = variant.option2 | downcase | strip -%}
+                  {%- elsif forloop.index == 3 -%}{%- assign color_val = variant.option3 | downcase | strip -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- for media in variant.metafields.custom.variant_gallery.value -%}
+                {%- assign url_string = media | image_url: width: 533 -%}
+                {%- unless all_metafield_media_urls contains url_string -%}
+                  {%- assign all_metafield_media_urls = all_metafield_media_urls | append: url_string | append: "|||" -%}
+                  <div class="card-swiper-slide" data-media-alt="{{ color_val | escape }}" data-variant-id="{{ variant.id }}">
+                    <img src="{{ url_string }}" alt="{{ media.alt | default: product.title | escape }}" loading="lazy" width="{{ media.width | default: 500 }}" height="{{ media.height | default: 500 }}">
+                  </div>
+                {%- endunless -%}
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- for media in product.media -%}
+            {%- assign media_url_string = media | image_url: width: 533 -%}
+            {%- unless all_metafield_media_urls contains media_url_string -%}
+              <div class="card-swiper-slide" data-media-alt="common" data-variant-id="">
+                <img src="{{ media_url_string }}" alt="{{ media.alt | default: product.title | escape }}" loading="lazy" width="{{ media.width | default: 500 }}" height="{{ media.height | default: 500 }}">
+              </div>
+            {%- endunless -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for media in product.media -%}
+            <div class="card-swiper-slide" data-media-alt="{{ media.alt | escape }}" data-variant-id="{%- for variant in product.variants -%}{%- if variant.featured_media.id == media.id -%}{{ variant.id }}{%- endif -%}{%- endfor -%}">
+              <img src="{{ media | image_url: width: 533 }}" alt="{{ media.alt | default: product.title | escape }}" loading="lazy" width="{{ media.width | default: 500 }}" height="{{ media.height | default: 500 }}">
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+      <div class="swiper-button-prev card-swiper-btn js-card-swiper-prev"></div>
+      <div class="swiper-button-next card-swiper-btn js-card-swiper-next"></div>
+    </div>
+  </div>
+
+  <!-- Swatches scrolling list -->
+  {%- liquid
+    assign color_option_index = -1
+    assign size_option_index = -1
+    for option in product.options_with_values
+      assign option_name_down = option.name | downcase
+      if option_name_down contains 'color' or option_name_down contains 'colour'
+        assign color_option_index = forloop.index0
+      endif
+      if option_name_down contains 'size'
+        assign size_option_index = forloop.index0
+      endif
+    endfor
+  -%}
+
+  {%- if color_option_index >= 0 -%}
+    {%- assign color_option = product.options_with_values[color_option_index] -%}
+    <div class="product-swatches-outer-wrapper">
+      <button class="swatch-scroll-btn swatch-scroll-prev" type="button" aria-label="Previous Swatches">
+        <svg viewBox="0 0 100 100" class="icon icon-chevron-left"><path d="M70.7,90.5L30.2,50L70.7,9.5" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="swatches-scroll-container js-swatches-container">
+        {%- for value in color_option.values -%}
+          {%- liquid
+            assign matching_variant = null
+            for variant in product.variants
+              assign var_option_val = variant.options[color_option_index]
+              if var_option_val == value
+                assign matching_variant = variant
+                break
+              endif
+            endfor
+            
+            assign is_active = false
+            if forloop.first
+              assign is_active = true
+              assign selected_variant = matching_variant
+            endif
+
+            # Determine Swatch Image or color
+            assign swatch_bg = ''
+            if value.swatch.image != blank
+              assign swatch_image_url = value.swatch.image | image_url: width: 50
+              assign swatch_bg = 'background-image: url(' | append: swatch_image_url | append: ');'
+            elsif value.swatch.color != blank
+              assign swatch_bg = 'background-color: rgb(' | append: value.swatch.color.rgb | append: ');'
+            elsif matching_variant.featured_media != blank
+              assign swatch_image_url = matching_variant.featured_media | image_url: width: 50
+              assign swatch_bg = 'background-image: url(' | append: swatch_image_url | append: ');'
+            else
+              assign swatch_bg = 'background-color: ' | append: value | handle | append: ';'
+            endif
+          -%}
+          <div class="color-swatch-btn-wrapper {% if is_active %}is-active{% endif %} js-swatch-wrapper">
+            <button
+              class="color-swatch-btn js-swatch-btn"
+              style="{{ swatch_bg }}"
+              data-color-name="{{ value | escape }}"
+              data-variant-id="{{ matching_variant.id }}"
+              data-price="{{ matching_variant.price | money }}"
+              data-compare-price="{% if matching_variant.compare_at_price > matching_variant.price %}{{ matching_variant.compare_at_price | money }}{% endif %}"
+              data-available="{{ matching_variant.available }}"
+              title="{{ value | escape }}"
+              type="button"
+            ></button>
+          </div>
+        {%- endfor -%}
+      </div>
+      <button class="swatch-scroll-btn swatch-scroll-next" type="button" aria-label="Next Swatches">
+        <svg viewBox="0 0 100 100" class="icon icon-chevron-right"><path d="M29.3,9.5L69.8,50L29.3,90.5" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  {%- else -%}
+    <div class="product-swatches-outer-wrapper" style="visibility: hidden; pointer-events: none;">
+      <div class="swatches-scroll-container">
+        <div class="color-swatch-btn-wrapper">
+          <div class="color-swatch-btn"></div>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- liquid
+    assign has_options = false
+    if size_option_index >= 0 or color_option_index >= 0
+      assign has_options = true
+    endif
+    
+    assign size_val = ''
+    if size_option_index >= 0
+      assign size_val = product.variants[0].options[size_option_index] | escape | append: ' | '
+    endif
+    
+    assign active_color_name = ''
+    if color_option_index >= 0
+      assign active_color_name = color_option.values[0] | escape
+    endif
+  -%}
+  <p class="selected-color-text js-selected-color-text" data-size="{{ size_val }}" style="{% unless has_options %}visibility: hidden; pointer-events: none;{% endunless %}">
+    {% if has_options %}
+      {{ size_val }}{{ active_color_name }}
+    {% else %}
+      &nbsp;
+    {% endif %}
+  </p>
+
+  <!-- Product details (Title and Price) -->
+  <div class="product-card-details">
+    <a href="{{ product.url }}" class="product-card-title">{{ product.title | escape }}</a>
+    
+    {%- assign current_variant = selected_variant | default: product.selected_or_first_available_variant -%}
+    <div class="product-card-price-container">
+      <span class="product-card-price-value js-price-value">{{ current_variant.price | money }}</span>
+      <s class="product-card-compare-price js-compare-price" style="{% unless current_variant.compare_at_price > current_variant.price %}display: none;{% endunless %}">
+        {{ current_variant.compare_at_price | money }}
+      </s>
+      {%- if current_variant.compare_at_price > current_variant.price -%}
+        {%- assign discount = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
+        <span class="product-card-discount-percent js-discount-percent">-{{ discount }}%</span>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- Add to bag button -->
+  {%- assign product_form_id = 'quick-add-' | append: section_id | append: product.id -%}
+  <product-form data-section-id="{{ section_id }}">
+    {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+      <input type="hidden" name="id" value="{{ current_variant.id }}" class="product-variant-id js-product-variant-id" {% unless current_variant.available %}disabled{% endunless %}>
+      <button
+        type="submit"
+        name="add"
+        class="product-card-submit-btn js-product-submit-btn"
+        {% unless current_variant.available %}disabled{% endunless %}
+      >
+        <span>
+          {%- if current_variant.available -%}
+            Add To Bag
+          {%- else -%}
+            Sold Out
+          {%- endif -%}
+        </span>
+        <div class="loading__spinner hidden js-loading-spinner">
+          <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+            <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+          </svg>
+        </div>
+      </button>
+    {%- endform -%}
+  </product-form>
+
+</div>

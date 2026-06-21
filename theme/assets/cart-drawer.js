@@ -114,23 +114,37 @@ class CartDrawer extends HTMLElement {
   }
 }
 
+
 customElements.define('cart-drawer', CartDrawer);
 
-class CartDrawerItems extends CartItems {
-  getSectionsToRender() {
-    return [
-      {
-        id: 'CartDrawer',
-        section: 'cart-drawer',
-        selector: '.drawer__inner',
-      },
-      {
-        id: 'cart-icon-bubble',
-        section: 'cart-icon-bubble',
-        selector: '.shopify-section',
-      },
-    ];
+// CartDrawerItems extends CartItems which is defined in cart.js.
+// We defer the definition to ensure CartItems is already registered.
+function defineCartDrawerItems() {
+  if (typeof CartItems === 'undefined') {
+    // CartItems not yet available — wait and retry
+    requestAnimationFrame(defineCartDrawerItems);
+    return;
   }
+
+  class CartDrawerItems extends CartItems {
+    getSectionsToRender() {
+      return [
+        {
+          id: 'CartDrawer',
+          section: 'cart-drawer',
+          selector: '.drawer__inner',
+        },
+        {
+          id: 'cart-icon-bubble',
+          section: 'cart-icon-bubble',
+          selector: '.shopify-section',
+        },
+      ];
+    }
+  }
+
+  customElements.define('cart-drawer-items', CartDrawerItems);
 }
 
-customElements.define('cart-drawer-items', CartDrawerItems);
+defineCartDrawerItems();
+

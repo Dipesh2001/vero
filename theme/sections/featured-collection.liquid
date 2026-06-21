@@ -1,5 +1,7 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
 
 {{ 'component-slider.css' | asset_url | stylesheet_tag }}
 {{ 'template-collection.css' | asset_url | stylesheet_tag }}
@@ -117,17 +119,9 @@
                   style="--animation-order: {{ forloop.index }};"
                 {% endif %}
               >
-                {% render 'card-product',
+                {% render 'premium-product-card',
                   card_product: product,
-                  media_aspect_ratio: section.settings.image_ratio,
-                  image_shape: section.settings.image_shape,
-                  lazy_load: lazy_load,
-                  show_secondary_image: section.settings.show_secondary_image,
-                  show_vendor: section.settings.show_vendor,
-                  show_rating: section.settings.show_rating,
-                  skip_styles: skip_card_product_styles,
-                  section_id: section.id,
-                  quick_add: section.settings.quick_add
+                  section_id: section.id
                 %}
               </li>
               {%- assign skip_card_product_styles = true -%}

@@ -1,45 +1,222 @@
 {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
 {{ 'component-collection-hero.css' | asset_url | stylesheet_tag }}
 
+{%- liquid
+  assign show_image = false
+  if section.settings.show_collection_image
+    if collection.image != blank or section.settings.fallback_image != blank
+      assign show_image = true
+    endif
+  endif
+
+  assign desktop_image = collection.image | default: section.settings.fallback_image
+  assign mobile_image = section.settings.image_mobile | default: desktop_image
+-%}
+
 {%- style -%}
-  @media screen and (max-width: 749px) {
-    .collection-hero--with-image .collection-hero__inner {
-      padding-bottom: calc({{ settings.media_shadow_vertical_offset | at_least: 0 }}px + 2rem);
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  .collection-hero-container-{{ section.id }} {
+    max-width: {{ settings.page_width }}px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    width: 100%;
+  }
+
+  {%- if section.settings.make_full_width -%}
+    @media screen and (min-width: 750px) {
+      .collection-hero-container-{{ section.id }} {
+        max-width: 100% !important;
+        padding: 0 !important;
+      }
+    }
+  {%- endif -%}
+
+  {%- if section.settings.make_full_width_mobile -%}
+    @media screen and (max-width: 749px) {
+      .collection-hero-container-{{ section.id }} {
+        max-width: 100% !important;
+        padding: 0 !important;
+      }
+    }
+  {%- endif -%}
+
+  {%- if show_image -%}
+    .collection-hero-banner-{{ section.id }} {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Desktop Height styling */
+    {%- if section.settings.image_height == 'adapt' and desktop_image != blank -%}
+      @media screen and (min-width: 750px) {
+        .collection-hero-banner-{{ section.id }} {
+          aspect-ratio: {{ desktop_image.aspect_ratio }};
+        }
+      }
+    {%- elsif section.settings.image_height == 'small' -%}
+      @media screen and (min-width: 750px) {
+        .collection-hero-banner-{{ section.id }} {
+          height: 280px;
+        }
+      }
+    {%- elsif section.settings.image_height == 'medium' -%}
+      @media screen and (min-width: 750px) {
+        .collection-hero-banner-{{ section.id }} {
+          height: 340px;
+        }
+      }
+    {%- elsif section.settings.image_height == 'large' -%}
+      @media screen and (min-width: 750px) {
+        .collection-hero-banner-{{ section.id }} {
+          height: 400px;
+        }
+      }
+    {%- endif -%}
+
+    /* Mobile Height styling */
+    {%- liquid
+      assign mobile_height_type = section.settings.mobile_image_height
+      if mobile_height_type == 'desktop'
+        assign mobile_height_type = section.settings.image_height
+      endif
+    -%}
+
+    {%- if mobile_height_type == 'adapt' and mobile_image != blank -%}
+      @media screen and (max-width: 749px) {
+        .collection-hero-banner-{{ section.id }} {
+          aspect-ratio: {{ mobile_image.aspect_ratio }};
+        }
+      }
+    {%- elsif mobile_height_type == 'small' -%}
+      @media screen and (max-width: 749px) {
+        .collection-hero-banner-{{ section.id }} {
+          height: 180px;
+        }
+      }
+    {%- elsif mobile_height_type == 'medium' -%}
+      @media screen and (max-width: 749px) {
+        .collection-hero-banner-{{ section.id }} {
+          height: 230px;
+        }
+      }
+    {%- elsif mobile_height_type == 'large' -%}
+      @media screen and (max-width: 749px) {
+        .collection-hero-banner-{{ section.id }} {
+          height: 280px;
+        }
+      }
+    {%- endif -%}
+
+    .collection-hero-banner-{{ section.id }}::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, {{ section.settings.image_overlay_opacity | divided_by: 100.0 }});
+      z-index: 1;
+    }
+
+    .collection-hero-banner-{{ section.id }} .collection-hero__banner-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: 0;
+    }
+
+    .collection-hero-banner-{{ section.id }} .collection-hero__banner-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 80rem;
+      padding: 0 2rem;
+    }
+  {%- else -%}
+    @media screen and (max-width: 749px) {
+      .collection-hero--with-image .collection-hero__inner {
+        padding-bottom: calc({{ settings.media_shadow_vertical_offset | at_least: 0 }}px + 2rem);
+      }
+    }
+  {%- endif -%}
 {%- endstyle -%}
 
-<div class="collection-hero{% if section.settings.show_collection_image and collection.image %} collection-hero--with-image{% endif %} color-{{ section.settings.color_scheme }} gradient">
-  <div class="collection-hero__inner page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-    <div class="collection-hero__text-wrapper">
-      <h1 class="collection-hero__title">
-        <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
-        {{- collection.title | escape -}}
-      </h1>
+<div class="section-{{ section.id }}-padding">
+  <div class="collection-hero-container-{{ section.id }}">
+    {%- if show_image -%}
+      <div class="collection-hero-banner-{{ section.id }} color-{{ section.settings.color_scheme }} gradient">
+        <picture>
+          {%- if mobile_image != blank -%}
+            <source media="(max-width: 749px)" srcset="
+              {%- if mobile_image.width >= 165 -%}{{ mobile_image | image_url: width: 165 }} 165w,{%- endif -%}
+              {%- if mobile_image.width >= 360 -%}{{ mobile_image | image_url: width: 360 }} 360w,{%- endif -%}
+              {%- if mobile_image.width >= 535 -%}{{ mobile_image | image_url: width: 535 }} 535w,{%- endif -%}
+              {%- if mobile_image.width >= 750 -%}{{ mobile_image | image_url: width: 750 }} 750w,{%- endif -%}
+              {{ mobile_image | image_url }} {{ mobile_image.width }}w
+            ">
+          {%- endif -%}
+          <source media="(min-width: 750px)" srcset="
+            {%- if desktop_image.width >= 750 -%}{{ desktop_image | image_url: width: 750 }} 750w,{%- endif -%}
+            {%- if desktop_image.width >= 1070 -%}{{ desktop_image | image_url: width: 1070 }} 1070w,{%- endif -%}
+            {%- if desktop_image.width >= 1500 -%}{{ desktop_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+            {{ desktop_image | image_url }} {{ desktop_image.width }}w
+          ">
+          <img
+            src="{{ desktop_image | image_url: width: 1500 }}"
+            alt="{{ desktop_image.alt | escape }}"
+            width="{{ desktop_image.width }}"
+            height="{{ desktop_image.height }}"
+            class="collection-hero__banner-image"
+            loading="eager"
+          >
+        </picture>
 
-      {%- if section.settings.show_collection_description -%}
-        <div class="collection-hero__description rte">{{ collection.description }}</div>
-      {%- endif -%}
-    </div>
+        {%- if section.settings.show_title_on_image -%}
+          <div class="collection-hero__banner-content page-width">
+            <h1 class="collection-hero__title">
+              <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
+              {{- collection.title | escape -}}
+            </h1>
 
-    {%- if section.settings.show_collection_image and collection.image -%}
-      <div class="collection-hero__image-container media gradient">
-        <img
-          srcset="
-            {%- if collection.image.width >= 165 -%}{{ collection.image | image_url: width: 165 }} 165w,{%- endif -%}
-            {%- if collection.image.width >= 360 -%}{{ collection.image | image_url: width: 360 }} 360w,{%- endif -%}
-            {%- if collection.image.width >= 535 -%}{{ collection.image | image_url: width: 535 }} 535w,{%- endif -%}
-            {%- if collection.image.width >= 750 -%}{{ collection.image | image_url: width: 750 }} 750w,{%- endif -%}
-            {%- if collection.image.width >= 1070 -%}{{ collection.image | image_url: width: 1070 }} 1070w,{%- endif -%}
-            {%- if collection.image.width >= 1500 -%}{{ collection.image | image_url: width: 1500 }} 1500w,{%- endif -%}
-            {{ collection.image | image_url }} {{ collection.image.width }}w
-          "
-          src="{{ collection.image | image_url: width: 750 }}"
-          sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc(50vw - 130px), calc(50vw - 55px)"
-          alt="{{ collection.image.alt | escape }}"
-          width="{{ collection.image.width }}"
-          height="{{ collection.image.height }}"
-        >
+            {%- if section.settings.show_collection_description and collection.description != blank -%}
+              <div class="collection-hero__description rte">{{ collection.description }}</div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      <div class="collection-hero color-{{ section.settings.color_scheme }} gradient">
+        <div class="collection-hero__inner page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+          <div class="collection-hero__text-wrapper">
+            <h1 class="collection-hero__title">
+              <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
+              {{- collection.title | escape -}}
+            </h1>
+
+            {%- if section.settings.show_collection_description and collection.description != blank -%}
+              <div class="collection-hero__description rte">{{ collection.description }}</div>
+            {%- endif -%}
+          </div>
+        </div>
       </div>
     {%- endif -%}
   </div>
@@ -67,10 +244,152 @@
       "label": "t:sections.main-collection-banner.settings.show_collection_image.label"
     },
     {
+      "type": "checkbox",
+      "id": "show_title_on_image",
+      "default": false,
+      "label": "Show title and description on image banner"
+    },
+    {
+      "type": "image_picker",
+      "id": "fallback_image",
+      "label": "Fallback Banner Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Banner Image (Optional)"
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium",
+      "label": "Banner Height (Desktop)"
+    },
+    {
+      "type": "select",
+      "id": "mobile_image_height",
+      "options": [
+        {
+          "value": "desktop",
+          "label": "Same as desktop"
+        },
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "desktop",
+      "label": "Banner Height (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "image_overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 0
+    },
+    {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "t:sections.all.colors.label",
       "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Layout Width"
+    },
+    {
+      "type": "checkbox",
+      "id": "make_full_width",
+      "default": true,
+      "label": "Make section full width on desktop"
+    },
+    {
+      "type": "checkbox",
+      "id": "make_full_width_mobile",
+      "default": true,
+      "label": "Make section full width on mobile"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top Spacing",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom Spacing",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Mobile Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Top Spacing",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Bottom Spacing",
+      "default": 0
     }
   ]
 }

@@ -1330,3 +1330,263 @@ class CartPerformance {
     );
   }
 }
+
+if (typeof window.PremiumProductCard === 'undefined') {
+  window.PremiumProductCard = class PremiumProductCard {
+    constructor(el) {
+      this.el = el;
+      this.mediaSwiperEl = el.querySelector('.js-card-media-swiper');
+      this.swatches = el.querySelectorAll('.js-swatch-btn');
+      this.selectedColorEl = el.querySelector('.js-selected-color-text');
+      this.variantIdInput = el.querySelector('.js-product-variant-id');
+      this.priceEl = el.querySelector('.js-price-value');
+      this.comparePriceEl = el.querySelector('.js-compare-price');
+      this.discountEl = el.querySelector('.js-discount-percent');
+      this.submitBtn = el.querySelector('.js-product-submit-btn');
+      this.swatchesContainer = el.querySelector('.js-swatches-container');
+      this.prevSwatchBtn = el.querySelector('.swatch-scroll-prev');
+      this.nextSwatchBtn = el.querySelector('.swatch-scroll-next');
+
+      // Save initial slides
+      if (this.mediaSwiperEl) {
+        this.allSlides = Array.from(this.mediaSwiperEl.querySelectorAll('.card-swiper-slide'));
+        this.initSwiper();
+      }
+
+      this.initSwatches();
+      this.initSwatchesScroll();
+    }
+
+    initSwiper() {
+      if (typeof Swiper === 'undefined') {
+        setTimeout(() => this.initSwiper(), 100);
+        return;
+      }
+      this.swiper = new Swiper(this.mediaSwiperEl, {
+        wrapperClass: 'card-swiper-wrapper',
+        slideClass: 'card-swiper-slide',
+        slidesPerView: 1,
+        nested: true,
+        resistanceRatio: 0,
+        allowTouchMove: true,
+        observer: true,
+        observeParents: true,
+        navigation: {
+          nextEl: this.el.querySelector('.js-card-swiper-next'),
+          prevEl: this.el.querySelector('.js-card-swiper-prev'),
+        }
+      });
+      
+      const initialActiveSwatch = this.el.querySelector('.js-swatch-btn.is-active') || this.swatches[0];
+      if (initialActiveSwatch) {
+        this.selectSwatch(initialActiveSwatch, true);
+      }
+    }
+
+    initSwatches() {
+      this.swatches.forEach(swatch => {
+        swatch.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.selectSwatch(swatch, false);
+        });
+        swatch.addEventListener('mouseenter', () => {
+          this.updateColorText(swatch.dataset.colorName);
+        });
+        swatch.addEventListener('mouseleave', () => {
+          const activeSwatch = this.el.querySelector('.js-swatch-btn.is-active') || this.el.querySelector('.js-swatch-wrapper.is-active .js-swatch-btn');
+          if (activeSwatch) {
+            this.updateColorText(activeSwatch.dataset.colorName);
+          }
+        });
+      });
+    }
+
+    initSwatchesScroll() {
+      if (this.prevSwatchBtn && this.nextSwatchBtn && this.swatchesContainer) {
+        const checkScroll = () => {
+          const isOverflowing = this.swatchesContainer.scrollWidth > this.swatchesContainer.clientWidth;
+          if (!isOverflowing) {
+            this.prevSwatchBtn.style.display = 'none';
+            this.nextSwatchBtn.style.display = 'none';
+          } else {
+            this.prevSwatchBtn.style.display = '';
+            this.nextSwatchBtn.style.display = '';
+          }
+        };
+        
+        checkScroll();
+        window.addEventListener('resize', checkScroll);
+
+        const selectAdjacentSwatch = (direction) => {
+          const activeSwatchWrapper = this.el.querySelector('.js-swatch-wrapper.is-active');
+          if (!activeSwatchWrapper) return;
+          const allWrappers = Array.from(this.el.querySelectorAll('.js-swatch-wrapper'));
+          const currentIndex = allWrappers.indexOf(activeSwatchWrapper);
+          
+          let newIndex = currentIndex + direction;
+          if (newIndex >= 0 && newIndex < allWrappers.length) {
+            const nextSwatchBtn = allWrappers[newIndex].querySelector('.js-swatch-btn');
+            if (nextSwatchBtn) {
+              this.selectSwatch(nextSwatchBtn, false);
+              nextSwatchBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+          }
+        };
+
+        this.prevSwatchBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          selectAdjacentSwatch(-1);
+        });
+        this.nextSwatchBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          selectAdjacentSwatch(1);
+        });
+      }
+    }
+
+    selectSwatch(swatch, isInitial = false) {
+      const wrappers = this.el.querySelectorAll('.js-swatch-wrapper');
+      wrappers.forEach(w => w.classList.remove('is-active'));
+
+      const wrapper = swatch.closest('.js-swatch-wrapper');
+      if (wrapper) wrapper.classList.add('is-active');
+
+      this.swatches.forEach(s => s.classList.remove('is-active'));
+      swatch.classList.add('is-active');
+
+      const colorName = swatch.dataset.colorName;
+      const variantId = swatch.dataset.variantId;
+      const price = swatch.dataset.price;
+      const comparePrice = swatch.dataset.comparePrice;
+      const available = swatch.dataset.available === 'true';
+
+      if (this.variantIdInput) {
+        this.variantIdInput.value = variantId;
+        this.variantIdInput.disabled = !available;
+      }
+
+      this.updatePrices(price, comparePrice);
+      this.updateButtonState(available);
+      this.filterSwiperImages(swatch);
+      this.updateColorText(colorName);
+    }
+
+    updateColorText(colorName) {
+      if (this.selectedColorEl) {
+        const sizeVal = this.selectedColorEl.dataset.size || '30oz';
+        this.selectedColorEl.textContent = `${sizeVal} | ${colorName}`;
+      }
+    }
+
+    updatePrices(price, comparePrice) {
+      if (this.priceEl) {
+        this.priceEl.innerHTML = price;
+      }
+      if (this.comparePriceEl) {
+        if (comparePrice && comparePrice !== '') {
+          this.comparePriceEl.innerHTML = comparePrice;
+          this.comparePriceEl.style.display = 'inline';
+
+          const priceNum = parseFloat(price.replace(/[^0-9.]/g, ''));
+          const compareNum = parseFloat(comparePrice.replace(/[^0-9.]/g, ''));
+          if (compareNum > priceNum) {
+            const discount = Math.round(((compareNum - priceNum) / compareNum) * 100);
+            if (this.discountEl) {
+              this.discountEl.textContent = `-${discount}%`;
+              this.discountEl.style.display = 'inline-block';
+            }
+          } else if (this.discountEl) {
+            this.discountEl.style.display = 'none';
+          }
+        } else {
+          this.comparePriceEl.style.display = 'none';
+          if (this.discountEl) this.discountEl.style.display = 'none';
+        }
+      }
+    }
+
+    updateButtonState(available) {
+      if (this.submitBtn) {
+        const textEl = this.submitBtn.querySelector('span');
+        if (available) {
+          this.submitBtn.removeAttribute('disabled');
+          if (textEl) textEl.textContent = 'Add To Bag';
+        } else {
+          this.submitBtn.setAttribute('disabled', 'disabled');
+          if (textEl) textEl.textContent = 'Sold Out';
+        }
+      }
+    }
+
+    filterSwiperImages(swatch) {
+      if (!this.swiper || !this.allSlides || this.allSlides.length === 0) return;
+      const colorName = swatch.dataset.colorName ? swatch.dataset.colorName.toLowerCase().trim() : '';
+      const variantId = swatch.dataset.variantId;
+      
+      const filteredSlides = [];
+      
+      this.allSlides.forEach(slide => {
+        const mediaAlt = slide.dataset.mediaAlt ? slide.dataset.mediaAlt.toLowerCase().trim() : '';
+        if (mediaAlt === colorName) {
+          filteredSlides.push(slide);
+        }
+      });
+      
+      if (filteredSlides.length === 0 && variantId) {
+        this.allSlides.forEach(slide => {
+          if (slide.dataset.variantId === variantId) {
+            filteredSlides.push(slide);
+          }
+        });
+      }
+      
+      this.allSlides.forEach(slide => {
+        const mediaAlt = slide.dataset.mediaAlt ? slide.dataset.mediaAlt.toLowerCase().trim() : '';
+        const slideVariantId = slide.dataset.variantId;
+        if (mediaAlt === 'common' || (mediaAlt === '' && !slideVariantId)) {
+          if (!filteredSlides.includes(slide)) {
+            filteredSlides.push(slide);
+          }
+        }
+      });
+      
+      const slidesToShow = filteredSlides.length > 0 ? filteredSlides : this.allSlides;
+
+      this.swiper.removeAllSlides();
+      this.swiper.appendSlide(slidesToShow);
+      this.swiper.update();
+      this.swiper.slideTo(0, 0);
+    }
+  };
+}
+
+// Prevent vertical sidebar filter summaries from toggling (closing/opening) on desktop click
+document.addEventListener('click', (e) => {
+  if (window.innerWidth >= 750) {
+    const summary = e.target.closest('.facets-vertical .facets__disclosure-vertical summary, .facets-vertical-sort + .facets-vertical .facets__disclosure-vertical summary, .facets-vertical summary.facets__summary');
+    if (summary) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }
+});
+
+// Automatically initialize all Premium Product Cards on the page
+document.addEventListener('DOMContentLoaded', () => {
+  const initPremiumCards = () => {
+    const cards = document.querySelectorAll('.js-product-card');
+    cards.forEach(card => {
+      if (typeof window.PremiumProductCard !== 'undefined' && !card.classList.contains('initialized')) {
+        new window.PremiumProductCard(card);
+        card.classList.add('initialized');
+      }
+    });
+  };
+
+  // Run initially
+  initPremiumCards();
+
+  // Run on DOM mutations (AJAX pagination, lazy load, recommendations, etc.)
+  const observer = new MutationObserver(initPremiumCards);
+  observer.observe(document.body, { childList: true, subtree: true });
+});

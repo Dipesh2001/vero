@@ -181,8 +181,18 @@ class FacetFiltersForm extends HTMLElement {
 
     activeFacetElementSelectors.forEach((selector) => {
       const activeFacetsElement = html.querySelector(selector);
-      if (!activeFacetsElement) return;
-      document.querySelector(selector).innerHTML = activeFacetsElement.innerHTML;
+      const domElements = document.querySelectorAll(selector);
+      domElements.forEach((domEl) => {
+        if (activeFacetsElement) {
+          // Active filters exist — update content
+          domEl.innerHTML = activeFacetsElement.innerHTML;
+          domEl.style.display = '';
+        } else {
+          // No active filters in new HTML — clear and hide the container
+          domEl.innerHTML = '';
+          domEl.style.display = 'none';
+        }
+      });
     });
 
     FacetFiltersForm.toggleActiveFacets(false);
@@ -193,10 +203,16 @@ class FacetFiltersForm extends HTMLElement {
 
     mobileElementSelectors.forEach((selector) => {
       if (!html.querySelector(selector)) return;
-      document.querySelector(selector).innerHTML = html.querySelector(selector).innerHTML;
+      const domEl = document.querySelector(selector);
+      if (domEl) domEl.innerHTML = html.querySelector(selector).innerHTML;
     });
 
-    document.getElementById('FacetFiltersFormMobile').closest('menu-drawer').bindEvents();
+    // Guard: only call bindEvents if the mobile drawer still exists
+    const mobileForm = document.getElementById('FacetFiltersFormMobile');
+    if (mobileForm) {
+      const drawer = mobileForm.closest('menu-drawer');
+      if (drawer && typeof drawer.bindEvents === 'function') drawer.bindEvents();
+    }
   }
 
   static renderCounts(source, target) {
@@ -251,6 +267,7 @@ class FacetFiltersForm extends HTMLElement {
   }
 
   createSearchParams(form) {
+    if (!form || !(form instanceof HTMLFormElement)) return '';
     const formData = new FormData(form);
     return new URLSearchParams(formData).toString();
   }
@@ -262,20 +279,38 @@ class FacetFiltersForm extends HTMLElement {
   onSubmitHandler(event) {
     event.preventDefault();
     const sortFilterForms = document.querySelectorAll('facet-filters-form form');
-    if (event.srcElement.className == 'mobile-facets__checkbox') {
-      const searchParams = this.createSearchParams(event.target.closest('form'));
+    const targetEl = event.target;
+    const targetClassName = (targetEl && targetEl.className) ? targetEl.className : '';
+    const closestForm = targetEl ? targetEl.closest('form') : null;
+    const closestFormId = closestForm ? closestForm.id : '';
+
+    if (typeof targetClassName === 'string' && targetClassName.indexOf('mobile-facets__checkbox') !== -1) {
+      const searchParams = this.createSearchParams(closestForm);
       this.onSubmitForm(searchParams, event);
     } else {
       const forms = [];
-      const isMobile = event.target.closest('form').id === 'FacetFiltersFormMobile';
+      const isMobileFilterDrawer = closestFormId === 'FacetFiltersFormMobile';
+      const isMobileSortBar = closestFormId === 'FacetMobileSortForm';
 
       sortFilterForms.forEach((form) => {
-        if (!isMobile) {
-          if (form.id === 'FacetSortForm' || form.id === 'FacetFiltersForm' || form.id === 'FacetSortDrawerForm') {
-            forms.push(this.createSearchParams(form));
+        if (isMobileFilterDrawer) {
+          // Mobile filter drawer: use its own form
+          if (form.id === 'FacetFiltersFormMobile') {
+            const params = this.createSearchParams(form);
+            if (params) forms.push(params);
           }
-        } else if (form.id === 'FacetFiltersFormMobile') {
-          forms.push(this.createSearchParams(form));
+        } else if (isMobileSortBar) {
+          // Mobile sort bar: combine sort with any active desktop filter
+          if (form.id === 'FacetMobileSortForm' || form.id === 'FacetFiltersForm') {
+            const params = this.createSearchParams(form);
+            if (params) forms.push(params);
+          }
+        } else {
+          // Desktop: combine sort + filter forms
+          if (form.id === 'FacetSortForm' || form.id === 'FacetFiltersForm' || form.id === 'FacetSortDrawerForm') {
+            const params = this.createSearchParams(form);
+            if (params) forms.push(params);
+          }
         }
       });
       this.onSubmitForm(forms.join('&'), event);
@@ -302,16 +337,106 @@ FacetFiltersForm.setListeners();
 class PriceRange extends HTMLElement {
   constructor() {
     super();
-    this.querySelectorAll('input').forEach((element) => {
-      element.addEventListener('change', this.onRangeChange.bind(this));
+  }
+
+  connectedCallback() {
+    this.textInputs = this.querySelectorAll('input[type="text"], input[type="number"]');
+    this.rangeInputs = this.querySelectorAll('input[type="range"]');
+    this.track = this.querySelector('.price-slider-track');
+    
+    this.textInputs.forEach((element) => {
+      element.addEventListener('change', this.onTextChange.bind(this));
       element.addEventListener('keydown', this.onKeyDown.bind(this));
     });
+    
+    this.rangeInputs.forEach((element) => {
+      element.addEventListener('input', this.onRangeSliderInput.bind(this));
+      element.addEventListener('change', this.onRangeSliderChange.bind(this));
+    });
+    
+    // Ensure inputs are pre-filled with min/max default values if they are blank on load
+    if (this.textInputs.length >= 2) {
+      const minInput = this.textInputs[0];
+      const maxInput = this.textInputs[1];
+      const maxLimit = maxInput.getAttribute('data-max') || '0.00';
+      
+      if (!minInput.value || minInput.value.trim() === '') {
+        minInput.value = '0.00';
+      }
+      if (!maxInput.value || maxInput.value.trim() === '') {
+        maxInput.value = maxLimit;
+      }
+    }
+
+    this.setMinAndMaxValues();
+    this.syncTextToRange();
+    this.updateSliderTrack();
+  }
+
+  onTextChange(event) {
+    this.adjustToValidValues(event.currentTarget);
+    this.setMinAndMaxValues();
+    this.syncTextToRange();
+    this.updateSliderTrack();
+  }
+
+  onRangeSliderInput(event) {
+    this.syncRangeToText(event.currentTarget);
+    this.updateSliderTrack();
+  }
+
+  onRangeSliderChange(event) {
+    const textInput = event.currentTarget.classList.contains('min-range-slider') ? this.textInputs[0] : this.textInputs[1];
+    if (textInput) {
+      textInput.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  }
+
+  syncTextToRange() {
+    if (!this.rangeInputs || this.rangeInputs.length < 2 || !this.textInputs || this.textInputs.length < 2) return;
+    const minVal = parseFloat(this.textInputs[0].value) || 0;
+    const maxVal = parseFloat(this.textInputs[1].value) || parseFloat(this.rangeInputs[1].getAttribute('max')) || 10000;
+    
+    this.rangeInputs[0].value = minVal;
+    this.rangeInputs[1].value = maxVal;
+  }
+
+  syncRangeToText(activeSlider) {
+    if (!this.rangeInputs || this.rangeInputs.length < 2 || !this.textInputs || this.textInputs.length < 2) return;
+    let minVal = parseFloat(this.rangeInputs[0].value) || 0;
+    let maxVal = parseFloat(this.rangeInputs[1].value) || 0;
+
+    if (activeSlider.classList.contains('min-range-slider')) {
+      if (minVal > maxVal) {
+        minVal = maxVal;
+        this.rangeInputs[0].value = minVal;
+      }
+    } else {
+      if (maxVal < minVal) {
+        maxVal = minVal;
+        this.rangeInputs[1].value = maxVal;
+      }
+    }
+
+    this.textInputs[0].value = minVal.toFixed(2);
+    this.textInputs[1].value = maxVal.toFixed(2);
+    
     this.setMinAndMaxValues();
   }
 
-  onRangeChange(event) {
-    this.adjustToValidValues(event.currentTarget);
-    this.setMinAndMaxValues();
+  updateSliderTrack() {
+    if (!this.track || !this.rangeInputs || this.rangeInputs.length < 2) return;
+    const min = parseFloat(this.rangeInputs[0].min) || 0;
+    const max = parseFloat(this.rangeInputs[0].max) || 100;
+    const val1 = parseFloat(this.rangeInputs[0].value) || 0;
+    const val2 = parseFloat(this.rangeInputs[1].value) || max;
+    
+    const range = max - min;
+    const percent1 = range > 0 ? ((val1 - min) / range) * 100 : 0;
+    const percent2 = range > 0 ? ((val2 - min) / range) * 100 : 100;
+    
+    this.track.style.left = percent1 + '%';
+    this.track.style.right = (100 - percent2) + '%';
   }
 
   onKeyDown(event) {
@@ -322,9 +447,9 @@ class PriceRange extends HTMLElement {
   }
 
   setMinAndMaxValues() {
-    const inputs = this.querySelectorAll('input');
-    const minInput = inputs[0];
-    const maxInput = inputs[1];
+    if (!this.textInputs || this.textInputs.length < 2) return;
+    const minInput = this.textInputs[0];
+    const maxInput = this.textInputs[1];
     if (maxInput.value) minInput.setAttribute('data-max', maxInput.value);
     if (minInput.value) maxInput.setAttribute('data-min', minInput.value);
     if (minInput.value === '') maxInput.setAttribute('data-min', 0);
@@ -332,12 +457,21 @@ class PriceRange extends HTMLElement {
   }
 
   adjustToValidValues(input) {
+    if (!this.textInputs || this.textInputs.length < 2) return;
+    if (input.value.trim() === '') {
+      if (input === this.textInputs[0]) {
+        input.value = '0.00';
+      } else {
+        input.value = input.getAttribute('data-max') || '0.00';
+      }
+    }
     const value = Number(input.value);
     const min = Number(input.getAttribute('data-min'));
     const max = Number(input.getAttribute('data-max'));
 
-    if (value < min) input.value = min;
-    if (value > max) input.value = max;
+    if (value < min) input.value = min.toFixed(2);
+    else if (value > max) input.value = max.toFixed(2);
+    else input.value = value.toFixed(2);
   }
 }
 
@@ -346,13 +480,18 @@ customElements.define('price-range', PriceRange);
 class FacetRemove extends HTMLElement {
   constructor() {
     super();
+  }
+
+  connectedCallback() {
     const facetLink = this.querySelector('a');
-    facetLink.setAttribute('role', 'button');
-    facetLink.addEventListener('click', this.closeFilter.bind(this));
-    facetLink.addEventListener('keyup', (event) => {
-      event.preventDefault();
-      if (event.code.toUpperCase() === 'SPACE') this.closeFilter(event);
-    });
+    if (facetLink) {
+      facetLink.setAttribute('role', 'button');
+      facetLink.addEventListener('click', this.closeFilter.bind(this));
+      facetLink.addEventListener('keyup', (event) => {
+        event.preventDefault();
+        if (event.code.toUpperCase() === 'SPACE') this.closeFilter(event);
+      });
+    }
   }
 
   closeFilter(event) {
@@ -363,3 +502,14 @@ class FacetRemove extends HTMLElement {
 }
 
 customElements.define('facet-remove', FacetRemove);
+
+// Global click event interception to completely prevent Vertical Filter collapses on Desktop (>= 750px)
+document.addEventListener('click', function(e) {
+  if (window.innerWidth >= 750) {
+    const verticalSummary = e.target.closest('.facets-vertical details.facets__disclosure-vertical summary');
+    if (verticalSummary) {
+      e.preventDefault();
+    }
+  }
+}, { capture: true });
+
