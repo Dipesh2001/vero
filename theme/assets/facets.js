@@ -183,7 +183,10 @@ class FacetFiltersForm extends HTMLElement {
       const activeFacetsElement = html.querySelector(selector);
       const domElements = document.querySelectorAll(selector);
       domElements.forEach((domEl) => {
-        if (activeFacetsElement) {
+        const styleAttr = activeFacetsElement ? (activeFacetsElement.getAttribute('style') || '') : '';
+        const isHiddenInFetch = styleAttr.replace(/\s/g, '').indexOf('display:none') !== -1;
+
+        if (activeFacetsElement && !isHiddenInFetch) {
           // Active filters exist — update content
           domEl.innerHTML = activeFacetsElement.innerHTML;
           domEl.style.display = '';
@@ -199,7 +202,7 @@ class FacetFiltersForm extends HTMLElement {
   }
 
   static renderAdditionalElements(html) {
-    const mobileElementSelectors = ['.mobile-facets__open', '.mobile-facets__count', '.sorting'];
+    const mobileElementSelectors = ['.mobile-facets__open', '.mobile-facets__count', '.sorting', '#FacetMobileSortForm'];
 
     mobileElementSelectors.forEach((selector) => {
       if (!html.querySelector(selector)) return;
@@ -266,9 +269,12 @@ class FacetFiltersForm extends HTMLElement {
     ];
   }
 
-  createSearchParams(form) {
+  createSearchParams(form, excludeSortBy = false) {
     if (!form || !(form instanceof HTMLFormElement)) return '';
     const formData = new FormData(form);
+    if (excludeSortBy) {
+      formData.delete('sort_by');
+    }
     return new URLSearchParams(formData).toString();
   }
 
@@ -300,9 +306,12 @@ class FacetFiltersForm extends HTMLElement {
             if (params) forms.push(params);
           }
         } else if (isMobileSortBar) {
-          // Mobile sort bar: combine sort with any active desktop filter
-          if (form.id === 'FacetMobileSortForm' || form.id === 'FacetFiltersForm') {
+          // Mobile sort bar: combine sort with any active mobile filter
+          if (form.id === 'FacetMobileSortForm') {
             const params = this.createSearchParams(form);
+            if (params) forms.push(params);
+          } else if (form.id === 'FacetFiltersFormMobile') {
+            const params = this.createSearchParams(form, true);
             if (params) forms.push(params);
           }
         } else {

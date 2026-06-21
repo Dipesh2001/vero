@@ -596,7 +596,6 @@
     display: inline-flex !important;
   }
   
-  /* Active Filter Pills Mobile container - side-by-side with gap */
   .active-facets-mobile {
     display: flex !important;
     flex-wrap: wrap !important;
@@ -605,6 +604,11 @@
     margin-bottom: 12px !important;
     padding: 0 !important;
     align-items: center !important;
+  }
+  
+  .active-facets-mobile[style*="display: none"],
+  .active-facets-mobile[style*="display:none"] {
+    display: none !important;
   }
 
   .active-facets-mobile facet-remove {
@@ -788,6 +792,10 @@
       display: flex !important;
       align-items: center !important;
     }
+    .mobile-facets__sort-wrapper .select:after,
+    .mobile-facets__sort-wrapper .select:before {
+      content: none !important;
+    }
     
     .mobile-facets__sort-wrapper .select select,
     .mobile-facets__sort-wrapper .select select.facet-filters__sort,
@@ -811,10 +819,8 @@
       line-height: normal !important;
       box-shadow: none !important;
       outline: none !important;
-      /* Align dropdown from right edge to prevent viewport overflow */
-      direction: rtl !important;
+      direction: ltr !important;
       text-align: left !important;
-      unicode-bidi: embed !important;
     }
     .mobile-facets__sort-wrapper .select select:focus,
     .mobile-facets__sort-wrapper .select select:focus-visible,
