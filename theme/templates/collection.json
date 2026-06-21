@@ -19,8 +19,6 @@
         "image_mobile": "shopify://shop_images/collection-banner-mobile.jpg",
         "image_height": "adapt",
         "mobile_image_height": "desktop",
-        "banner_height_desktop": 408,
-        "banner_height_mobile": 200,
         "image_overlay_opacity": 0,
         "color_scheme": "scheme-1",
         "make_full_width": true,
