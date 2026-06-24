@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "banner": {
@@ -75,25 +84,32 @@
       "type": "product-universe-collage",
       "blocks": {
         "img_1": {
-          "type": "image"
+          "type": "image",
+          "settings": {}
         },
         "img_2": {
-          "type": "image"
+          "type": "image",
+          "settings": {}
         },
         "img_3": {
-          "type": "image"
+          "type": "image",
+          "settings": {}
         },
         "img_4": {
-          "type": "image"
+          "type": "image",
+          "settings": {}
         },
         "img_5": {
-          "type": "image"
+          "type": "image",
+          "settings": {}
         },
         "img_6": {
-          "type": "image"
+          "type": "image",
+          "settings": {}
         },
         "img_7": {
-          "type": "image"
+          "type": "image",
+          "settings": {}
         }
       },
       "block_order": [
