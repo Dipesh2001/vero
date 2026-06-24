@@ -180,6 +180,9 @@
                           const errorMsg = errorWrapper.querySelector('.product-form__error-message');
                           if (errorMsg) errorMsg.textContent = data.description || data.message;
                         }
+                        if (window.showCartErrorToast) {
+                          window.showCartErrorToast(data.description || data.message);
+                        }
                         buyNowBtn.removeAttribute('disabled');
                         if (spinner) spinner.classList.add('hidden');
                         if (submitBtn) submitBtn.removeAttribute('disabled');
@@ -189,6 +192,9 @@
                     })
                     .catch((error) => {
                       console.error('Error:', error);
+                      if (window.showCartErrorToast) {
+                        window.showCartErrorToast(error.message || 'Error checking out.');
+                      }
                       buyNowBtn.removeAttribute('disabled');
                       if (spinner) spinner.classList.add('hidden');
                       if (submitBtn) submitBtn.removeAttribute('disabled');

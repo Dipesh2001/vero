@@ -172,6 +172,9 @@ class CartItems extends HTMLElement {
           if (parsedState.errors) {
             quantityElement.value = quantityElement.getAttribute('value');
             this.updateLiveRegions(line, parsedState.errors);
+            if (window.showCartErrorToast) {
+              window.showCartErrorToast(parsedState.errors);
+            }
             return;
           }
 
@@ -200,7 +203,10 @@ class CartItems extends HTMLElement {
               message = window.cartStrings.quantityError.replace('[quantity]', updatedValue);
             }
           }
-          this.updateLiveRegions(line, message);
+           this.updateLiveRegions(line, message);
+          if (message && window.showCartErrorToast) {
+            window.showCartErrorToast(message);
+          }
 
           const lineItem =
             document.getElementById(`CartItem-${line}`) || document.getElementById(`CartDrawer-Item-${line}`);
@@ -220,7 +226,10 @@ class CartItems extends HTMLElement {
       .catch(() => {
         this.querySelectorAll('.loading__spinner').forEach((overlay) => overlay.classList.add('hidden'));
         const errors = document.getElementById('cart-errors') || document.getElementById('CartDrawer-CartErrors');
-        errors.textContent = window.cartStrings.error;
+        if (errors) errors.textContent = window.cartStrings.error;
+        if (window.showCartErrorToast) {
+          window.showCartErrorToast(window.cartStrings.error);
+        }
       })
       .finally(() => {
         this.disableLoading(line);
@@ -282,15 +291,24 @@ if (!customElements.get('cart-note')) {
       constructor() {
         super();
 
-        this.addEventListener(
-          'input',
-          debounce((event) => {
-            const body = JSON.stringify({ note: event.target.value });
-            fetch(`${routes.cart_update_url}`, { ...fetchConfig(), ...{ body } }).then(() =>
-              CartPerformance.measureFromEvent('note-update:user-action', event)
-            );
-          }, ON_CHANGE_DEBOUNCE_TIMER)
-        );
+          this.addEventListener(
+            'input',
+            debounce((event) => {
+              const body = JSON.stringify({ note: event.target.value });
+              fetch(`${routes.cart_update_url}`, { ...fetchConfig(), ...{ body } })
+                .then((response) => {
+                  if (!response.ok) {
+                    return response.json().then((data) => {
+                      if (window.showCartErrorToast) window.showCartErrorToast(data.description || data.message || 'Failed to update note.');
+                    });
+                  }
+                  CartPerformance.measureFromEvent('note-update:user-action', event);
+                })
+                .catch((err) => {
+                  if (window.showCartErrorToast) window.showCartErrorToast('Failed to update note.');
+                });
+            }, ON_CHANGE_DEBOUNCE_TIMER)
+          );
       }
     }
   );

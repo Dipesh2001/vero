@@ -123,17 +123,22 @@
                         </div>
 
                         <div class="cart-item__prices custom-item-prices">
-                          {%- if item.variant.compare_at_price > item.original_line_price -%}
+                          {%- if item.variant.compare_at_price > item.final_price -%}
                             <div class="cart-item__discounted-prices">
-                              <s class="cart-item__old-price">{{ item.variant.compare_at_price | money }}</s>
-                              <span class="cart-item__final-price">{{ item.original_line_price | money }}</span>
-                              <span class="cart-item__discount-badge">
-                                {{ item.variant.compare_at_price | minus: item.original_line_price | times: 100.0 | divided_by: item.variant.compare_at_price | round }}% OFF
-                              </span>
+                              <div class="cart-item__compare-row">
+                                <s class="cart-item__old-price">{{ item.variant.compare_at_price | times: item.quantity | money }}</s>
+                                {%- assign line_discount = item.variant.compare_at_price | minus: item.final_price | times: 100.0 | divided_by: item.variant.compare_at_price | round -%}
+                                <span class="cart-item__discount-badge">{{ line_discount }}% OFF</span>
+                              </div>
+                              <span class="cart-item__final-price">{{ item.final_line_price | money }}</span>
                             </div>
                           {%- elsif item.original_line_price != item.final_line_price -%}
                             <div class="cart-item__discounted-prices">
-                              <s class="cart-item__old-price">{{ item.original_line_price | money }}</s>
+                              <div class="cart-item__compare-row">
+                                <s class="cart-item__old-price">{{ item.original_line_price | money }}</s>
+                                {%- assign line_discount = item.original_line_price | minus: item.final_line_price | times: 100.0 | divided_by: item.original_line_price | round -%}
+                                <span class="cart-item__discount-badge">{{ line_discount }}% OFF</span>
+                              </div>
                               <span class="cart-item__final-price">{{ item.final_line_price | money }}</span>
                             </div>
                           {%- else -%}
@@ -166,31 +171,42 @@
         {%- if settings.enable_discount_input -%}
           <div class="cart-discount-section">
             <div class="cart-discount-slider">
-            <!-- View 1: Toggle -->
-            <div class="cart-discount-view cart-discount-toggle" onclick="this.closest('.cart-discount-section').classList.add('show-input')">
-              <div class="cart-reward-content">
-                <span class="reward-title">Coupons<br>Apply now and save extra !</span>
+
+              <!-- View 1: Toggle row (matches Figma) -->
+              <div class="cart-discount-view cart-discount-toggle">
+                <!-- Left: icon -->
+                <span class="cart-coupon-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#00237d">
+                    <path d="M21.41 11.58L12.41 2.58C12.05 2.21 11.55 2 11 2H4C2.9 2 2 2.9 2 4V11C2 11.55 2.21 12.05 2.59 12.42L11.59 21.42C11.95 21.79 12.45 22 13 22C13.55 22 14.05 21.79 14.41 21.41L21.41 14.41C21.79 14.05 22 13.55 22 13C22 12.45 21.78 11.94 21.41 11.58ZM6.5 8C5.67 8 5 7.33 5 6.5C5 5.67 5.67 5 6.5 5C7.33 5 8 5.67 8 6.5C8 7.33 7.33 8 6.5 8Z"/>
+                    <circle cx="6.5" cy="6.5" r="1.5" fill="white"/>
+                  </svg>
+                </span>
+                <!-- Middle: text -->
+                <div class="cart-coupon-text">
+                  <span class="cart-coupon-title">Coupons</span>
+                  <span class="cart-coupon-sub">Apply now and save extra !</span>
+                </div>
+                <!-- Right: chevron -->
+                <span class="cart-promo-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </span>
               </div>
-              <span class="cart-promo-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-              </span>
-            </div>
-            
-            <!-- View 2: Input -->
-            <div class="cart-discount-view cart-discount-input-view">
-              <div class="cart-discount-header">
-                <button type="button" class="cart-discount-back" aria-label="Back" onclick="this.closest('.cart-discount-section').classList.remove('show-input')">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                </button>
-                <span class="cart-discount-header-title">Enter Coupon Code</span>
+
+              <!-- View 2: Input row -->
+              <div class="cart-discount-view cart-discount-input-view">
+                <div class="cart-discount-input-row">
+                  <button type="button" class="cart-discount-back" aria-label="Back">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  </button>
+                  <input type="text" id="CartDrawer-Discount" class="cart-discount-input" placeholder="Enter coupon code" form="CartDrawer-Form" autocomplete="off" autocapitalize="off">
+                  <button type="button" class="cart-discount-apply" onclick="applyCartDrawerDiscount()">Apply</button>
+                </div>
               </div>
-              <div class="cart-discount-input-wrapper">
-                <input type="text" id="CartDrawer-Discount" class="cart-discount-input" placeholder="Enter discount code" form="CartDrawer-Form">
-                <button type="button" class="cart-discount-apply button" onclick="applyCartDrawerDiscount()">Apply</button>
-              </div>
+
             </div>
           </div>
         {%- endif -%}
+
 
         {%- if settings.enable_cart_recommendations and cart != empty and cart.items.first.product_id -%}
           {%- assign first_product = cart.items.first.product -%}
@@ -270,7 +286,8 @@
 
         <div class="cart__ctas custom-cart-ctas">
           <button type="submit" id="CartDrawer-Checkout" class="cart__checkout-button button custom-checkout-btn" name="checkout" form="CartDrawer-Form" {% if cart == empty %}disabled{% endif %}>
-            Checkout
+            Proceed Order
+            <svg class="checkout-arrow" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
           </button>
         </div>
       </div>

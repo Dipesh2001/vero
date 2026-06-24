@@ -58,6 +58,9 @@ if (!customElements.get('product-form')) {
                 message: response.message,
               });
               this.handleErrorMessage(response.description);
+              if (window.showCartErrorToast) {
+                window.showCartErrorToast(response.description || response.message);
+              }
 
               const soldOutMessage = this.submitButton.querySelector('.sold-out-message');
               if (!soldOutMessage) return;
@@ -103,6 +106,9 @@ if (!customElements.get('product-form')) {
           })
           .catch((e) => {
             console.error(e);
+            if (window.showCartErrorToast) {
+              window.showCartErrorToast(e.message || 'Error occurred while adding to cart.');
+            }
           })
           .finally(() => {
             this.submitButton.classList.remove('loading');

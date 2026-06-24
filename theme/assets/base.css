@@ -1370,7 +1370,8 @@ shopify-accelerated-checkout-cart {
 }
 
 .button.loading > .loading__spinner .spinner {
-  width: fit-content;
+  width: 1.8rem;
+  height: 1.8rem;
 }
 
 .button.loading > .loading__spinner .path {
@@ -3513,6 +3514,8 @@ details-disclosure > details {
 
 .spinner {
   animation: rotator 1.4s linear infinite;
+  width: 1.8rem;
+  height: 1.8rem;
 }
 
 @keyframes rotator {
@@ -3596,3 +3599,40 @@ details-disclosure > details {
     transform: translateX(100%) scaleX(0);
   }
 }
+
+/* Premium Toast Notification */
+.cart-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translate(-50%, 100px);
+  background-color: #d32f2f; /* Premium Crimson Red */
+  color: #ffffff;
+  padding: 1.2rem 2.4rem;
+  border-radius: 4px;
+  font-size: 1.4rem;
+  font-family: inherit;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 99999;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cart-toast.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cart-toast svg {
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+

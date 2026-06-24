@@ -1,68 +1,159 @@
 async function applyCartDrawerDiscount() {
   const input = document.getElementById('CartDrawer-Discount');
-  const code = input ? input.value.trim() : '';
+  const code = input ? input.value.trim().toUpperCase() : '';
   const btn = document.querySelector('.cart-discount-apply');
+  const section = document.querySelector('.cart-discount-section');
 
   if (!code) {
-    alert('Please enter a discount code.');
+    input && input.focus();
+    if (window.showCartErrorToast) {
+      window.showCartErrorToast('Please enter a discount code.');
+    }
     return;
   }
 
+  // Loading state
   if (btn) {
     btn.textContent = '...';
     btn.disabled = true;
   }
 
   try {
-    // Shopify native AJAX discount application
-    await fetch(window.Shopify.routes.root + 'cart/update.js', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/javascript'
-      },
-      body: JSON.stringify({ discount: code })
+    // Shopify discount codes are applied at checkout URL — store the code and update checkout URL
+    // The /discount/:code endpoint sets a session cookie that applies the discount at checkout
+    const discountRes = await fetch(`${window.Shopify.routes.root}discount/${encodeURIComponent(code)}`, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' },
+      redirect: 'manual' // don't follow redirect, just acknowledge
     });
 
-    // To trigger a re-render of the Dawn cart drawer, we can fetch the cart again
-    // and re-render sections. Since cart-drawer.js handles section rendering, we can trigger an event or manually refresh.
-    // The easiest way is to mimic a cart update event or refresh the page if event is too complex.
-    // Or we can just call the native fetchConfig logic if available.
-    
-    // Quick refresh of the cart drawer section
-    const response = await fetch(`${window.location.pathname}?section_id=cart-drawer`);
-    if (response.ok) {
-      const html = await response.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-      
-      const newItems = doc.getElementById('CartDrawer-CartItems');
-      const oldItems = document.getElementById('CartDrawer-CartItems');
-      if (newItems && oldItems) oldItems.innerHTML = newItems.innerHTML;
-
-      const newTotals = doc.querySelector('.cart-drawer__footer-totals');
-      const oldTotals = document.querySelector('.cart-drawer__footer-totals');
-      if (newTotals && oldTotals) oldTotals.innerHTML = newTotals.innerHTML;
-      
-      // Update form action to include discount code on checkout
-      const form = document.getElementById('CartDrawer-Form');
-      if (form) {
-        const actionUrl = new URL(form.action, window.location.origin);
-        actionUrl.searchParams.set('discount', code);
-        form.action = actionUrl.toString();
-      }
-
-      if (btn) btn.textContent = 'Applied';
+    // Update the checkout button's form action to include the discount param
+    const form = document.getElementById('CartDrawer-Form');
+    if (form) {
+      const actionUrl = new URL(form.action || '/checkout', window.location.origin);
+      actionUrl.searchParams.set('discount', code);
+      form.action = actionUrl.toString();
     }
+
+    // Also persist for session (store in sessionStorage so it survives section re-renders)
+    try { sessionStorage.setItem('cart_discount_code', code); } catch(e) {}
+
+    // Success state
+    if (btn) {
+      btn.textContent = '✓ Applied';
+      btn.style.backgroundColor = '#2e7d32';
+      btn.disabled = false;
+    }
+    if (input) input.value = code;
+
+    // Slide back to toggle view after 2s and update toggle text
+    setTimeout(() => {
+      if (section) section.classList.remove('show-input');
+      const sub = section && section.querySelector('.cart-coupon-sub');
+      if (sub) {
+        sub.textContent = `"${code}" applied!`;
+        sub.style.color = '#2e7d32';
+      }
+      // Reset button
+      if (btn) {
+        btn.textContent = 'Apply';
+        btn.style.backgroundColor = '';
+        btn.disabled = false;
+      }
+    }, 2000);
+
   } catch (error) {
     console.error('Error applying discount:', error);
-    alert('Error applying discount code.');
+    if (window.showCartErrorToast) {
+      window.showCartErrorToast('Could not apply discount code. Please try again.');
+    }
     if (btn) {
       btn.textContent = 'Apply';
       btn.disabled = false;
     }
   }
 }
+
+let isRestoringDiscount = false;
+function restoreCartDrawerDiscount() {
+  if (isRestoringDiscount) return;
+  try {
+    const saved = sessionStorage.getItem('cart_discount_code');
+    if (!saved) return;
+
+    isRestoringDiscount = true;
+    const form = document.getElementById('CartDrawer-Form');
+    if (form) {
+      const actionUrl = new URL(form.action || '/checkout', window.location.origin);
+      if (actionUrl.searchParams.get('discount') !== saved) {
+        actionUrl.searchParams.set('discount', saved);
+        form.action = actionUrl.toString();
+      }
+    }
+    const sub = document.querySelector('.cart-coupon-sub');
+    if (sub && sub.textContent !== `"${saved}" applied!`) {
+      sub.textContent = `"${saved}" applied!`;
+      sub.style.color = '#2e7d32';
+    }
+  } catch(e) {
+    console.error('Error restoring discount:', e);
+  } finally {
+    isRestoringDiscount = false;
+  }
+}
+
+// Set up delegated events and mutation observer on page load
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Event delegation for coupon drawer slider views
+  document.addEventListener('click', (e) => {
+    // Check if clicked the toggle or any child of it
+    const toggle = e.target.closest('.cart-discount-toggle');
+    if (toggle) {
+      const section = toggle.closest('.cart-discount-section');
+      if (section) {
+        section.classList.add('show-input');
+        const input = section.querySelector('.cart-discount-input');
+        setTimeout(() => {
+          if (input) input.focus();
+        }, 350);
+      }
+      return;
+    }
+
+    // Check if clicked back button or any child of it
+    const backBtn = e.target.closest('.cart-discount-back');
+    if (backBtn) {
+      const section = backBtn.closest('.cart-discount-section');
+      if (section) {
+        section.classList.remove('show-input');
+      }
+      return;
+    }
+  });
+
+  // Apply discount on enter key
+  document.addEventListener('keydown', (e) => {
+    if (e.target && e.target.id === 'CartDrawer-Discount' && e.key === 'Enter') {
+      e.preventDefault();
+      applyCartDrawerDiscount();
+    }
+  });
+
+  // 2. Set up MutationObserver to re-apply discount parameter when cart updates
+  const cartDrawer = document.getElementById('CartDrawer');
+  if (cartDrawer) {
+    const observer = new MutationObserver(() => {
+      restoreCartDrawerDiscount();
+    });
+    observer.observe(cartDrawer, { childList: true, subtree: true });
+  }
+
+  // 3. Restore discount code initially
+  restoreCartDrawerDiscount();
+});
+
+
+
 
 class CartRecommendations extends HTMLElement {
   constructor() {
@@ -185,9 +276,18 @@ window.addToCartFromRecs = async function(variantId) {
           if (bubble) bubble.innerHTML = data.sections['cart-icon-bubble'];
         }
       }
+      else {
+        const errorData = await res.json().catch(() => ({}));
+        if (window.showCartErrorToast) {
+          window.showCartErrorToast(errorData.description || errorData.message || 'Error adding item to cart.');
+        }
+      }
     }
   } catch (e) {
     console.error("Error adding to cart", e);
+    if (window.showCartErrorToast) {
+      window.showCartErrorToast('Network error occurred.');
+    }
   }
 };
 
@@ -254,47 +354,148 @@ class CartDrawerRecommendations extends HTMLElement {
 }
 customElements.define('cart-drawer-recommendations', CartDrawerRecommendations);
 
+/**
+ * Called when a color swatch is clicked in an upsell card.
+ * Updates: image, variant title, price, discount badge, selected variant ID on the card.
+ */
+function upsellSwatchClick(swatchEl) {
+  const card = swatchEl.closest('.custom-upsell-item');
+  if (!card) return;
+
+  // Update selected variant on card
+  const variantId = swatchEl.dataset.variantId;
+  card.dataset.selectedVariant = variantId;
+
+  // -- Image --
+  const imgEl = card.querySelector('.upsell-product-img');
+  const imgUrl = swatchEl.dataset.variantImage;
+  if (imgEl && imgUrl) {
+    imgEl.src = imgUrl;
+    imgEl.style.opacity = '0.5';
+    imgEl.onload = () => { imgEl.style.opacity = '1'; };
+  }
+
+  // -- Variant title --
+  const titleEl = card.querySelector('.upsell-variant-title');
+  if (titleEl) {
+    titleEl.textContent = swatchEl.dataset.variantTitle || '';
+  }
+
+  // -- Price row --
+  const priceRow = card.querySelector('.upsell-price-row');
+  if (priceRow) {
+    const hasDiscount = swatchEl.dataset.variantHasDiscount === 'true';
+    if (hasDiscount) {
+      priceRow.innerHTML = `
+        <span class="upsell-price-sale">${swatchEl.dataset.variantPrice}</span>
+        <span class="upsell-price-compare">${swatchEl.dataset.variantCompare}</span>
+        <span class="upsell-discount-badge">${swatchEl.dataset.variantDiscount}%</span>
+      `;
+    } else {
+      priceRow.innerHTML = `<span class="upsell-price">${swatchEl.dataset.variantPrice}</span>`;
+    }
+  }
+
+  // -- Active swatch highlight --
+  card.querySelectorAll('.upsell-swatch-item').forEach(s => s.classList.remove('is-selected'));
+  swatchEl.classList.add('is-selected');
+}
+
+/**
+ * Adds the currently selected upsell variant to the cart.
+ * Handles success (re-renders drawer) and errors cleanly without false error toasts.
+ */
 async function addUpsellToCart(variantId, btn) {
+  if (!variantId) {
+    if (window.showCartErrorToast) window.showCartErrorToast('Please select a variant.');
+    return;
+  }
+
   if (btn) {
     btn.dataset.originalText = btn.textContent;
     btn.textContent = '...';
     btn.disabled = true;
   }
 
+  let addedSuccessfully = false;
+
   try {
-    const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
+    // Step 1: Add to cart
+    const addResponse = await fetch(window.Shopify.routes.root + 'cart/add.js', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        items: [{ id: variantId, quantity: 1 }]
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
     });
-    
-    if (response.ok) {
-      // Re-render cart drawer the Dawn way
-      const res = await fetch(window.Shopify.routes.root + '?section_id=cart-drawer');
-      const text = await res.text();
-      const cart = document.querySelector('cart-drawer');
-      if (cart) {
-        cart.renderContents(new DOMParser().parseFromString(text, 'text/html'), variantId, false);
+
+    if (!addResponse.ok) {
+      // Server returned an error (e.g. sold out, out of stock)
+      let errMsg = 'Failed to add item to cart.';
+      try {
+        const errData = await addResponse.json();
+        errMsg = errData.description || errData.message || errMsg;
+      } catch(e) {}
+      if (window.showCartErrorToast) window.showCartErrorToast(errMsg);
+      if (btn) { btn.textContent = btn.dataset.originalText || 'Add'; btn.disabled = false; }
+      return;
+    }
+
+    // Add succeeded
+    addedSuccessfully = true;
+
+    // Show success state immediately
+    if (btn) {
+      btn.textContent = '✓ Added';
+      btn.style.backgroundColor = '#2e7d32';
+    }
+
+    // Step 2: Re-render cart drawer (this may throw if renderContents has issues — handle separately)
+    try {
+      const sectionRes = await fetch(window.Shopify.routes.root + '?section_id=cart-drawer');
+      if (sectionRes.ok) {
+        const html = await sectionRes.text();
+        const parsedDoc = new DOMParser().parseFromString(html, 'text/html');
+        const drawerEl = document.querySelector('cart-drawer');
+        if (drawerEl && typeof drawerEl.renderContents === 'function') {
+          drawerEl.renderContents(parsedDoc, parseInt(variantId), false);
+        } else {
+          // Fallback: manually update cart items and totals
+          const newItems = parsedDoc.getElementById('CartDrawer-CartItems');
+          const oldItems = document.getElementById('CartDrawer-CartItems');
+          if (newItems && oldItems) oldItems.innerHTML = newItems.innerHTML;
+
+          const newTotals = parsedDoc.querySelector('.cart-drawer__footer-totals');
+          const oldTotals = document.querySelector('.cart-drawer__footer-totals');
+          if (newTotals && oldTotals) oldTotals.innerHTML = newTotals.innerHTML;
+
+          // Update cart count bubble
+          const newCount = parsedDoc.querySelector('.cart-count-bubble');
+          const oldCount = document.querySelector('.cart-count-bubble');
+          if (newCount && oldCount) oldCount.innerHTML = newCount.innerHTML;
+        }
       }
-    } else {
-      console.error('Failed to add upsell');
+    } catch (renderErr) {
+      // Re-render failed but add was successful — don't show error to user
+      console.warn('Cart re-render failed after successful add:', renderErr);
+    }
+
+  } catch (networkErr) {
+    // Only show network error if the add itself failed
+    if (!addedSuccessfully) {
+      console.error('Network error adding upsell:', networkErr);
+      if (window.showCartErrorToast) window.showCartErrorToast('Network error. Please try again.');
+    }
+  } finally {
+    // Reset button after 1.5s
+    setTimeout(() => {
       if (btn) {
-        btn.textContent = btn.dataset.originalText;
+        btn.textContent = btn.dataset.originalText || 'Add';
+        btn.style.backgroundColor = '';
         btn.disabled = false;
       }
-    }
-  } catch (error) {
-    console.error(error);
-    if (btn) {
-      btn.textContent = btn.dataset.originalText;
-      btn.disabled = false;
-    }
+    }, 1500);
   }
 }
+
 
 // Fix stuck spinner on quantity errors
 document.addEventListener('DOMContentLoaded', () => {
