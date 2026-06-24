@@ -1,0 +1,478 @@
+{%- style -%}
+  @import url('https://fonts.googleapis.com/css2?family=Kalnia:wght@300;400;500;700&family=Mulish:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .stand-for-container-{{ section.id }} {
+    max-width: {{ settings.page_width }}px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .stand-for-heading-{{ section.id }} {
+    font-family: 'Kalnia', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: rgb(var(--color-foreground));
+    margin-top: 0;
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .stand-for-heading-{{ section.id }} {
+      font-size: 64px;
+      margin-bottom: 4rem;
+    }
+  }
+
+  .stand-for-accordion-{{ section.id }} {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+    /* Extra padding to ensure left-side box shadows are not clipped */
+    padding: 20px 10px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .stand-for-accordion-{{ section.id }} {
+      flex-direction: row;
+      height: 445px;
+      align-items: center;
+    }
+  }
+
+  .stand-for-card-{{ section.id }} {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    /* 4% opacity of the active foreground color for dynamic collapsed card background */
+    background-color: rgba(var(--color-foreground), 0.04);
+    transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.6s ease, box-shadow 0.6s ease, transform 0.6s ease, margin 0.6s ease;
+  }
+
+  /* Desktop card styling with left-only shadow and deck effect */
+  @media screen and (min-width: 750px) {
+    .stand-for-card-{{ section.id }} {
+      flex: 1;
+      height: 405px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      /* Left-only shadow to match Figma */
+      box-shadow: -12px 0 20px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Horizontal overlap */
+    .stand-for-card-{{ section.id }}:not(:first-child) {
+      margin-left: -32px;
+    }
+
+    /* Active card styles (no z-index alteration, keeping natural left-to-right stacking) */
+    .stand-for-card-{{ section.id }}.is-active {
+      flex: 3.5;
+      /* 8% opacity of the active foreground color for active card background */
+      background-color: rgba(var(--color-foreground), 0.08);
+      cursor: default;
+      align-items: flex-start;
+      /* Left-only shadow remains when card is active */
+      box-shadow: -12px 0 20px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  /* Mobile card styling with vertical deck stacking */
+  @media screen and (max-width: 749px) {
+    .stand-for-card-{{ section.id }} {
+      flex-direction: column;
+      padding: 20px;
+      cursor: pointer;
+      min-height: 80px;
+      /* Top-only shadow for vertical deck overlap */
+      box-shadow: 0 -8px 16px rgba(0, 0, 0, 0.04);
+    }
+
+    .stand-for-card-{{ section.id }}:not(:first-child) {
+      margin-top: -16px;
+    }
+
+    .stand-for-card-{{ section.id }}.is-active {
+      background-color: rgba(var(--color-foreground), 0.08);
+      box-shadow: 0 -8px 16px rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  .stand-for-card__vertical-title-{{ section.id }} {
+    font-family: 'Kalnia', serif;
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0;
+    white-space: nowrap;
+    color: rgb(var(--color-foreground));
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    user-select: none;
+    box-sizing: border-box;
+  }
+
+  @media screen and (min-width: 750px) {
+    .stand-for-card__vertical-title-{{ section.id }} {
+      font-size: 40px;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      padding: 20px 0;
+      display: block;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .stand-for-card-{{ section.id }}.is-active .stand-for-card__vertical-title-{{ section.id }} {
+      opacity: 0;
+      visibility: hidden;
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .stand-for-card-{{ section.id }}.is-active .stand-for-card__vertical-title-{{ section.id }} {
+      margin-bottom: 12px;
+    }
+  }
+
+  /* Expanded content container has a fixed width to prevent text crunching during width transition */
+  .stand-for-card__expanded-content-{{ section.id }} {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  @media screen and (min-width: 750px) {
+    .stand-for-card__expanded-content-{{ section.id }} {
+      height: 100%;
+      width: 480px;
+      padding: 40px 60px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .stand-for-card-{{ section.id }}.is-active .stand-for-card__expanded-content-{{ section.id }} {
+      opacity: 1;
+      position: relative;
+      pointer-events: auto;
+      transition: opacity 0.5s ease 0.2s;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .stand-for-card__expanded-content-{{ section.id }} {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.4s ease;
+      align-items: flex-start;
+    }
+
+    .stand-for-card-{{ section.id }}.is-active .stand-for-card__expanded-content-{{ section.id }} {
+      opacity: 1;
+      max-height: 500px;
+    }
+  }
+
+  .stand-for-card__horizontal-title-{{ section.id }} {
+    font-family: 'Kalnia', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: rgb(var(--color-foreground));
+    margin: 0 0 15px 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .stand-for-card__horizontal-title-{{ section.id }} {
+      font-size: 40px;
+      margin: 0;
+    }
+  }
+
+  .stand-for-card__description-{{ section.id }} {
+    font-family: 'Mulish', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: rgba(var(--color-foreground), 0.85); /* Evaluates to dark charcoal / body color based on active scheme */
+    margin: 0 0 20px 0;
+    width: 100%;
+  }
+
+  .stand-for-card__description-{{ section.id }} p {
+    margin: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .stand-for-card__description-{{ section.id }} {
+      font-size: 15px;
+      line-height: 2.6;
+      margin: auto 0;
+    }
+  }
+
+  .stand-for-card__button-{{ section.id }} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(var(--color-button));
+    color: rgb(var(--color-button-text));
+    font-family: 'Mulish', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: -0.22px;
+    text-decoration: none;
+    padding: 10px 24px;
+    border-radius: 0px;
+    transition: background-color 0.3s ease;
+    margin: 0;
+    cursor: pointer;
+    border: none;
+  }
+
+  .stand-for-card__button-{{ section.id }}:hover {
+    background-color: rgba(var(--color-button), 0.9);
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="stand-for-container-{{ section.id }}">
+    {%- if section.settings.title != blank -%}
+      <h2 class="stand-for-heading-{{ section.id }}">{{ section.settings.title }}</h2>
+    {%- endif -%}
+
+    <div class="stand-for-accordion-{{ section.id }}">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'card' -%}
+          {%- liquid
+            assign is_first = false
+            if forloop.first
+              assign is_first = true
+            endif
+          -%}
+          
+          <div 
+            class="stand-for-card-{{ section.id }}{% if is_first %} is-active{% endif %}" 
+            {{ block.shopify_attributes }}
+            style="z-index: {{ forloop.index }};"
+          >
+            <h3 class="stand-for-card__vertical-title-{{ section.id }}">
+              {{ block.settings.title | escape }}
+            </h3>
+
+            <div class="stand-for-card__expanded-content-{{ section.id }}">
+              <h4 class="stand-for-card__horizontal-title-{{ section.id }}">
+                {{ block.settings.title | escape }}
+              </h4>
+              
+              {%- if block.settings.description != blank -%}
+                <div class="stand-for-card__description-{{ section.id }}">
+                  {{ block.settings.description }}
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.button_label != blank -%}
+                <a href="{{ block.settings.button_link | default: '#' }}" class="stand-for-card__button-{{ section.id }}">
+                  {{ block.settings.button_label | escape }}
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    function initAccordion() {
+      const accordion = document.querySelector('.stand-for-accordion-{{ section.id }}');
+      if (!accordion) return;
+
+      const cards = accordion.querySelectorAll('.stand-for-card-{{ section.id }}');
+      cards.forEach(card => {
+        card.addEventListener('click', function(e) {
+          if (e.target.closest('.stand-for-card__button-{{ section.id }}')) return;
+          if (window.innerWidth >= 750 && card.classList.contains('is-active')) return;
+
+          cards.forEach(c => {
+            if (c !== card) {
+              c.classList.remove('is-active');
+            }
+          });
+          
+          card.classList.toggle('is-active');
+          
+          if (window.innerWidth >= 750 && !accordion.querySelector('.stand-for-card-{{ section.id }}.is-active')) {
+            card.classList.add('is-active');
+          }
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initAccordion);
+    document.addEventListener('shopify:section:load', function(e) {
+      if (e.detail.sectionId === '{{ section.id }}') {
+        initAccordion();
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "What We Stand For",
+  "class": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "What We Stand For",
+      "label": "Heading"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top Spacing",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom Spacing",
+      "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Mobile Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Top Spacing",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Bottom Spacing",
+      "default": 28
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Accordion Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Quality",
+          "label": "Card title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "default": "<p>Every Vero product is carefully selected and developed with attention to detail, ensuring reliable performance and long-lasting value</p>",
+          "label": "Card description"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Know more",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "What We Stand For",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "title": "Quality"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Innovation"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Functionality"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "Customer First"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

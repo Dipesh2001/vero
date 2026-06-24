@@ -1,0 +1,171 @@
+{
+  "sections": {
+    "banner": {
+      "type": "main-page-banner",
+      "settings": {
+        "show_page_description": true,
+        "show_page_image": true,
+        "show_title_on_image": false,
+        "fallback_image": "shopify://shop_images/collection-banner-desktop.jpg",
+        "image_mobile": "shopify://shop_images/collection-banner-mobile.jpg",
+        "image_height": "adapt",
+        "mobile_image_height": "desktop",
+        "image_overlay_opacity": 0,
+        "color_scheme": "scheme-1",
+        "make_full_width": true,
+        "make_full_width_mobile": true,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0
+      }
+    },
+    "what-we-stand-for": {
+      "type": "what-we-stand-for",
+      "blocks": {
+        "card_quality": {
+          "type": "card",
+          "settings": {
+            "title": "Quality",
+            "description": "<p>Every Vero product is carefully selected and developed with attention to detail, ensuring reliable performance and long-lasting value</p>",
+            "button_label": "Know more"
+          }
+        },
+        "card_innovation": {
+          "type": "card",
+          "settings": {
+            "title": "Innovation",
+            "description": "<p>We constantly explore new designs, technologies, and materials to bring fresh, forward-thinking solutions to our customers</p>",
+            "button_label": "Know more"
+          }
+        },
+        "card_functionality": {
+          "type": "card",
+          "settings": {
+            "title": "Functionality",
+            "description": "<p>Our products are designed for everyday utility, merging practicality with user-friendly features to make your life simpler</p>",
+            "button_label": "Know more"
+          }
+        },
+        "card_customer_first": {
+          "type": "card",
+          "settings": {
+            "title": "Customer First",
+            "description": "<p>We place our customers at the heart of everything we do, offering dedicated support and premium experiences</p>",
+            "button_label": "Know more"
+          }
+        }
+      },
+      "block_order": [
+        "card_quality",
+        "card_innovation",
+        "card_functionality",
+        "card_customer_first"
+      ],
+      "settings": {
+        "title": "What We Stand For",
+        "color_scheme": "scheme-8",
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_top_mobile": 28,
+        "padding_bottom_mobile": 28
+      }
+    },
+    "product-universe-collage": {
+      "type": "product-universe-collage",
+      "blocks": {
+        "img_1": {
+          "type": "image"
+        },
+        "img_2": {
+          "type": "image"
+        },
+        "img_3": {
+          "type": "image"
+        },
+        "img_4": {
+          "type": "image"
+        },
+        "img_5": {
+          "type": "image"
+        },
+        "img_6": {
+          "type": "image"
+        },
+        "img_7": {
+          "type": "image"
+        }
+      },
+      "block_order": [
+        "img_1",
+        "img_2",
+        "img_3",
+        "img_4",
+        "img_5",
+        "img_6",
+        "img_7"
+      ],
+      "settings": {
+        "title": "Our Product Universe",
+        "color_scheme": "scheme-8",
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "padding_top_mobile": 36,
+        "padding_bottom_mobile": 36
+      }
+    },
+    "why-choose-us": {
+      "type": "why-choose-us",
+      "blocks": {
+        "feat_quality": {
+          "type": "feature",
+          "settings": {
+            "title": "Premium Quality",
+            "icon_default": "award"
+          }
+        },
+        "feat_design": {
+          "type": "feature",
+          "settings": {
+            "title": "Smart Design",
+            "icon_default": "layout"
+          }
+        },
+        "feat_performance": {
+          "type": "feature",
+          "settings": {
+            "title": "Reliable Performance",
+            "icon_default": "activity"
+          }
+        },
+        "feat_trusted": {
+          "type": "feature",
+          "settings": {
+            "title": "Trusted by Customers",
+            "icon_default": "heart"
+          }
+        }
+      },
+      "block_order": [
+        "feat_quality",
+        "feat_design",
+        "feat_performance",
+        "feat_trusted"
+      ],
+      "settings": {
+        "title": "Why Choose Vero",
+        "color_scheme": "scheme-8",
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "padding_top_mobile": 36,
+        "padding_bottom_mobile": 36
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "what-we-stand-for",
+    "product-universe-collage",
+    "why-choose-us"
+  ]
+}

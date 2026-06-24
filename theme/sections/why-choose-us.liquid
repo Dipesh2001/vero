@@ -1,0 +1,360 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top_mobile }}px;
+    padding-bottom: {{ section.settings.padding_bottom_mobile }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .why-choose-container-{{ section.id }} {
+    max-width: {{ settings.page_width }}px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .why-choose-heading-{{ section.id }} {
+    font-family: 'Kalnia', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: rgb(var(--color-foreground));
+    margin-top: 0;
+    margin-bottom: 3.5rem;
+    text-align: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .why-choose-heading-{{ section.id }} {
+      font-size: 64px;
+      margin-bottom: 5rem;
+    }
+  }
+
+  .why-choose-grid-{{ section.id }} {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  @media screen and (min-width: 750px) {
+    .why-choose-grid-{{ section.id }} {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+    }
+  }
+
+  .why-choose-item-{{ section.id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .why-choose-circle-{{ section.id }} {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    /* Double-lined border implementation */
+    border: 1.5px solid rgba(var(--color-foreground), 0.15);
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 6px;
+    box-sizing: border-box;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.4s ease;
+  }
+
+  .why-choose-circle-inner-{{ section.id }} {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1.5px solid rgba(var(--color-foreground), 0.15);
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  @media screen and (min-width: 750px) {
+    .why-choose-circle-{{ section.id }} {
+      width: 164px;
+      height: 164px;
+      margin-bottom: 28px;
+      padding: 8px;
+    }
+  }
+
+  .why-choose-item-{{ section.id }}:hover .why-choose-circle-{{ section.id }} {
+    transform: scale(1.06);
+    border-color: rgba(var(--color-foreground), 1);
+  }
+
+  .why-choose-item-{{ section.id }}:hover .why-choose-circle-inner-{{ section.id }} {
+    border-color: rgba(var(--color-foreground), 1);
+  }
+
+  .why-choose-icon-{{ section.id }} {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    color: rgb(var(--color-foreground));
+    fill: currentColor;
+  }
+
+  .why-choose-icon-{{ section.id }} svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    fill: none;
+  }
+
+  @media screen and (min-width: 750px) {
+    .why-choose-icon-{{ section.id }} {
+      width: 48px;
+      height: 48px;
+    }
+  }
+
+  .why-choose-item-{{ section.id }}:hover .why-choose-icon-{{ section.id }} {
+    transform: translateY(-4px);
+  }
+
+  .why-choose-label-{{ section.id }} {
+    font-family: 'Kalnia', serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.3;
+    color: rgb(var(--color-foreground));
+    margin: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .why-choose-label-{{ section.id }} {
+      font-size: 24px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="why-choose-container-{{ section.id }}">
+    {%- if section.settings.title != blank -%}
+      <h2 class="why-choose-heading-{{ section.id }} scroll-trigger animate--fade-in">{{ section.settings.title | escape }}</h2>
+    {%- endif -%}
+
+    <div class="why-choose-grid-{{ section.id }}">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'feature' -%}
+          <div 
+            class="why-choose-item-{{ section.id }} scroll-trigger animate--slide-in"
+            {{ block.shopify_attributes }}
+            style="--animation-order: {{ forloop.index }};"
+          >
+            <div class="why-choose-circle-{{ section.id }}">
+              <div class="why-choose-circle-inner-{{ section.id }}">
+                {%- if block.settings.image != blank -%}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 100 }}"
+                    alt="{{ block.settings.image.alt | escape }}"
+                    width="{{ block.settings.image.width }}"
+                    height="{{ block.settings.image.height }}"
+                    loading="lazy"
+                    class="why-choose-icon-{{ section.id }}"
+                  >
+                {%- elsif block.settings.icon_svg != blank -%}
+                  <div class="why-choose-icon-{{ section.id }}">
+                    {{ block.settings.icon_svg }}
+                  </div>
+                {%- else -%}
+                  <div class="why-choose-icon-{{ section.id }}">
+                    {%- case block.settings.icon_default -%}
+                      {%- when 'award' -%}
+                        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                      {%- when 'layout' -%}
+                        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+                      {%- when 'activity' -%}
+                        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                      {%- when 'heart' -%}
+                        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    {%- endcase -%}
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+
+            {%- if block.settings.title != blank -%}
+              <h3 class="why-choose-label-{{ section.id }}">{{ block.settings.title | escape }}</h3>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Why Choose Us",
+  "class": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Why Choose Vero",
+      "label": "Heading"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-8"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top Spacing",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom Spacing",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Mobile Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Top Spacing",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Mobile Bottom Spacing",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "default": "Feature Name",
+          "label": "Feature Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom Icon Image (Optional)"
+        },
+        {
+          "type": "textarea",
+          "id": "icon_svg",
+          "label": "Custom SVG Code (Optional)"
+        },
+        {
+          "type": "select",
+          "id": "icon_default",
+          "options": [
+            {
+              "value": "award",
+              "label": "Award"
+            },
+            {
+              "value": "layout",
+              "label": "Layout"
+            },
+            {
+              "value": "activity",
+              "label": "Activity"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            }
+          ],
+          "default": "award",
+          "label": "Default Vector Icon"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Why Choose Us",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Premium Quality",
+            "icon_default": "award"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Smart Design",
+            "icon_default": "layout"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Reliable Performance",
+            "icon_default": "activity"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Trusted by Customers",
+            "icon_default": "heart"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
