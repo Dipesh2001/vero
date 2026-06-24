@@ -67,7 +67,7 @@
     transition: flex 0.6s cubic-bezier(0.25, 1, 0.5, 1), background-color 0.6s ease, box-shadow 0.6s ease, transform 0.6s ease, margin 0.6s ease;
   }
 
-  /* Desktop card styling with left-only shadow and deck effect */
+  /* Desktop card styling with right-side shadow and deck effect */
   @media screen and (min-width: 750px) {
     .stand-for-card-{{ section.id }} {
       flex: 1;
@@ -76,8 +76,8 @@
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      /* Left-only shadow to match Figma */
-      box-shadow: -12px 0 20px rgba(0, 0, 0, 0.05);
+      /* Right-side shadow cast onto the card below it in decreasing z-index stacking */
+      box-shadow: 12px 0 20px rgba(0, 0, 0, 0.05);
     }
 
     /* Horizontal overlap */
@@ -85,15 +85,14 @@
       margin-left: -32px;
     }
 
-    /* Active card styles (no z-index alteration, keeping natural left-to-right stacking) */
+    /* Active card styles (no z-index alteration, keeping natural stacking) */
     .stand-for-card-{{ section.id }}.is-active {
       flex: 3.5;
       /* 8% opacity of the active foreground color for active card background */
       background-color: rgba(var(--color-foreground), 0.08);
       cursor: default;
       align-items: flex-start;
-      /* Left-only shadow remains when card is active */
-      box-shadow: -12px 0 20px rgba(0, 0, 0, 0.05);
+      box-shadow: 12px 0 20px rgba(0, 0, 0, 0.05);
     }
   }
 
@@ -104,8 +103,8 @@
       padding: 20px;
       cursor: pointer;
       min-height: 80px;
-      /* Top-only shadow for vertical deck overlap */
-      box-shadow: 0 -8px 16px rgba(0, 0, 0, 0.04);
+      /* Bottom-only shadow for vertical deck overlap */
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
     }
 
     .stand-for-card-{{ section.id }}:not(:first-child) {
@@ -114,7 +113,7 @@
 
     .stand-for-card-{{ section.id }}.is-active {
       background-color: rgba(var(--color-foreground), 0.08);
-      box-shadow: 0 -8px 16px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
     }
   }
 
@@ -201,16 +200,16 @@
   }
 
   .stand-for-card__horizontal-title-{{ section.id }} {
-    font-family: 'Kalnia', serif;
-    font-size: 28px;
-    font-weight: 400;
-    color: rgb(var(--color-foreground));
-    margin: 0 0 15px 0;
+    display: none;
   }
 
   @media screen and (min-width: 750px) {
     .stand-for-card__horizontal-title-{{ section.id }} {
+      display: block;
+      font-family: 'Kalnia', serif;
       font-size: 40px;
+      font-weight: 400;
+      color: rgb(var(--color-foreground));
       margin: 0;
     }
   }
@@ -280,7 +279,7 @@
           <div 
             class="stand-for-card-{{ section.id }}{% if is_first %} is-active{% endif %}" 
             {{ block.shopify_attributes }}
-            style="z-index: {{ forloop.index }};"
+            style="z-index: {{ 10 | minus: forloop.index }};"
           >
             <h3 class="stand-for-card__vertical-title-{{ section.id }}">
               {{ block.settings.title | escape }}

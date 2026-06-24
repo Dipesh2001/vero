@@ -35,7 +35,7 @@
 
   .collage-heading-{{ section.id }} {
     font-family: 'Kalnia', serif;
-    font-size: 36px;
+    font-size: 16px;
     font-weight: 400;
     color: rgb(var(--color-foreground));
     margin: 0;
@@ -56,7 +56,13 @@
     white-space: nowrap;
     cursor: grab;
     user-select: none;
-    padding: 24px 0;
+    padding: 16px 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .collage-marquee-row-{{ section.id }} {
+      padding: 36px 0;
+    }
   }
 
   .collage-marquee-row-{{ section.id }}:active {
@@ -65,10 +71,9 @@
 
   .collage-item-{{ section.id }} {
     position: relative;
-    width: 200px;
-    height: 130px;
-    margin-right: 24px;
-    border-radius: 8px;
+    width: 99px;
+    height: 63px;
+    border-radius: 4px;
     overflow: hidden;
     background-color: rgba(var(--color-foreground), 0.03);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
@@ -76,11 +81,52 @@
     display: inline-block;
   }
 
+  /* Randomized Horizontal Margins (Gaps) inside rows for mobile */
+  .collage-item-{{ section.id }}:nth-child(4n+1) {
+    margin-right: 28px;
+  }
+  .collage-item-{{ section.id }}:nth-child(4n+2) {
+    margin-right: 12px;
+  }
+  .collage-item-{{ section.id }}:nth-child(4n+3) {
+    margin-right: 36px;
+  }
+  .collage-item-{{ section.id }}:nth-child(4n+4) {
+    margin-right: 18px;
+  }
+
+  /* Randomized Asymmetrical Floating Offsets inside rows for mobile */
+  #marquee-row-1-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+1) {
+    transform: translateY(-8px);
+  }
+  #marquee-row-1-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+2) {
+    transform: translateY(6px);
+  }
+  #marquee-row-1-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+3) {
+    transform: translateY(-2px);
+  }
+  #marquee-row-1-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+4) {
+    transform: translateY(8px);
+  }
+
+  #marquee-row-2-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+1) {
+    transform: translateY(6px);
+  }
+  #marquee-row-2-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+2) {
+    transform: translateY(-8px);
+  }
+  #marquee-row-2-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+3) {
+    transform: translateY(2px);
+  }
+  #marquee-row-2-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+4) {
+    transform: translateY(-6px);
+  }
+
   @media screen and (min-width: 750px) {
     .collage-item-{{ section.id }} {
       width: 293px;
       height: 189px;
-      margin-right: 32px;
+      border-radius: 8px;
     }
     
     .collage-item-{{ section.id }}:hover {
@@ -88,25 +134,45 @@
       transform: scale(1.03) !important;
     }
 
-    /* Asymmetrical Floating Offsets inside rows */
-    #marquee-row-1-{{ section.id }} .collage-item-{{ section.id }}:nth-child(3n+1) {
-      transform: translateY(-16px);
+    /* Randomized Horizontal Margins (Gaps) inside rows for desktop */
+    .collage-item-{{ section.id }}:nth-child(4n+1) {
+      margin-right: 48px;
     }
-    #marquee-row-1-{{ section.id }} .collage-item-{{ section.id }}:nth-child(3n+2) {
-      transform: translateY(16px);
+    .collage-item-{{ section.id }}:nth-child(4n+2) {
+      margin-right: 16px;
     }
-    #marquee-row-1-{{ section.id }} .collage-item-{{ section.id }}:nth-child(3n+3) {
-      transform: translateY(0);
+    .collage-item-{{ section.id }}:nth-child(4n+3) {
+      margin-right: 64px;
+    }
+    .collage-item-{{ section.id }}:nth-child(4n+4) {
+      margin-right: 28px;
     }
 
-    #marquee-row-2-{{ section.id }} .collage-item-{{ section.id }}:nth-child(3n+1) {
-      transform: translateY(12px);
+    /* Randomized Asymmetrical Floating Offsets inside rows for desktop */
+    #marquee-row-1-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+1) {
+      transform: translateY(-24px);
     }
-    #marquee-row-2-{{ section.id }} .collage-item-{{ section.id }}:nth-child(3n+2) {
-      transform: translateY(-12px);
+    #marquee-row-1-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+2) {
+      transform: translateY(18px);
     }
-    #marquee-row-2-{{ section.id }} .collage-item-{{ section.id }}:nth-child(3n+3) {
-      transform: translateY(0);
+    #marquee-row-1-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+3) {
+      transform: translateY(-8px);
+    }
+    #marquee-row-1-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+4) {
+      transform: translateY(22px);
+    }
+
+    #marquee-row-2-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+1) {
+      transform: translateY(18px);
+    }
+    #marquee-row-2-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+2) {
+      transform: translateY(-22px);
+    }
+    #marquee-row-2-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+3) {
+      transform: translateY(6px);
+    }
+    #marquee-row-2-{{ section.id }} .collage-item-{{ section.id }}:nth-child(4n+4) {
+      transform: translateY(-18px);
     }
   }
 
@@ -228,14 +294,17 @@
       let momentumID;
       let autoScrollID;
       let singleSetWidth = 0;
+      let currentScrollX = 0;
 
       function updateDimensions() {
         singleSetWidth = row.scrollWidth / 4;
+        currentScrollX = row.scrollLeft;
       }
 
       // Initial dimension setup
       updateDimensions();
       row.scrollLeft = singleSetWidth;
+      currentScrollX = singleSetWidth;
 
       // Recalculate on resize or media load
       window.addEventListener('resize', updateDimensions);
@@ -245,13 +314,16 @@
 
       function step() {
         if (!isDown) {
-          row.scrollLeft += speed;
+          currentScrollX += speed;
+          row.scrollLeft = Math.round(currentScrollX);
 
           // Seamless loop boundary resets
           if (row.scrollLeft >= singleSetWidth * 2.5) {
-            row.scrollLeft -= singleSetWidth;
+            currentScrollX -= singleSetWidth;
+            row.scrollLeft = Math.round(currentScrollX);
           } else if (row.scrollLeft <= singleSetWidth * 0.5) {
-            row.scrollLeft += singleSetWidth;
+            currentScrollX += singleSetWidth;
+            row.scrollLeft = Math.round(currentScrollX);
           }
         }
         autoScrollID = requestAnimationFrame(step);
@@ -264,6 +336,7 @@
         isDown = true;
         startX = e.pageX - row.offsetLeft;
         scrollLeft = row.scrollLeft;
+        currentScrollX = scrollLeft;
         cancelAnimationFrame(momentumID);
         velX = 0;
       });
@@ -290,14 +363,17 @@
         
         const prevScroll = row.scrollLeft;
         row.scrollLeft = scrollLeft - walk;
+        currentScrollX = row.scrollLeft;
         velX = row.scrollLeft - prevScroll;
 
         // Boundaries check during drag
         if (row.scrollLeft >= singleSetWidth * 2.5) {
           row.scrollLeft -= singleSetWidth;
+          currentScrollX -= singleSetWidth;
           scrollLeft -= singleSetWidth;
         } else if (row.scrollLeft <= singleSetWidth * 0.5) {
           row.scrollLeft += singleSetWidth;
+          currentScrollX += singleSetWidth;
           scrollLeft += singleSetWidth;
         }
       });
@@ -307,6 +383,7 @@
         isDown = true;
         startX = e.touches[0].pageX - row.offsetLeft;
         scrollLeft = row.scrollLeft;
+        currentScrollX = scrollLeft;
         cancelAnimationFrame(momentumID);
         velX = 0;
       });
@@ -325,13 +402,16 @@
         
         const prevScroll = row.scrollLeft;
         row.scrollLeft = scrollLeft - walk;
+        currentScrollX = row.scrollLeft;
         velX = row.scrollLeft - prevScroll;
 
         if (row.scrollLeft >= singleSetWidth * 2.5) {
           row.scrollLeft -= singleSetWidth;
+          currentScrollX -= singleSetWidth;
           scrollLeft -= singleSetWidth;
         } else if (row.scrollLeft <= singleSetWidth * 0.5) {
           row.scrollLeft += singleSetWidth;
+          currentScrollX += singleSetWidth;
           scrollLeft += singleSetWidth;
         }
       });
@@ -340,12 +420,15 @@
         function momentum() {
           if (Math.abs(velX) > 0.15) {
             row.scrollLeft += velX;
+            currentScrollX = row.scrollLeft;
             velX *= 0.92; // Friction damping
 
             if (row.scrollLeft >= singleSetWidth * 2.5) {
               row.scrollLeft -= singleSetWidth;
+              currentScrollX -= singleSetWidth;
             } else if (row.scrollLeft <= singleSetWidth * 0.5) {
               row.scrollLeft += singleSetWidth;
+              currentScrollX += singleSetWidth;
             }
             momentumID = requestAnimationFrame(momentum);
           }
@@ -358,8 +441,11 @@
       const row1 = document.getElementById('marquee-row-1-{{ section.id }}');
       const row2 = document.getElementById('marquee-row-2-{{ section.id }}');
       
-      initMarquee(row1, 0.7);  // Right to Left
-      initMarquee(row2, -0.7); // Left to Right
+      const isMobile = window.innerWidth < 750;
+      const speed = isMobile ? 0.25 : 0.7;
+      
+      initMarquee(row1, speed);      // Right to Left
+      initMarquee(row2, -1 * speed); // Left to Right
     }
 
     document.addEventListener('DOMContentLoaded', initCollageMarquee);
