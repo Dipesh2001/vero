@@ -33,12 +33,13 @@
     >
       {%- if cart == empty -%}
         <div class="drawer__inner-empty">
+          <button class="drawer__close custom-drawer__close" type="button" onclick="this.classList.add('closing'); setTimeout(() => { this.closest('cart-drawer').close(); this.classList.remove('closing'); }, 300);" aria-label="{{ 'accessibility.close' | t }}">
+            <div class="close-line line-1">&nbsp;</div>
+            <div class="close-line line-2">&nbsp;</div>
+          </button>
           <div class="cart-drawer__warnings center">
             <div class="cart-drawer__empty-content">
               <h2 class="cart__empty-text">{{ 'sections.cart.empty' | t }}</h2>
-              <button class="drawer__close" type="button" onclick="this.closest('cart-drawer').close()" aria-label="{{ 'accessibility.close' | t }}">
-                <span class="svg-wrapper">{{- 'icon-close.svg' | inline_asset_content -}}</span>
-              </button>
               <a href="{{ routes.all_products_collection_url }}" class="button">
                 {{ 'general.continue_shopping' | t }}
               </a>

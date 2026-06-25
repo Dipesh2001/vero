@@ -51,14 +51,17 @@
     overflow: visible !important;
     clip-path: inset(-100px -100px -100px -100px);
   }
-
   /* Product Card Styling */
   .product-card-premium {
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 100%;
     position: relative;
     box-sizing: border-box;
+  }
+  .product-card-premium product-form {
+    margin-top: auto;
   }
 
   /* Image Box Wrapper */
@@ -702,8 +705,12 @@
 
     updateColorText(colorName) {
       if (this.selectedColorEl) {
-        const sizeVal = this.selectedColorEl.dataset.size || '30oz';
-        this.selectedColorEl.textContent = `${sizeVal} | ${colorName}`;
+        const sizeVal = this.selectedColorEl.dataset.size;
+        if (sizeVal && sizeVal.trim() !== '') {
+          this.selectedColorEl.textContent = `${sizeVal} | ${colorName}`;
+        } else {
+          this.selectedColorEl.textContent = colorName;
+        }
       }
     }
 
@@ -722,7 +729,7 @@
           if (compareNum > priceNum) {
             const discount = Math.round(((compareNum - priceNum) / compareNum) * 100);
             if (this.discountEl) {
-              this.discountEl.textContent = `-${discount}%`;
+              this.discountEl.textContent = `${discount}%`;
               this.discountEl.style.display = 'inline-block';
             }
           } else if (this.discountEl) {

@@ -1473,8 +1473,12 @@ if (typeof window.PremiumProductCard === 'undefined') {
 
     updateColorText(colorName) {
       if (this.selectedColorEl) {
-        const sizeVal = this.selectedColorEl.dataset.size || '30oz';
-        this.selectedColorEl.textContent = `${sizeVal} | ${colorName}`;
+        const sizeVal = this.selectedColorEl.dataset.size;
+        if (sizeVal && sizeVal.trim() !== '') {
+          this.selectedColorEl.textContent = `${sizeVal} | ${colorName}`;
+        } else {
+          this.selectedColorEl.textContent = colorName;
+        }
       }
     }
 
@@ -1492,7 +1496,7 @@ if (typeof window.PremiumProductCard === 'undefined') {
           if (compareNum > priceNum) {
             const discount = Math.round(((compareNum - priceNum) / compareNum) * 100);
             if (this.discountEl) {
-              this.discountEl.textContent = `-${discount}%`;
+              this.discountEl.textContent = `${discount}%`;
               this.discountEl.style.display = 'inline-block';
             }
           } else if (this.discountEl) {

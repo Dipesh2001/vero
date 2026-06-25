@@ -166,7 +166,7 @@
     
     assign size_val = ''
     if size_option_index >= 0
-      assign size_val = product.variants[0].options[size_option_index] | escape | append: ' | '
+      assign size_val = product.variants[0].options[size_option_index] | escape
     endif
     
     assign active_color_name = ''
@@ -176,7 +176,7 @@
   -%}
   <p class="selected-color-text js-selected-color-text" data-size="{{ size_val }}" style="{% unless has_options %}visibility: hidden; pointer-events: none;{% endunless %}">
     {% if has_options %}
-      {{ size_val }}{{ active_color_name }}
+      {% if size_val != blank %}{{ size_val }} | {% endif %}{{ active_color_name }}
     {% else %}
       &nbsp;
     {% endif %}
@@ -194,7 +194,7 @@
       </s>
       {%- if current_variant.compare_at_price > current_variant.price -%}
         {%- assign discount = current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price -%}
-        <span class="product-card-discount-percent js-discount-percent">-{{ discount }}%</span>
+        <span class="product-card-discount-percent js-discount-percent">{{ discount }}%</span>
       {%- endif -%}
     </div>
   </div>

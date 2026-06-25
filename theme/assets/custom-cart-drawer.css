@@ -1114,24 +1114,10 @@ cart-drawer-items::-webkit-scrollbar-thumb {
   position: relative !important;
 }
 
-.cart-drawer__warnings .drawer__close {
+.drawer__inner-empty .custom-drawer__close {
   position: absolute !important;
-  top: 20px !important;
+  top: 24px !important;
   right: 20px !important;
   margin: 0 !important;
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  z-index: 10;
-  background-color: transparent !important;
-  border: none !important;
-  cursor: pointer;
-  color: #000000 !important;
-}
-
-.cart-drawer__warnings .drawer__close:hover {
-  transform: scale(1.1);
-  color: var(--color-brand-primary) !important;
+  z-index: 10 !important;
 }
