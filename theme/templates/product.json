@@ -12,6 +12,10 @@
     "main": {
       "type": "main-product",
       "blocks": {
+        "wishlist_wishify_wishify_product_3ABgte": {
+          "type": "shopify://apps/wishlist-wishify/blocks/wishify-product/e14a43b5-34c6-492d-b46f-3ad2eda08696",
+          "settings": {}
+        },
         "title": {
           "type": "title",
           "settings": {}
@@ -87,6 +91,7 @@
         }
       },
       "block_order": [
+        "wishlist_wishify_wishify_product_3ABgte",
         "title",
         "price",
         "payment_icons_XEihVW",

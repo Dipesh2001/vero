@@ -1,7 +1,17 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "padding_top": 36,
         "padding_bottom": 36
@@ -12,6 +22,13 @@
       "settings": {
         "heading": "",
         "heading_size": "h1",
+        "show_info": true,
+        "info_heading": "Get in Touch",
+        "info_text": "Have questions or feedback? We're here to help. Reach out to us through any of the channels below.",
+        "info_email": "support@verolife.com",
+        "info_phone": "+1 (800) 123-4567",
+        "info_hours": "Mon - Fri: 9:00 AM - 5:00 PM",
+        "info_address": "New Delhi, India",
         "color_scheme": "scheme-1",
         "padding_top": 36,
         "padding_bottom": 36
