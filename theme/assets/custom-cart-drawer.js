@@ -313,6 +313,9 @@ class CartDrawerRecommendations extends HTMLElement {
           this.innerHTML = recommendations.outerHTML;
           this.classList.remove('hidden');
           this.initSwiper();
+        } else {
+          this.innerHTML = '';
+          this.classList.add('hidden');
         }
       })
       .catch(e => console.error(e));
@@ -420,15 +423,20 @@ async function addUpsellToCart(variantId, btn) {
   let addedSuccessfully = false;
 
   try {
-    // Step 1: Add to cart
+    // Step 1: Add to cart and fetch rendered section HTML
     const addResponse = await fetch(window.Shopify.routes.root + 'cart/add.js', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: [{ id: parseInt(variantId), quantity: 1 }] })
+      headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({ 
+        items: [{ id: parseInt(variantId), quantity: 1 }],
+        sections: 'cart-drawer'
+      })
     });
 
     if (!addResponse.ok) {
-      // Server returned an error (e.g. sold out, out of stock)
       let errMsg = 'Failed to add item to cart.';
       try {
         const errData = await addResponse.json();
@@ -439,7 +447,7 @@ async function addUpsellToCart(variantId, btn) {
       return;
     }
 
-    // Add succeeded
+    const data = await addResponse.json();
     addedSuccessfully = true;
 
     // Show success state immediately
@@ -448,38 +456,44 @@ async function addUpsellToCart(variantId, btn) {
       btn.style.backgroundColor = '#2e7d32';
     }
 
-    // Step 2: Re-render cart drawer (this may throw if renderContents has issues — handle separately)
-    try {
-      const sectionRes = await fetch(window.Shopify.routes.root + '?section_id=cart-drawer');
-      if (sectionRes.ok) {
-        const html = await sectionRes.text();
-        const parsedDoc = new DOMParser().parseFromString(html, 'text/html');
-        const drawerEl = document.querySelector('cart-drawer');
-        if (drawerEl && typeof drawerEl.renderContents === 'function') {
-          drawerEl.renderContents(parsedDoc, parseInt(variantId), false);
+    // Step 2: Remove the item from client-side recommendation swiper instantly
+    const card = btn.closest('.custom-upsell-item');
+    if (card) {
+      const slide = card.closest('.swiper-slide');
+      if (slide && window.Swiper) {
+        const swiperContainer = slide.closest('.cart-upsell-swiper');
+        if (swiperContainer && swiperContainer.swiper) {
+          const swiper = swiperContainer.swiper;
+          const slideIndex = Array.from(swiper.slides).indexOf(slide);
+          if (slideIndex > -1) {
+            swiper.removeSlide(slideIndex);
+            swiper.update();
+          }
         } else {
-          // Fallback: manually update cart items and totals
-          const newItems = parsedDoc.getElementById('CartDrawer-CartItems');
-          const oldItems = document.getElementById('CartDrawer-CartItems');
-          if (newItems && oldItems) oldItems.innerHTML = newItems.innerHTML;
-
-          const newTotals = parsedDoc.querySelector('.cart-drawer__footer-totals');
-          const oldTotals = document.querySelector('.cart-drawer__footer-totals');
-          if (newTotals && oldTotals) oldTotals.innerHTML = newTotals.innerHTML;
-
-          // Update cart count bubble
-          const newCount = parsedDoc.querySelector('.cart-count-bubble');
-          const oldCount = document.querySelector('.cart-count-bubble');
-          if (newCount && oldCount) oldCount.innerHTML = newCount.innerHTML;
+          slide.remove();
         }
+      } else {
+        card.remove();
       }
-    } catch (renderErr) {
-      // Re-render failed but add was successful — don't show error to user
-      console.warn('Cart re-render failed after successful add:', renderErr);
+    }
+
+    // Check if any upsell cards are left. If not, hide recommendations container
+    const recommendations = document.querySelector('cart-drawer-recommendations');
+    if (recommendations) {
+      const remainingItems = recommendations.querySelectorAll('.custom-upsell-item');
+      if (remainingItems.length === 0) {
+        recommendations.innerHTML = '';
+        recommendations.classList.add('hidden');
+      }
+    }
+
+    // Step 3: Re-render cart drawer contents (this opens/updates the drawer)
+    const drawerEl = document.querySelector('cart-drawer');
+    if (drawerEl && typeof drawerEl.renderContents === 'function') {
+      drawerEl.renderContents(data);
     }
 
   } catch (networkErr) {
-    // Only show network error if the add itself failed
     if (!addedSuccessfully) {
       console.error('Network error adding upsell:', networkErr);
       if (window.showCartErrorToast) window.showCartErrorToast('Network error. Please try again.');

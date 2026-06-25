@@ -1498,7 +1498,7 @@
         "type": "checkbox",
         "id": "enable_discount_input",
         "label": "Enable Discount Input",
-        "default": true
+        "default": false
       }
     ]
   }

@@ -129,7 +129,7 @@
     "cart_drawer_collection": "frontpage",
     "cart_color_scheme": "scheme-1",
     "enable_cart_recommendations": true,
-    "enable_discount_input": true,
+    "enable_discount_input": false,
     "sections": {
       "main-password-header": {
         "type": "main-password-header",

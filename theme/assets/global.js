@@ -1626,3 +1626,72 @@ window.showCartErrorToast = function(message) {
   }, 4000);
 };
 
+
+// Product Gallery Wishlist & Share Interactivity
+document.addEventListener('DOMContentLoaded', () => {
+  // Delegate click event for the custom wishlist button to trigger Wishify app button
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.custom-gallery-wishlist-btn');
+    if (!btn) return;
+
+    e.preventDefault();
+    
+    // Attempt to locate the Wishify wishlist button in the page DOM
+    const wishifySelectors = [
+      '.wishlist-btn-wishify',
+      '.wishlist-btn-wishify-text',
+      '.wishify-btn',
+      '.wishify-add-btn',
+      '.wishlist-add-btn',
+      '.wishify-link',
+      '.sobooster-wishlist-btn',
+      '[class*="wishify"]',
+      '[id*="wishify"]'
+    ];
+    
+    let wishifyBtn = null;
+    for (const selector of wishifySelectors) {
+      const el = document.querySelector(selector);
+      if (el && el !== btn && !el.closest('.custom-gallery-actions')) {
+        wishifyBtn = el;
+        break;
+      }
+    }
+    
+    if (wishifyBtn) {
+      // Click the Wishify app's actual element
+      wishifyBtn.click();
+      
+      // Toggle class is-active on our custom button to reflect state changes
+      btn.classList.toggle('is-active');
+    } else {
+      // Toggle class anyway to simulate click
+      btn.classList.toggle('is-active');
+      console.warn('Wishify button not found in the DOM.');
+    }
+  });
+
+  // Delegation for share button click
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.custom-gallery-share-btn');
+    if (!btn) return;
+
+    e.preventDefault();
+    const url = btn.dataset.shareUrl || window.location.href;
+    const title = btn.dataset.shareTitle || document.title;
+
+    if (navigator.share) {
+      navigator.share({ title, url }).catch(console.error);
+    } else {
+      // Fallback: Copy to clipboard
+      navigator.clipboard.writeText(url).then(() => {
+        if (window.showCartErrorToast) {
+          window.showCartErrorToast('Link copied to clipboard!');
+        }
+      }).catch(err => {
+        console.error('Failed to copy link:', err);
+      });
+    }
+  });
+});
+
