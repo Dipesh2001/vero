@@ -126,9 +126,9 @@
     "cart_type": "drawer",
     "show_vendor": false,
     "show_cart_note": false,
-    "cart_drawer_collection": "frontpage",
     "cart_color_scheme": "scheme-1",
     "enable_cart_recommendations": true,
+    "cart_drawer_collection": "frontpage",
     "enable_discount_input": false,
     "sections": {
       "main-password-header": {
@@ -145,6 +145,13 @@
       }
     },
     "content_for_index": [],
+    "blocks": {
+      "4061177414627956758": {
+        "type": "shopify://apps/wishlist-wishify/blocks/app-embed/e14a43b5-34c6-492d-b46f-3ad2eda08696",
+        "disabled": false,
+        "settings": {}
+      }
+    },
     "color_schemes": {
       "scheme-1": {
         "settings": {
