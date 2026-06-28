@@ -1051,7 +1051,7 @@ class SlideshowComponent extends SliderComponent {
     const slideScrollPosition =
       this.slider.scrollLeft +
       this.sliderFirstItemNode.clientWidth *
-        (this.sliderControlLinksArray.indexOf(event.currentTarget) + 1 - this.currentPage);
+      (this.sliderControlLinksArray.indexOf(event.currentTarget) + 1 - this.currentPage);
     this.slider.scrollTo({
       left: slideScrollPosition,
     });
@@ -1376,7 +1376,7 @@ if (typeof window.PremiumProductCard === 'undefined') {
           prevEl: this.el.querySelector('.js-card-swiper-prev'),
         }
       });
-      
+
       const initialActiveSwatch = this.el.querySelector('.js-swatch-btn.is-active') || this.swatches[0];
       if (initialActiveSwatch) {
         this.selectSwatch(initialActiveSwatch, true);
@@ -1413,7 +1413,7 @@ if (typeof window.PremiumProductCard === 'undefined') {
             this.nextSwatchBtn.style.display = '';
           }
         };
-        
+
         checkScroll();
         window.addEventListener('resize', checkScroll);
 
@@ -1422,7 +1422,7 @@ if (typeof window.PremiumProductCard === 'undefined') {
           if (!activeSwatchWrapper) return;
           const allWrappers = Array.from(this.el.querySelectorAll('.js-swatch-wrapper'));
           const currentIndex = allWrappers.indexOf(activeSwatchWrapper);
-          
+
           let newIndex = currentIndex + direction;
           if (newIndex >= 0 && newIndex < allWrappers.length) {
             const nextSwatchBtn = allWrappers[newIndex].querySelector('.js-swatch-btn');
@@ -1526,16 +1526,16 @@ if (typeof window.PremiumProductCard === 'undefined') {
       if (!this.swiper || !this.allSlides || this.allSlides.length === 0) return;
       const colorName = swatch.dataset.colorName ? swatch.dataset.colorName.toLowerCase().trim() : '';
       const variantId = swatch.dataset.variantId;
-      
+
       const filteredSlides = [];
-      
+
       this.allSlides.forEach(slide => {
         const mediaAlt = slide.dataset.mediaAlt ? slide.dataset.mediaAlt.toLowerCase().trim() : '';
         if (mediaAlt === colorName) {
           filteredSlides.push(slide);
         }
       });
-      
+
       if (filteredSlides.length === 0 && variantId) {
         this.allSlides.forEach(slide => {
           if (slide.dataset.variantId === variantId) {
@@ -1543,7 +1543,7 @@ if (typeof window.PremiumProductCard === 'undefined') {
           }
         });
       }
-      
+
       this.allSlides.forEach(slide => {
         const mediaAlt = slide.dataset.mediaAlt ? slide.dataset.mediaAlt.toLowerCase().trim() : '';
         const slideVariantId = slide.dataset.variantId;
@@ -1553,7 +1553,7 @@ if (typeof window.PremiumProductCard === 'undefined') {
           }
         }
       });
-      
+
       const slidesToShow = filteredSlides.length > 0 ? filteredSlides : this.allSlides;
 
       this.swiper.removeAllSlides();
@@ -1596,7 +1596,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Global Cart Error Toast Helper
-window.showCartErrorToast = function(message) {
+window.showCartErrorToast = function (message) {
   let toast = document.getElementById('cart-toast');
   if (!toast) {
     toast = document.createElement('div');
@@ -1610,21 +1610,21 @@ window.showCartErrorToast = function(message) {
     `;
     document.body.appendChild(toast);
   }
-  
+
   const messageEl = toast.querySelector('.cart-toast-message');
   messageEl.textContent = message || 'An error occurred while updating your cart.';
-  
+
   // Clear any existing timeout
   if (window.cartToastTimeout) {
     clearTimeout(window.cartToastTimeout);
   }
-  
+
   // Trigger layout reset to allow re-triggering animation
   toast.classList.remove('show');
-  void toast.offsetWidth; 
-  
+  void toast.offsetWidth;
+
   toast.classList.add('show');
-  
+
   window.cartToastTimeout = setTimeout(() => {
     toast.classList.remove('show');
   }, 4000);
@@ -1639,7 +1639,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!btn) return;
 
     e.preventDefault();
-    
+
     // Attempt to locate the Wishify wishlist button in the page DOM
     const wishifySelectors = [
       '.wishlist-btn-wishify',
@@ -1649,10 +1649,16 @@ document.addEventListener('DOMContentLoaded', () => {
       '.wishlist-add-btn',
       '.wishify-link',
       '.sobooster-wishlist-btn',
+      '.zoomywishid button',
+      '.zoomywishid a',
+      '.zoomywishid',
+      '[class*="zoomy"] button',
+      '[class*="zoomy"] a',
+      '[class*="zoomy"]',
       '[class*="wishify"]',
       '[id*="wishify"]'
     ];
-    
+
     let wishifyBtn = null;
     for (const selector of wishifySelectors) {
       const el = document.querySelector(selector);
@@ -1661,11 +1667,11 @@ document.addEventListener('DOMContentLoaded', () => {
         break;
       }
     }
-    
+
     if (wishifyBtn) {
       // Click the Wishify app's actual element
       wishifyBtn.click();
-      
+
       // Toggle class is-active on our custom button to reflect state changes
       btn.classList.toggle('is-active');
     } else {
@@ -1698,4 +1704,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+// Delegation for share button click
+document.addEventListener('click', (e) => {
+  const btn = e.target.closest('.custom-gallery-share-btn');
+  if (!btn) return;
+
+  e.preventDefault();
+  const url = btn.dataset.shareUrl || window.location.href;
+  const title = btn.dataset.shareTitle || document.title;
+
+  if (navigator.share) {
+    navigator.share({ title, url }).catch(console.error);
+  } else {
+    // Fallback: Copy to clipboard
+    navigator.clipboard.writeText(url).then(() => {
+      if (window.showCartErrorToast) {
+        window.showCartErrorToast('Link copied to clipboard!');
+      }
+    }).catch(err => {
+      console.error('Failed to copy link:', err);
+    });
+  }
+});
+
+// Check for cartOpen=true query param to open the cart drawer programmatically
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('cartOpen') === 'true') {
+  setTimeout(() => {
+    const cartDrawer = document.querySelector('cart-drawer');
+    if (cartDrawer) {
+      cartDrawer.open();
+      // Clean up the query parameter without reload
+      const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+      window.history.replaceState({ path: newUrl }, '', newUrl);
+    }
+  }, 600);
+}
 

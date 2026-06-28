@@ -901,9 +901,9 @@
                     {%- for option in product.options -%}
                       {%- assign downcased_opt = option | downcase -%}
                       {%- if downcased_opt == 'color' or downcased_opt == 'colour' -%}
-                        {%- if forloop.index == 1 -%}{%- assign color_val = variant.option1 | downcase | trim -%}
-                        {%- elsif forloop.index == 2 -%}{%- assign color_val = variant.option2 | downcase | trim -%}
-                        {%- elsif forloop.index == 3 -%}{%- assign color_val = variant.option3 | downcase | trim -%}
+                        {%- if forloop.index == 1 -%}{%- assign color_val = variant.option1 | downcase | strip -%}
+                        {%- elsif forloop.index == 2 -%}{%- assign color_val = variant.option2 | downcase | strip -%}
+                        {%- elsif forloop.index == 3 -%}{%- assign color_val = variant.option3 | downcase | strip -%}
                         {%- endif -%}
                       {%- endif -%}
                     {%- endfor -%}
@@ -963,15 +963,16 @@
               {%- endif -%}
             </div>
              <!-- Wishlist and Share Floating Buttons Overlay -->
-             <div class="custom-gallery-actions">
+             <div class="custom-gallery-actions" style="position: absolute; top: 15px; right: 15px; display: flex; flex-direction: column; gap: 10px; z-index: 10;">
                {%- if section.settings.show_wishlist_button -%}
                  <button
                    type="button"
                    class="custom-gallery-action-btn custom-gallery-wishlist-btn"
                    aria-label="Add to wishlist"
                    data-product-id="{{ product.id }}"
+                   style="width: 42px !important; height: 42px !important; border-radius: 50% !important; background-color: #ffffff !important; border: 1px solid rgba(0, 0, 0, 0.08) !important; display: flex !important; align-items: center !important; justify-content: center !important; color: #000000 !important; cursor: pointer !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important; padding: 0 !important; outline: none !important;"
                  >
-                   <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                   <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="width: 22px !important; height: 22px !important;">
                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                    </svg>
                  </button>
@@ -984,8 +985,9 @@
                    aria-label="Share product"
                    data-share-url="{{ shop.url | append: product.url }}"
                    data-share-title="{{ product.title | escape }}"
+                   style="width: 42px !important; height: 42px !important; border-radius: 50% !important; background-color: #ffffff !important; border: 1px solid rgba(0, 0, 0, 0.08) !important; display: flex !important; align-items: center !important; justify-content: center !important; color: #000000 !important; cursor: pointer !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important; padding: 0 !important; outline: none !important;"
                  >
-                   <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                   <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="width: 22px !important; height: 22px !important;">
                      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
                      <polyline points="16 6 12 2 8 6"></polyline>
                      <line x1="12" y1="2" x2="12" y2="15"></line>
@@ -1017,9 +1019,9 @@
                     {%- for option in product.options -%}
                       {%- assign downcased_opt = option | downcase -%}
                       {%- if downcased_opt == 'color' or downcased_opt == 'colour' -%}
-                        {%- if forloop.index == 1 -%}{%- assign color_val = variant.option1 | downcase | trim -%}
-                        {%- elsif forloop.index == 2 -%}{%- assign color_val = variant.option2 | downcase | trim -%}
-                        {%- elsif forloop.index == 3 -%}{%- assign color_val = variant.option3 | downcase | trim -%}
+                        {%- if forloop.index == 1 -%}{%- assign color_val = variant.option1 | downcase | strip -%}
+                        {%- elsif forloop.index == 2 -%}{%- assign color_val = variant.option2 | downcase | strip -%}
+                        {%- elsif forloop.index == 3 -%}{%- assign color_val = variant.option3 | downcase | strip -%}
                         {%- endif -%}
                       {%- endif -%}
                     {%- endfor -%}

@@ -12,6 +12,11 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  #ZoomyWishlistPage {
+    display: block !important;
+    min-height: 200px;
+  }
 {%- endstyle -%}
 
 <div class="page-width section-{{ section.id }}-padding">
@@ -23,6 +28,8 @@
     <div id="ZoomyWishlistPage"></div>
   </div>
 </div>
+
+<script src="https://zooomyapps.com/wishlist/ListWishlist.js" defer="defer"></script>
 
 {% schema %}
 {

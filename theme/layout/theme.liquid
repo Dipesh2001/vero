@@ -1,6 +1,11 @@
 <!doctype html>
 <html class="js" lang="{{ request.locale.iso_code }}">
   <head>
+    {%- if request.page_type == 'cart' and settings.cart_type == 'drawer' -%}
+      <script>
+        window.location.href = "{{ routes.root_url }}?cartOpen=true";
+      </script>
+    {%- endif -%}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">

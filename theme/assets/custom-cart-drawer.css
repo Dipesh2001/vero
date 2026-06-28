@@ -1123,12 +1123,23 @@ cart-drawer-items::-webkit-scrollbar-thumb {
 }
 
 /* Hide default Wishify app block buttons from product details page */
-.wishlist-btn-wishify, 
-.wishify-btn, 
-.wishify-add-btn,
-.wishlist-add-btn,
-[class*="wishify"]:not(.custom-gallery-wishlist-btn) {
-  display: none !important;
+.product .wishlist-btn-wishify, 
+.product .wishify-btn, 
+.product .wishify-add-btn,
+.product .wishlist-add-btn,
+.product .zoomywishid,
+.product [class*="wishify"]:not(.custom-gallery-wishlist-btn),
+.product [class*="zoomy"]:not(.custom-gallery-wishlist-btn) {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  z-index: -999 !important;
 }
 
 /* Ensure our custom gallery wishlist button remains visible */

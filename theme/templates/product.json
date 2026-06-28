@@ -118,7 +118,8 @@
         "show_arrows": true,
         "enable_loop": false,
         "accent_color": "#ffc357",
-        "accent_text_color": "#00237d"
+        "accent_text_color": "#00237d",
+        "show_wishlist_button": false
       }
     },
     "product_additional_info_hENpdw": {
