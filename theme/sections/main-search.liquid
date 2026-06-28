@@ -108,6 +108,391 @@
     display: inline !important;
   }
 
+
+  /* Main Collection Product Grid Styles */
+  .facets-vertical {
+    padding-top: 30px !important;
+    padding-bottom: 60px !important;
+  }
+
+  @media screen and (min-width: 750px) {
+    .facets-vertical {
+      display: flex !important;
+      gap: 40px !important;
+    }
+    .facets-vertical .facets-wrapper {
+      width: 300px !important;
+      max-width: 300px !important;
+      flex-shrink: 0 !important;
+      padding-left: 0 !important;
+      padding-right: 30px !important;
+      border-right: 1px solid #e5e5e5 !important;
+      box-sizing: border-box !important;
+    }
+    .facets-vertical .product-grid-container {
+      flex-grow: 1 !important;
+      width: auto !important;
+    }
+    .facets-vertical .product-grid-container #product-grid {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 342px)) !important;
+      gap: 24px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      list-style: none !important;
+    }
+    .facets-vertical .product-grid-container #product-grid .grid__item {
+      width: 100% !important;
+      max-width: 342px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  }
+
+  /* Sidebar header styling */
+  .facets-vertical .active-facets-vertical-filter {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin-bottom: 25px !important;
+  }
+  .facets-vertical .facets__heading--vertical {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 20px !important;
+    font-weight: 500 !important;
+    color: #00237d !important;
+    margin: 0 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+  }
+  .facets-vertical .active-facets__button-remove {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    color: #a1a1a1 !important;
+    text-decoration: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: inline-block !important;
+  }
+  .facets-vertical .active-facets__button-remove span {
+    color: #a1a1a1 !important;
+    text-decoration: none !important;
+  }
+  .facets-vertical .active-facets__button-remove:hover span {
+    text-decoration: underline !important;
+  }
+
+  /* Show active facets on desktop sidebar top */
+  .facets-vertical .active-facets-desktop facet-remove:not(.active-facets__button-wrapper) {
+    display: inline-block !important;
+  }
+
+  /* Details and Summary overrides */
+  .facets-vertical .facets__disclosure-vertical {
+    border: none !important;
+    margin-bottom: 25px !important;
+  }
+  .facets-vertical .facets__summary {
+    font-family: 'Teachers', sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    color: #222222 !important;
+    position: relative !important;
+    padding: 0 0 12px 0 !important;
+    margin-bottom: 15px !important;
+    border: none !important;
+  }
+  /* 60x2px underline divider */
+  .facets-vertical .facets__summary::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background-color: #222222;
+  }
+  .facets-vertical .facets__summary .icon-caret {
+    display: none !important;
+  }
+
+  /* Filter List Items and Labels */
+  .facets-vertical .facets__list--vertical {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .facets-vertical .facets__item {
+    padding: 0 !important;
+    margin-bottom: 10px !important;
+    list-style: none !important;
+  }
+  .facets-vertical .facet-checkbox {
+    font-family: 'Teachers', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    color: #111827 !important;
+    line-height: 25px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    position: relative !important;
+    cursor: pointer !important;
+    word-break: break-word !important;
+  }
+
+  /* Custom Checkbox Squares */
+  .facets-vertical .facet-checkbox input[type='checkbox'] {
+    width: 16px !important;
+    height: 16px !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    margin: 0 !important;
+    left: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    cursor: pointer !important;
+    z-index: 2 !important;
+  }
+  /* Hide Dawn's default square icon to prevent double checkbox */
+  .facets-vertical .facet-checkbox > svg {
+    display: none !important;
+  }
+  .facets-vertical .facet-checkbox::before {
+    content: '';
+    display: inline-block !important;
+    width: 16px !important;
+    height: 16px !important;
+    border: 1px solid #dddddd !important;
+    background-color: #ffffff !important;
+    margin-right: 10px !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+    transition: all 0.2s ease !important;
+  }
+  .facets-vertical .facet-checkbox:has(input[type='checkbox']:checked)::before {
+    background-color: #00237d !important;
+    border-color: #00237d !important;
+  }
+
+  /* Checkmark logic */
+  .facets-vertical .facet-checkbox .svg-wrapper {
+    position: absolute !important;
+    left: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 16px !important;
+    height: 16px !important;
+    display: none !important;
+    align-items: center !important;
+    justify-content: center !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+  }
+  .facets-vertical .facet-checkbox input[type='checkbox']:checked ~ .svg-wrapper {
+    display: flex !important;
+  }
+  .facets-vertical .facet-checkbox svg.icon-checkmark {
+    width: 10px !important;
+    height: 10px !important;
+    stroke: #ffffff !important;
+    fill: none !important;
+    position: static !important;
+  }
+
+  /* Color Swatches variant selectors style */
+  .facets-vertical .swatch-input-wrapper {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin-right: 10px !important;
+    flex-shrink: 0 !important;
+  }
+  .facets-vertical .swatch-input__label {
+    display: inline-block !important;
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: 1px solid #dddddd !important;
+    cursor: pointer !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+  .facets-vertical .swatch-input__input:checked + .swatch-input__label {
+    border: 2px solid #00237d !important;
+    outline: none !important;
+  }
+  .facets-vertical .swatch-input__label .swatch {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 50% !important;
+    border: none !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Price range inputs styling */
+  .facets__price {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    width: 100% !important;
+    margin-top: 15px !important;
+  }
+  .facets__price-inputs {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+  .facets__price .field {
+    position: relative !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+  .facets__price .field__input {
+    font-family: 'Teachers', sans-serif !important;
+    font-size: 14px !important;
+    color: #111827 !important;
+    border: 1px solid #dddddd !important;
+    padding: 10px 10px 10px 30px !important;
+    width: 100% !important;
+    height: 40px !important;
+    box-sizing: border-box !important;
+    border-radius: 0px !important;
+  }
+  .facets__price .field-currency {
+    position: absolute !important;
+    left: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    font-family: 'Teachers', sans-serif !important;
+    font-size: 14px !important;
+    color: #878787 !important;
+    z-index: 1 !important;
+  }
+  .facets__price .field__label {
+    display: none !important;
+  }
+
+  /* Premium Search Input Styling on Search Page */
+  .template-search__search {
+    margin: 3rem auto 5rem !important;
+    max-width: 600px !important;
+  }
+  .template-search__search .search {
+    position: relative !important;
+    border-radius: 0px !important;
+    overflow: hidden !important;
+    border: 1px solid #00237d !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 4px 15px rgba(0, 35, 125, 0.04) !important;
+  }
+  .template-search__search .field {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    height: 54px !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+  /* Disable Dawn's default field border & focus rings */
+  .template-search__search .field::after,
+  .template-search__search .field::before {
+    display: none !important;
+    content: none !important;
+  }
+  .template-search__search .search__input.field__input {
+    font-family: 'Teachers', sans-serif !important;
+    font-size: 16px !important;
+    color: #00237d !important;
+    padding: 15px 110px 15px 20px !important;
+    height: 54px !important;
+    border: none !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+  .template-search__search .search__input.field__input:focus,
+  .template-search__search .search__input.field__input:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+  /* Remove the floating label */
+  .template-search__search .field__label {
+    display: none !important;
+  }
+  /* Search Button inside input */
+  .template-search__search .search__button {
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    width: 54px !important;
+    height: 54px !important;
+    background-color: #00237d !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 0px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .template-search__search .search__button:hover {
+    background-color: #001a5e !important;
+  }
+  .template-search__search .search__button svg {
+    width: 20px !important;
+    height: 20px !important;
+    color: #ffffff !important;
+    fill: none !important;
+    stroke: currentColor !important;
+  }
+  /* Reset/close button */
+  .template-search__search .reset__button {
+    position: absolute !important;
+    right: 54px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 36px !important;
+    height: 36px !important;
+    background: transparent !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    color: #a1a1a1 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .template-search__search .reset__button.hidden {
+    display: none !important;
+  }
+  .template-search__search .search__input:placeholder-shown ~ .reset__button {
+    display: none !important;
+  }
+  .template-search__search .reset__button::after {
+    display: none !important;
+  }
+  .template-search__search .reset__button svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
   /* Disable Vertical Filter Click Accordion collapsing on Desktop */
   @media screen and (min-width: 750px) {
     .facets-vertical details.facets__disclosure-vertical summary {
@@ -266,7 +651,7 @@
     height: 6px;
     background-color: #e5e5e5;
     border-radius: 3px;
-    margin: 20px 0 10px 0;
+    margin: 10px 0 10px 0 !important;
   }
   
   .price-slider-track {
@@ -279,40 +664,43 @@
   }
   
   .range-slider {
-    position: absolute;
-    width: 100%;
-    height: 6px;
-    top: 0;
-    left: 0;
-    background: none;
-    pointer-events: none;
-    -webkit-appearance: none;
-    appearance: none;
-    margin: 0;
+    position: absolute !important;
+    width: 100% !important;
+    height: 16px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    left: 0 !important;
+    background: none !important;
+    pointer-events: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
   }
   
   .range-slider::-webkit-slider-thumb {
-    height: 16px;
-    width: 16px;
-    border-radius: 50%;
-    background-color: #00237d;
-    border: 2px solid #ffffff;
-    cursor: pointer;
-    pointer-events: auto;
-    -webkit-appearance: none;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    margin-top: -5px;
+    height: 16px !important;
+    width: 16px !important;
+    border-radius: 50% !important;
+    background-color: #00237d !important;
+    border: 2px solid #ffffff !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    -webkit-appearance: none !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
+    margin-top: 0 !important;
   }
   
   .range-slider::-moz-range-thumb {
-    height: 12px;
-    width: 12px;
-    border-radius: 50%;
-    background-color: #00237d;
-    border: 2px solid #ffffff;
-    cursor: pointer;
-    pointer-events: auto;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    height: 16px !important;
+    width: 16px !important;
+    border-radius: 50% !important;
+    background-color: #00237d !important;
+    border: 2px solid #ffffff !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
   }
   
   .facets-vertical .facets__price {
@@ -863,6 +1251,7 @@
                 type="reset"
                 class="reset__button field__button{% if search.terms == blank %} hidden{% endif %}"
                 aria-label="{{ 'general.search.reset' | t }}"
+                onclick="window.location.href = window.location.pathname;"
               >
                 <span class="svg-wrapper">
                   {{- 'icon-reset.svg' | inline_asset_content -}}
@@ -997,11 +1386,12 @@
           {%- else -%}
             <div
               class="template-search__results collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
-              id="product-grid"
               data-id="{{ section.id }}"
             >
               <div class="loading-overlay gradient"></div>
               <ul
+                id="product-grid"
+                data-id="{{ section.id }}"
                 class="grid product-grid  grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop"
                 role="list"
               >
